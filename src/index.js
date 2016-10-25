@@ -275,7 +275,11 @@ class AudioPlayer extends React.Component {
      * after touch handlers if we're seeking.
      */
     event.preventDefault();
-    const boundingRect = this.audioProgressBoundingRect;
+    /* Needs to be called here again, because the click handler is bound
+	   * at the same time as the ref, so this.audioProgressContainer size
+	   * isn't updated yet, since that happens in componentDidMount
+     */
+    const boundingRect = this.audioProgressContainer.getBoundingClientRect();
     const isTouch = event.type.slice(0, 5) === 'touch';
     const pageX = isTouch ? event.targetTouches.item(0).pageX : event.pageX;
     const position = pageX - boundingRect.left - document.body.scrollLeft;
