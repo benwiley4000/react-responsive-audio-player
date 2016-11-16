@@ -45,6 +45,14 @@ function convertToTime (number) {
  * Accepts 'style' prop, object, is applied to
  * outermost div (React styles).
  *
+ * Accepts 'onTrackStart' prop, a callback that is invoked
+ * when a track begins playing. An argument will be provided
+ * to the callback representing the track that has been started.
+ *
+ * Accepts 'onTrackEnd' prop, a callback that is invoked
+ * when a track has completely finished playing. An argument will be provided
+ * to the callback representing the track that has completely finished playing.
+ *
  */
 class AudioPlayer extends React.Component {
 
@@ -71,7 +79,7 @@ class AudioPlayer extends React.Component {
        * the new time is visually previewed before the
        * audio seeks.
        */
-      displayedTime: 0 
+      displayedTime: 0
     };
 
     this.state = this.defaultState;
@@ -101,7 +109,7 @@ class AudioPlayer extends React.Component {
     audio.preload = 'metadata';
     audio.addEventListener('ended', () => {
       const gapLengthInSeconds = this.props.gapLengthInSeconds || 0;
-      setTimeout(() => this.skipToNextTrack(), gapLengthInSeconds * 1000);
+      setTimeout(() => this.skipToNextTrack(true), gapLengthInSeconds * 1000);
     });
     audio.addEventListener('timeupdate', () => this.handleTimeUpdate());
     audio.addEventListener('loadedmetadata', () => {
@@ -168,7 +176,7 @@ class AudioPlayer extends React.Component {
      * should load up the first one.
      */
     if (this.audio && this.currentTrackIndex === -1) {
-      this.skipToNextTrack(false);
+      this.skipToNextTrack(false, false);
     }
   }
 
@@ -187,6 +195,9 @@ class AudioPlayer extends React.Component {
       return;
     }
     try {
+      if (this.props.onTrackStart) {
+        this.props.onTrackStart(this.props.playlist[this.currentTrackIndex]);
+      }
       this.audio.play();
     } catch (error) {
       logError(error);
@@ -198,13 +209,16 @@ class AudioPlayer extends React.Component {
     }
   }
 
-  skipToNextTrack (shouldPlay) {
+  skipToNextTrack (didPreviousFinish, shouldPlay) {
     if (!this.audio) {
       return;
     }
     this.audio.pause();
     if (!this.props.playlist || !this.props.playlist.length) {
       return;
+    }
+    if (this.props.onTrackEnd && didPreviousFinish && this.currentTrackIndex > -1) {
+      this.props.onTrackEnd(this.props.playlist[this.currentTrackIndex]);
     }
     let i = this.currentTrackIndex + 1;
     if (i >= this.props.playlist.length) {
@@ -238,7 +252,7 @@ class AudioPlayer extends React.Component {
       i = this.props.playlist.length - 1;
     }
     this.currentTrackIndex = i - 1;
-    this.skipToNextTrack();
+    this.skipToNextTrack(false);
   }
 
   updateSource () {
@@ -359,7 +373,7 @@ class AudioPlayer extends React.Component {
           <div
             id="skip_button"
             className="skip_button audio_button"
-            onClick={() => this.skipToNextTrack()}
+            onClick={() => this.skipToNextTrack(false)}
           >
             <div className="skip_button_inner">
               <div className="right_facing_triangle"></div>
@@ -410,7 +424,9 @@ AudioPlayer.propTypes = {
   gapLengthInSeconds: React.PropTypes.number,
   hideBackSkip: React.PropTypes.bool,
   stayOnBackSkipThreshold: React.PropTypes.number,
-  style: React.PropTypes.object
+  style: React.PropTypes.object,
+  onTrackStart: React.PropTypes.func,
+  onTrackEnd: React.PropTypes.func
 };
 
 module.exports = AudioPlayer;
