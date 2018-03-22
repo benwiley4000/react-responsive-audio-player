@@ -5,6 +5,7 @@ import RepeatIcon from 'svg-react-loader?name=RepeatIcon!material-design-icons/a
 import RepeatOneIcon from 'svg-react-loader?name=RepeatOneIcon!material-design-icons/av/svg/design/ic_repeat_one_48px.svg?';
 
 import { repeatStrategyOptions } from '../constants';
+import bindMethods from '../utils/bindMethods';
 import createControlRenderProp from '../factories/createControlRenderProp';
 
 function getNextRepeatStrategy (repeatStrategy) {
@@ -19,8 +20,10 @@ class RepeatButton extends PureComponent {
   constructor (props) {
     super(props);
 
-    // bind methods fired on React events
-    this.handleNextRepeatStrategy = this.handleNextRepeatStrategy.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'handleNextRepeatStrategy'
+    ]);
   }
 
   handleNextRepeatStrategy () {

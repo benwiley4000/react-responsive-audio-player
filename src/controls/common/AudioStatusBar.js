@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import ResizeObserver from 'resize-observer-polyfill';
 
 import getStatusBarSizeClassName from '../../utils/getStatusBarSizeClassName';
+import bindMethods from '../../utils/bindMethods';
 
 class AudioStatusBar extends PureComponent {
   constructor (props) {
@@ -16,11 +17,13 @@ class AudioStatusBar extends PureComponent {
     this.statusBarRef = null;
     this.statusBarResizeObserver = null;
 
-    // bind methods fired on React events
-    this.setStatusBarRef = this.setStatusBarRef.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'setStatusBarRef',
 
-    // bind listeners to add on mount and remove on unmount
-    this.handleResize = this.handleResize.bind(this);
+      // bind listeners to add on mount and remove on unmount
+      'handleResize'
+    ]);
   }
 
   componentDidMount () {

@@ -7,6 +7,7 @@ import ProgressBar from './common/ProgressBar';
 import getVolumeIconClassName from '../utils/getVolumeIconClassName';
 import getVolumeBarDirectionFromPosition from '../utils/getVolumeBarDirectionFromPosition';
 import stopPropagation from '../utils/reactStopPropagation';
+import bindMethods from '../utils/bindMethods';
 import createControlRenderProp from '../factories/createControlRenderProp';
 
 const volumeControlStyle = {
@@ -37,15 +38,17 @@ class VolumeControl extends PureComponent {
     this.muteToggleRef = null;
     this.volumeBarContainerRef = null;
 
-    // bind methods fired on React events
-    this.setVolumeControlRef = this.setVolumeControlRef.bind(this);
-    this.setMuteToggleRef = this.setMuteToggleRef.bind(this);
-    this.setVolumeBarContainerRef = this.setVolumeBarContainerRef.bind(this);
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'setVolumeControlRef',
+      'setMuteToggleRef',
+      'setVolumeBarContainerRef',
+      'handleMouseEnter',
+      'handleMouseLeave',
 
-    // bind listeners to add on mount and remove on unmount
-    this.handleMuteToggleTouchStart = this.handleMuteToggleTouchStart.bind(this);
+      // bind listeners to add on mount and remove on unmount
+      'handleMuteToggleTouchStart'
+    ]);
   }
 
   componentDidMount () {

@@ -6,6 +6,7 @@ import AudioStatusBar from './common/AudioStatusBar';
 import convertToTime from '../utils/convertToTime';
 import getDisplayText from '../utils/getDisplayText';
 import isPlaylistValid from '../utils/isPlaylistValid';
+import bindMethods from '../utils/bindMethods';
 import createControlRenderProp from '../factories/createControlRenderProp';
 
 const audioStatusBarStyle = {
@@ -21,8 +22,10 @@ class AudioProgress extends Component {
   constructor (props) {
     super(props);
 
-    // bind methods fired on React events
-    this.handleSeekPreview = this.handleSeekPreview.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'handleSeekPreview'
+    ]);
   }
 
   handleSeekPreview (progress) {

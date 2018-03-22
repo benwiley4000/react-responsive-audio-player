@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import ProgressBarDisplay from './ProgressBarDisplay';
 import convertToNumberWithinIntervalBounds from '../../utils/convertToNumberWithinIntervalBounds';
+import bindMethods from '../../utils/bindMethods';
 
 class ProgressBar extends PureComponent {
   constructor (props) {
@@ -10,12 +11,14 @@ class ProgressBar extends PureComponent {
 
     this.progressContainer = null;
 
-    // bind methods fired on React events
-    this.setProgressContainerRef = this.setProgressContainerRef.bind(this);
-    this.handleAdjustProgress = this.handleAdjustProgress.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'setProgressContainerRef',
+      'handleAdjustProgress',
 
-    // bind listeners to add on mount and remove on unmount
-    this.handleAdjustComplete = this.handleAdjustComplete.bind(this);
+      // bind listeners to add on mount and remove on unmount
+      'handleAdjustComplete'
+    ]);
   }
 
   componentDidMount () {

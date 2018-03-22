@@ -15,6 +15,8 @@ import getDisplayText from './utils/getDisplayText';
 import getRepeatStrategy from './utils/getRepeatStrategy';
 import getControlRenderProp from './utils/getControlRenderProp';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
+import bindMethods from './utils/bindMethods';
+import { addListenersOnObject, removeListenersOnObject } from './utils/listeners';
 import { repeatStrategyOptions } from './constants';
 
 import './styles/index.scss';
@@ -132,35 +134,37 @@ class AudioPlayer extends Component {
     // html audio element used for playback
     this.audio = null;
 
-    // bind methods fired on React events
-    this.setAudioElementRef = this.setAudioElementRef.bind(this);
-    this.togglePause = this.togglePause.bind(this);
-    this.selectTrackIndex = this.selectTrackIndex.bind(this);
-    this.forwardSkip = this.forwardSkip.bind(this);
-    this.backSkip = this.backSkip.bind(this);
-    this.seekPreview = this.seekPreview.bind(this);
-    this.seekComplete = this.seekComplete.bind(this);
-    this.setVolume = this.setVolume.bind(this);
-    this.setVolumeComplete = this.setVolumeComplete.bind(this);
-    this.toggleMuted = this.toggleMuted.bind(this);
-    this.toggleShuffle = this.toggleShuffle.bind(this);
-    this.setRepeatStrategy = this.setRepeatStrategy.bind(this);
-    this.setPlaybackRate = this.setPlaybackRate.bind(this);
+    bindMethods(this, [
+      // bind methods fired on React events
+      'setAudioElementRef',
+      'togglePause',
+      'selectTrackIndex',
+      'forwardSkip',
+      'backSkip',
+      'seekPreview',
+      'seekComplete',
+      'setVolume',
+      'setVolumeComplete',
+      'toggleMuted',
+      'toggleShuffle',
+      'setRepeatStrategy',
+      'setPlaybackRate',
 
-    // bind audio event listeners to add on mount and remove on unmount
-    this.handleAudioPlay = this.handleAudioPlay.bind(this);
-    this.handleAudioPause = this.handleAudioPause.bind(this);
-    this.handleAudioSrcchange = this.handleAudioSrcchange.bind(this);
-    this.handleAudioEnded = this.handleAudioEnded.bind(this);
-    this.handleAudioStalled = this.handleAudioStalled.bind(this);
-    this.handleAudioCanplaythrough = this.handleAudioCanplaythrough.bind(this);
-    this.handleAudioTimeupdate = this.handleAudioTimeupdate.bind(this);
-    this.handleAudioLoadedmetadata = this.handleAudioLoadedmetadata.bind(this);
-    this.handleAudioVolumechange = this.handleAudioVolumechange.bind(this);
-    this.handleAudioDurationchange = this.handleAudioDurationchange.bind(this);
-    this.handleAudioProgress = this.handleAudioProgress.bind(this);
-    this.handleAudioLoopchange = this.handleAudioLoopchange.bind(this);
-    this.handleAudioRatechange = this.handleAudioRatechange.bind(this);
+      // bind audio event listeners to add on mount and remove on unmount
+      'handleAudioPlay',
+      'handleAudioPause',
+      'handleAudioSrcchange',
+      'handleAudioEnded',
+      'handleAudioStalled',
+      'handleAudioCanplaythrough',
+      'handleAudioTimeupdate',
+      'handleAudioLoadedmetadata',
+      'handleAudioVolumechange',
+      'handleAudioDurationchange',
+      'handleAudioProgress',
+      'handleAudioLoopchange',
+      'handleAudioRatechange'
+    ]);
   }
 
   componentDidMount () {
@@ -174,19 +178,21 @@ class AudioPlayer extends Component {
     audio.playbackRate = this.state.playbackRate;
 
     // add event listeners on the audio element
-    audio.addEventListener('play', this.handleAudioPlay);
-    audio.addEventListener('pause', this.handleAudioPause);
-    audio.addEventListener('srcchange', this.handleAudioSrcchange);
-    audio.addEventListener('ended', this.handleAudioEnded);
-    audio.addEventListener('stalled', this.handleAudioStalled);
-    audio.addEventListener('canplaythrough', this.handleAudioCanplaythrough);
-    audio.addEventListener('timeupdate', this.handleAudioTimeupdate);
-    audio.addEventListener('loadedmetadata', this.handleAudioLoadedmetadata);
-    audio.addEventListener('volumechange', this.handleAudioVolumechange);
-    audio.addEventListener('durationchange', this.handleAudioDurationchange);
-    audio.addEventListener('progress', this.handleAudioProgress);
-    audio.addEventListener('loopchange', this.handleAudioLoopchange);
-    audio.addEventListener('ratechange', this.handleAudioRatechange);
+    addListenersOnObject(this, audio, [
+      ['play', 'handleAudioPlay'],
+      ['pause', 'handleAudioPause'],
+      ['srcchange', 'handleAudioSrcchange'],
+      ['ended', 'handleAudioEnded'],
+      ['stalled', 'handleAudioStalled'],
+      ['canplaythrough', 'handleAudioCanplaythrough'],
+      ['timeupdate', 'handleAudioTimeupdate'],
+      ['loadedmetadata', 'handleAudioLoadedmetadata'],
+      ['volumechange', 'handleAudioVolumechange'],
+      ['durationchange', 'handleAudioDurationchange'],
+      ['progress', 'handleAudioProgress'],
+      ['loopchange', 'handleAudioLoopchange'],
+      ['ratechange', 'handleAudioRatechange']
+    ]);
     this.addMediaEventListeners(this.props.onMediaEvent);
 
     if (isPlaylistValid(this.props.playlist) && this.props.autoplay) {
@@ -288,19 +294,21 @@ class AudioPlayer extends Component {
   componentWillUnmount () {
     const { audio } = this;
     // remove event listeners on the audio element
-    audio.removeEventListener('play', this.handleAudioPlay);
-    audio.removeEventListener('pause', this.handleAudioPause);
-    audio.removeEventListener('srcchange', this.handleAudioSrcchange);
-    audio.removeEventListener('ended', this.handleAudioEnded);
-    audio.removeEventListener('stalled', this.handleAudioStalled);
-    audio.removeEventListener('canplaythrough', this.handleAudioCanplaythrough);
-    audio.removeEventListener('timeupdate', this.handleAudioTimeupdate);
-    audio.removeEventListener('loadedmetadata', this.handleAudioLoadedmetadata);
-    audio.removeEventListener('volumechange', this.handleAudioVolumechange);
-    audio.removeEventListener('durationchange', this.handleAudioDurationchange);
-    audio.removeEventListener('progress', this.handleAudioProgress);
-    audio.removeEventListener('loopchange', this.handleAudioLoopchange);
-    audio.removeEventListener('ratechange', this.handleAudioRatechange);
+    removeListenersOnObject(this, audio, [
+      ['play', 'handleAudioPlay'],
+      ['pause', 'handleAudioPause'],
+      ['srcchange', 'handleAudioSrcchange'],
+      ['ended', 'handleAudioEnded'],
+      ['stalled', 'handleAudioStalled'],
+      ['canplaythrough', 'handleAudioCanplaythrough'],
+      ['timeupdate', 'handleAudioTimeupdate'],
+      ['loadedmetadata', 'handleAudioLoadedmetadata'],
+      ['volumechange', 'handleAudioVolumechange'],
+      ['durationchange', 'handleAudioDurationchange'],
+      ['progress', 'handleAudioProgress'],
+      ['loopchange', 'handleAudioLoopchange'],
+      ['ratechange', 'handleAudioRatechange']
+    ]);
     removeMediaEventListeners(this.props.onMediaEvent);
 
     clearTimeout(this.gapLengthTimeout);
