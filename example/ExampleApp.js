@@ -1,10 +1,9 @@
 /* globals React, PropTypes, ExamplePlayerContextProvider, ExampleMediaPlayer, ExampleMediaInfo */
-
 // eslint-disable-next-line no-unused-vars
 function ExampleApp(props) {
   return React.createElement(
     React.StrictMode,
-    {},
+     {},
     React.createElement(
       ExamplePlayerContextProvider,
       {
