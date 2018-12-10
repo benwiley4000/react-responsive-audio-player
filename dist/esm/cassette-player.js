@@ -7,7 +7,7 @@
 		exports["cassettePlayer"] = factory(require("react"), require("prop-types"), require("@cassette/core"), require("@cassette/components"));
 	else
 		root["cassettePlayer"] = factory(root["React"], root["PropTypes"], root["cassetteCore"], root["cassetteComponents"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__) {
+})((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -703,7 +703,6 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
     const _props = this.props,
           volume = _props.volume,
           muted = _props.muted,
-          setVolumeInProgress = _props.setVolumeInProgress,
           onSetVolume = _props.onSetVolume,
           onSetVolumeComplete = _props.onSetVolumeComplete,
           onToggleMuted = _props.onToggleMuted;
@@ -741,7 +740,6 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
       progress: muted ? 0 : volume,
       progressDirection: utils_getVolumeBarDirectionFromPosition(volumeBarPosition),
       handle: this.renderHandle(),
-      adjusting: setVolumeInProgress,
       onAdjustProgress: onSetVolume,
       onAdjustComplete: onSetVolumeComplete
     })));
@@ -985,7 +983,6 @@ class MediaProgress_MediaProgress extends external_root_React_commonjs_react_com
       progressClassName: "progress",
       progress: displayedProgress,
       progressDirection: "right",
-      adjusting: seekInProgress,
       readonly: !Object(core_["isPlaylistValid"])(playlist),
       onAdjustProgress: this.handleSeekPreview,
       onAdjustComplete: onSeekComplete

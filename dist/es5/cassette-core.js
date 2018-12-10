@@ -7,7 +7,7 @@
 		exports["cassetteCore"] = factory(require("prop-types"), require("react"));
 	else
 		root["cassetteCore"] = factory(root["PropTypes"], root["React"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
+})((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -108,6 +108,60 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return logError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return logWarning; });
+/* eslint-disable no-console */
+var log = console.log.bind(console);
+var logError = console.error ? console.error.bind(console) : log;
+var logWarning = console.warn ? console.warn.bind(console) : log;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _console__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+
+
+
+var packageVersion = __webpack_require__(6).version;
+
+var _global = typeof window === 'undefined' ? global : window;
+
+_global.__cassette_contexts__ = _global.__cassette_contexts__ || {};
+
+function createSingleGlobalContext(displayName, defaultValue) {
+  if (defaultValue === void 0) {
+    defaultValue = null;
+  }
+
+  var ExistingContext = _global.__cassette_contexts__[displayName];
+
+  if (ExistingContext) {
+    if (ExistingContext.packageVersion !== packageVersion) {
+      Object(_console__WEBPACK_IMPORTED_MODULE_1__[/* logWarning */ "b"])("Warning: multiple versions of " + displayName + " from the @cassette/core" + (" package have been loaded. v" + packageVersion + " will be ignored and") + (" v" + ExistingContext.packageVersion + " will be used instead."));
+    }
+
+    return ExistingContext;
+  }
+
+  var Context = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])(defaultValue);
+  Context.displayName = displayName;
+  Context.packageVersion = packageVersion;
+  _global.__cassette_contexts__[displayName] = Context;
+  return Context;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createSingleGlobalContext);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -139,7 +193,39 @@ module.exports = function (arr, predicate, ctx) {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module) {
+
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.7","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -167,26 +253,23 @@ var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_ty
 var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default = /*#__PURE__*/__webpack_require__.n(external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_);
 
 // EXTERNAL MODULE: ./packages/core/node_modules/array-find-index/index.js
-var array_find_index = __webpack_require__(2);
+var array_find_index = __webpack_require__(4);
 var array_find_index_default = /*#__PURE__*/__webpack_require__.n(array_find_index);
+
+// EXTERNAL MODULE: ./packages/core/src/utils/createSingleGlobalContext.js
+var createSingleGlobalContext = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./packages/core/src/PlayerContext.js
 
-var PlayerContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])(null);
-PlayerContext.displayName = 'PlayerContext';
-/* harmony default export */ var src_PlayerContext = (PlayerContext);
+/* harmony default export */ var PlayerContext = (Object(createSingleGlobalContext["a" /* default */])('PlayerContext'));
 // CONCATENATED MODULE: ./packages/core/src/GroupContext.js
 
-var GroupContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])(null);
-GroupContext.displayName = 'GroupContext';
-/* harmony default export */ var src_GroupContext = (GroupContext);
+/* harmony default export */ var GroupContext = (Object(createSingleGlobalContext["a" /* default */])('GroupContext'));
 // CONCATENATED MODULE: ./packages/core/src/constants.js
 var repeatStrategyOptions = ['none', 'playlist', 'track'];
-// CONCATENATED MODULE: ./packages/core/src/utils/console.js
-/* eslint-disable no-console */
-var log = console.log.bind(console);
-var logError = console.error ? console.error.bind(console) : log;
-var logWarning = console.warn ? console.warn.bind(console) : log;
+// EXTERNAL MODULE: ./packages/core/src/utils/console.js
+var console = __webpack_require__(2);
+
 // CONCATENATED MODULE: ./packages/core/src/PlayerPropTypes.js
 
 
@@ -198,7 +281,7 @@ function requiredOnlyUnlessHasProp(propType, altPropName) {
   function validate(props, propName, componentName) {
     if (propName in props) {
       if (!warnedAboutDefiningBoth && altPropName in props) {
-        logWarning("Do not define both the '" + propName + "' and '" + altPropName + "' props.");
+        Object(console["b" /* logWarning */])("Do not define both the '" + propName + "' and '" + altPropName + "' props.");
         warnedAboutDefiningBoth = true;
       }
 
@@ -257,11 +340,8 @@ function aspectRatio(props, propName) {
 var loopchange = 'loopchange';
 var srcrequest = 'srcrequest';
 
-function createCustomMediaElement(media) {
-  if (media === void 0) {
-    media = document.createElement('media');
-  }
-
+function createCustomMediaElement() {
+  var media = document.createElement('video');
   new MutationObserver(function () {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {
@@ -656,78 +736,6 @@ function convertToNumberWithinIntervalBounds(number, min, max) {
 }
 
 /* harmony default export */ var utils_convertToNumberWithinIntervalBounds = (convertToNumberWithinIntervalBounds);
-// CONCATENATED MODULE: ./packages/core/src/utils/streamVideoElementToCanvas.js
-function streamVideoElementToCanvas(videoElement, canvas, callback) {
-  var ctx = canvas.getContext('2d');
-  var requestId = null;
-  var widthSet = null;
-  var heightSet = null;
-  var placeholderImage = null;
-  requestId = requestAnimationFrame(streamToCanvas);
-  return {
-    endStream: function endStream() {
-      cancelAnimationFrame(requestId);
-    },
-    setCanvasSize: function setCanvasSize(width, height) {
-      widthSet = width || null;
-      heightSet = height || null;
-    },
-    setPlaceholderImage: function setPlaceholderImage(img) {
-      placeholderImage = img || null;
-    }
-  };
-
-  function streamToCanvas() {
-    var videoWidth = videoElement.videoWidth,
-        videoHeight = videoElement.videoHeight; // we want to draw the current frame image from the video element
-
-    var imageElement = videoElement;
-    var imageWidth = videoWidth;
-    var imageHeight = videoHeight;
-    var targetWidth = videoWidth;
-    var targetHeight = videoHeight;
-    var isVideo = true; // however if there's no video to display (usually means we're playing
-    // media) then we want to display a placeholder image, if available
-
-    if (!(targetWidth && targetHeight) && placeholderImage) {
-      imageElement = placeholderImage;
-      imageWidth = placeholderImage.naturalWidth;
-      imageHeight = placeholderImage.naturalHeight;
-      targetWidth = placeholderImage.naturalWidth;
-      targetHeight = placeholderImage.naturalHeight;
-      isVideo = false;
-    } // figure out what resolution the drawn image should be
-
-
-    if (widthSet && heightSet) {
-      targetWidth = widthSet;
-      targetHeight = heightSet;
-    } else if (widthSet) {
-      targetWidth = widthSet;
-      targetHeight = widthSet / imageWidth * imageHeight;
-    } else if (heightSet) {
-      targetHeight = heightSet;
-      targetWidth = heightSet / imageHeight * imageWidth;
-    } // resize the canvas to the draw resolution if it doesn't already match
-
-
-    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-    } // draw
-
-
-    ctx.drawImage(imageElement, 0, 0, targetWidth, targetHeight); // let the callback handle any post-processing
-
-    if (callback) {
-      callback(ctx, isVideo);
-    }
-
-    requestId = requestAnimationFrame(streamToCanvas);
-  }
-}
-
-/* harmony default export */ var utils_streamVideoElementToCanvas = (streamVideoElementToCanvas);
 // CONCATENATED MODULE: ./packages/core/src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -760,22 +768,19 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 
 
-
 function playErrorHandler(err) {
-  logError(err);
+  Object(console["a" /* logError */])(err);
 
   if (err.name === 'NotAllowedError') {
     var warningMessage = 'Media playback failed at ' + new Date().toLocaleTimeString() + '! (Perhaps autoplay is disabled in this browser.)';
-    logWarning(warningMessage);
+    Object(console["b" /* logWarning */])(warningMessage);
   }
 } // Existing Media Session API implementations have default handlers
 // for play/pause, and may yield unexpected behavior if custom
 // play/pause handlers are defined - so let's leave them be.
 
 
-var supportableMediaSessionActions = ['previoustrack', 'nexttrack', 'seekbackward', 'seekforward']; // media element readyState
-
-var HAVE_NOTHING = 0;
+var supportableMediaSessionActions = ['previoustrack', 'nexttrack', 'seekbackward', 'seekforward'];
 var defaultState = {
   // indicates whether media player should be paused
   paused: true,
@@ -822,6 +827,42 @@ function getGoToTrackState(prevState, index, shouldPlay) {
     awaitingPlay: Boolean(shouldPlay),
     paused: !shouldPlay
   };
+}
+
+function setMediaElementSources(mediaElement, sources) {
+  // remove current sources
+  var firstChild;
+
+  while (firstChild = mediaElement.firstChild) {
+    mediaElement.removeChild(firstChild);
+  } // add new sources
+
+
+  for (var _iterator = sources, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var _source = _ref;
+    var sourceElement = document.createElement('source');
+    sourceElement.src = _source.src;
+
+    if (_source.type) {
+      sourceElement.type = _source.type;
+    }
+
+    mediaElement.appendChild(sourceElement);
+  } // cancel playback and re-scan new sources
+
+
+  mediaElement.load();
 }
 /**
  * Wraps an area which shares a common [`playerContext`](#playercontext)
@@ -871,7 +912,9 @@ function (_Component) {
     }); // html media element used for playback
 
     _this.media = null;
-    _this.setMediaElementRef = _this.setMediaElementRef.bind(_assertThisInitialized(_this)); // bind callback methods to pass to descendant elements
+    _this.videoHostElementList = [];
+    _this.videoHostOccupiedCallbacks = new Map();
+    _this.videoHostVacatedCallbacks = new Map(); // bind callback methods to pass to descendant elements
 
     _this.togglePause = _this.togglePause.bind(_assertThisInitialized(_this));
     _this.selectTrackIndex = _this.selectTrackIndex.bind(_assertThisInitialized(_this));
@@ -885,7 +928,10 @@ function (_Component) {
     _this.toggleShuffle = _this.toggleShuffle.bind(_assertThisInitialized(_this));
     _this.setRepeatStrategy = _this.setRepeatStrategy.bind(_assertThisInitialized(_this));
     _this.setPlaybackRate = _this.setPlaybackRate.bind(_assertThisInitialized(_this));
-    _this.pipeVideoStreamToCanvas = _this.pipeVideoStreamToCanvas.bind(_assertThisInitialized(_this)); // bind media event handlers
+    _this.registerVideoHostElement = _this.registerVideoHostElement.bind(_assertThisInitialized(_this));
+    _this.renderVideoIntoHostElement = _this.renderVideoIntoHostElement.bind(_assertThisInitialized(_this));
+    _this.unregisterVideoHostElement = _this.unregisterVideoHostElement.bind(_assertThisInitialized(_this));
+    _this.updateVideoHostElement = _this.updateVideoHostElement.bind(_assertThisInitialized(_this)); // bind media event handlers
 
     _this.handleMediaPlay = _this.handleMediaPlay.bind(_assertThisInitialized(_this));
     _this.handleMediaPause = _this.handleMediaPause.bind(_assertThisInitialized(_this));
@@ -908,32 +954,71 @@ function (_Component) {
   _proto.componentDidMount = function componentDidMount() {
     var _this2 = this;
 
-    var media = this.media = factories_createCustomMediaElement(this.media); // initialize media properties
+    var media = this.media = factories_createCustomMediaElement();
+    var _props = this.props,
+        defaultPlaybackRate = _props.defaultPlaybackRate,
+        crossOrigin = _props.crossOrigin,
+        playlist = _props.playlist,
+        autoplayDelayInSeconds = _props.autoplayDelayInSeconds,
+        mediaElementRef = _props.mediaElementRef,
+        getPosterImageForTrack = _props.getPosterImageForTrack,
+        onActiveTrackUpdate = _props.onActiveTrackUpdate;
+    var _state = this.state,
+        volume = _state.volume,
+        muted = _state.muted,
+        playbackRate = _state.playbackRate,
+        loop = _state.loop,
+        activeTrackIndex = _state.activeTrackIndex,
+        awaitingPlay = _state.awaitingPlay; // initialize media properties
+    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // This avoids an issue where some browsers ignore or delay currentTime
+    // updates when in the HAVE_NOTHING state.
 
-    if (media.readyState !== HAVE_NOTHING) {
-      // we only set the currentTime now if we're beyond the
-      // HAVE_NOTHING readyState. Otherwise we'll let this get
-      // set when the loadedmetadata event fires. This avoids
-      // an issue where some browsers ignore or delay currentTime
-      // updates when in the HAVE_NOTHING state.
-      media.currentTime = this.state.currentTime;
-    }
+    media.defaultPlaybackRate = defaultPlaybackRate;
+    media.crossOrigin = crossOrigin;
+    media.volume = volume;
+    media.muted = muted;
+    media.playbackRate = playbackRate;
+    media.loop = loop;
+    media.setAttribute('playsinline', '');
+    media.setAttribute('webkit-playsinline', '');
+    media.setAttribute('preload', 'metadata');
+    media.setAttribute('poster', getPosterImageForTrack(playlist[activeTrackIndex])); // add listeners for media events
 
-    media.volume = this.state.volume;
-    media.muted = this.state.muted;
-    media.defaultPlaybackRate = this.props.defaultPlaybackRate;
-    media.playbackRate = this.state.playbackRate; // add special event listeners on the media element
+    media.addEventListener('play', this.handleMediaPlay);
+    media.addEventListener('pause', this.handleMediaPause);
+    media.addEventListener('ended', this.handleMediaEnded);
+    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.addEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('volumechange', this.handleMediaVolumechange);
+    media.addEventListener('durationchange', this.handleMediaDurationchange);
+    media.addEventListener('progress', this.handleMediaProgress);
+    media.addEventListener('ratechange', this.handleMediaRatechange); // add listeners for special events
 
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
-    media.addEventListener('loopchange', this.handleMediaLoopchange);
+    media.addEventListener('loopchange', this.handleMediaLoopchange); // set source elements for current track
 
-    if (this.state.awaitingPlay) {
+    setMediaElementSources(media, utils_getTrackSources(playlist, activeTrackIndex)); // initially mount media element in the hidden container (this may change)
+
+    this.mediaContainer.appendChild(media);
+
+    if (awaitingPlay) {
       this.setState({
         awaitingPlay: false
       });
       this.delayTimeout = setTimeout(function () {
         _this2.togglePause(false);
-      }, this.props.autoplayDelayInSeconds * 1000);
+      }, autoplayDelayInSeconds * 1000);
+    }
+
+    if (mediaElementRef) {
+      mediaElementRef(media);
+    }
+
+    if (onActiveTrackUpdate) {
+      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
     }
   };
 
@@ -987,16 +1072,19 @@ function (_Component) {
     var _this3 = this;
 
     this.media.defaultPlaybackRate = this.props.defaultPlaybackRate;
+    this.media.crossOrigin = this.props.crossOrigin;
     this.shuffler.setList(utils_getSourceList(this.props.playlist));
     this.shuffler.setOptions({
       allowBackShuffle: this.props.allowBackShuffle
     });
     var prevSources = utils_getTrackSources(prevProps.playlist, prevState.activeTrackIndex);
     var newSources = utils_getTrackSources(this.props.playlist, this.state.activeTrackIndex);
+    var prevTrack = prevProps.playlist[prevState.activeTrackIndex];
+    var newTrack = this.props.playlist[this.state.activeTrackIndex];
 
     if (prevSources[0].src !== newSources[0].src) {
-      // cancel playback and re-scan current sources
-      this.media.load();
+      setMediaElementSources(this.media, newSources);
+      this.media.setAttribute('poster', this.props.getPosterImageForTrack(newTrack));
 
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -1005,6 +1093,10 @@ function (_Component) {
         // lost our history.
         this.shuffler.clear();
       }
+    }
+
+    if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
+      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -1038,14 +1130,6 @@ function (_Component) {
     media.removeEventListener('loopchange', this.handleMediaLoopchange);
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
-  };
-
-  _proto.setMediaElementRef = function setMediaElementRef(ref) {
-    this.media = ref;
-
-    if (typeof this.props.mediaElementRef === 'function') {
-      this.props.mediaElementRef(ref);
-    }
   };
 
   _proto.stealMediaSession = function stealMediaSession() {
@@ -1096,8 +1180,75 @@ function (_Component) {
     });
   };
 
-  _proto.pipeVideoStreamToCanvas = function pipeVideoStreamToCanvas(canvas, callback) {
-    return utils_streamVideoElementToCanvas(this.media, canvas, callback);
+  _proto.registerVideoHostElement = function registerVideoHostElement(hostElement, _ref2) {
+    var onHostOccupied = _ref2.onHostOccupied,
+        onHostVacated = _ref2.onHostVacated;
+    this.videoHostElementList = this.videoHostElementList.concat(hostElement);
+    this.videoHostOccupiedCallbacks.set(hostElement, onHostOccupied);
+    this.videoHostVacatedCallbacks.set(hostElement, onHostVacated);
+  };
+
+  _proto.renderVideoIntoHostElement = function renderVideoIntoHostElement(hostElement) {
+    var _this5 = this;
+
+    if (this.videoHostElementList.indexOf(hostElement) === -1) {
+      return;
+    }
+
+    cancelAnimationFrame(this.videoHostUpdateRaf);
+    this.videoHostUpdateRaf = requestAnimationFrame(function () {
+      return _this5.updateVideoHostElement(hostElement);
+    });
+  };
+
+  _proto.unregisterVideoHostElement = function unregisterVideoHostElement(hostElement) {
+    this.videoHostElementList = this.videoHostElementList.filter(function (elem) {
+      return elem !== hostElement;
+    });
+    this.videoHostOccupiedCallbacks.delete(hostElement);
+    this.videoHostVacatedCallbacks.delete(hostElement);
+
+    if (this.media.parentNode === hostElement) {
+      this.updateVideoHostElement();
+    }
+  };
+
+  _proto.updateVideoHostElement = function updateVideoHostElement(hostElement) {
+    if (!hostElement) {
+      hostElement = this.videoHostElementList[0] || this.mediaContainer;
+    } else {
+      // move hostElement to front of list
+      this.videoHostElementList = [hostElement].concat(this.videoHostElementList.filter(function (elem) {
+        return elem !== hostElement;
+      }));
+    }
+
+    var playing = !this.media.paused;
+    var oldHostElement = this.media.parentNode;
+
+    if (hostElement === oldHostElement) {
+      return;
+    }
+
+    hostElement.appendChild(this.media); // according to the HTML spec playback should continue, but
+    // some browsers pause the element whenever it is moved around, so
+    // let's make sure playback resumes if that's the case.
+
+    if (playing && this.media.paused) {
+      this.media.play();
+    }
+
+    var onVacated = this.videoHostVacatedCallbacks.get(oldHostElement);
+
+    if (onVacated) {
+      onVacated(this.media);
+    }
+
+    var onOccupied = this.videoHostOccupiedCallbacks.get(hostElement);
+
+    if (onOccupied) {
+      onOccupied(this.media);
+    }
   };
 
   _proto.handleMediaPlay = function handleMediaPlay() {
@@ -1133,7 +1284,7 @@ function (_Component) {
     var newTrackIndex = utils_findTrackIndexByUrl(playlist, e.srcRequested);
 
     if (newTrackIndex === -1) {
-      logError("Source '" + e.srcRequested + "' does not exist in the loaded playlist. " + "Make sure you've updated the 'playlist' prop to " + "PlayerContextProvider before you select this track!");
+      Object(console["a" /* logError */])("Source '" + e.srcRequested + "' does not exist in the loaded playlist. " + "Make sure you've updated the 'playlist' prop to " + "PlayerContextProvider before you select this track!");
       return;
     }
 
@@ -1148,17 +1299,17 @@ function (_Component) {
     }
 
     clearTimeout(this.gapLengthTimeout);
-    var _props = this.props,
-        playlist = _props.playlist,
-        loadFirstTrackOnPlaylistComplete = _props.loadFirstTrackOnPlaylistComplete;
+    var _props2 = this.props,
+        playlist = _props2.playlist,
+        loadFirstTrackOnPlaylistComplete = _props2.loadFirstTrackOnPlaylistComplete;
 
     if (!utils_isPlaylistValid(playlist)) {
       return;
     }
 
-    var _state = this.state,
-        cycle = _state.cycle,
-        activeTrackIndex = _state.activeTrackIndex;
+    var _state2 = this.state,
+        cycle = _state2.cycle,
+        activeTrackIndex = _state2.activeTrackIndex;
 
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
@@ -1191,6 +1342,13 @@ function (_Component) {
     var _media = this.media,
         currentTime = _media.currentTime,
         played = _media.played;
+
+    if (this.state.trackLoading) {
+      // correct currentTime to preset, if applicable, during load
+      this.media.currentTime = this.state.currentTime;
+      return;
+    }
+
     this.setState({
       currentTime: currentTime,
       playedRanges: utils_getTimeRangesArray(played)
@@ -1302,7 +1460,7 @@ function (_Component) {
     }
 
     if (index < 0 || index > playlist.length) {
-      logWarning("Playlist index " + index + " is out of bounds!");
+      Object(console["b" /* logWarning */])("Playlist index " + index + " is out of bounds!");
       return;
     }
 
@@ -1314,14 +1472,14 @@ function (_Component) {
   };
 
   _proto.backSkip = function backSkip() {
-    var _props2 = this.props,
-        playlist = _props2.playlist,
-        stayOnBackSkipThreshold = _props2.stayOnBackSkipThreshold;
+    var _props3 = this.props,
+        playlist = _props3.playlist,
+        stayOnBackSkipThreshold = _props3.stayOnBackSkipThreshold;
     var media = this.media;
-    var _state2 = this.state,
-        cycle = _state2.cycle,
-        activeTrackIndex = _state2.activeTrackIndex,
-        shuffle = _state2.shuffle;
+    var _state3 = this.state,
+        cycle = _state3.cycle,
+        activeTrackIndex = _state3.activeTrackIndex,
+        shuffle = _state3.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || media.currentTime >= stayOnBackSkipThreshold || !cycle && activeTrackIndex < 1) {
       media.currentTime = 0;
@@ -1353,10 +1511,10 @@ function (_Component) {
 
   _proto.forwardSkip = function forwardSkip() {
     var playlist = this.props.playlist;
-    var _state3 = this.state,
-        cycle = _state3.cycle,
-        activeTrackIndex = _state3.activeTrackIndex,
-        shuffle = _state3.shuffle;
+    var _state4 = this.state,
+        cycle = _state4.cycle,
+        activeTrackIndex = _state4.activeTrackIndex,
+        shuffle = _state4.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || !cycle && activeTrackIndex + 1 >= playlist.length) {
       return;
@@ -1389,9 +1547,9 @@ function (_Component) {
 
     switch (this.props.seekMode) {
       case 'paused':
-        this.setState(function (_ref) {
-          var paused = _ref.paused,
-              awaitingResumeOnSeekComplete = _ref.awaitingResumeOnSeekComplete;
+        this.setState(function (_ref3) {
+          var paused = _ref3.paused,
+              awaitingResumeOnSeekComplete = _ref3.awaitingResumeOnSeekComplete;
           return _objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
@@ -1405,9 +1563,9 @@ function (_Component) {
         break;
 
       case 'immediate':
-        this.setState(function (_ref2) {
-          var paused = _ref2.paused,
-              awaitingResumeOnSeekComplete = _ref2.awaitingResumeOnSeekComplete;
+        this.setState(function (_ref4) {
+          var paused = _ref4.paused,
+              awaitingResumeOnSeekComplete = _ref4.awaitingResumeOnSeekComplete;
           return _objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
@@ -1428,16 +1586,17 @@ function (_Component) {
     }
   };
 
-  _proto.seekComplete = function seekComplete() {
-    var _state4 = this.state,
-        seekPreviewTime = _state4.seekPreviewTime,
-        awaitingResumeOnSeekComplete = _state4.awaitingResumeOnSeekComplete;
+  _proto.seekComplete = function seekComplete(targetTime) {
+    var _state5 = this.state,
+        seekPreviewTime = _state5.seekPreviewTime,
+        awaitingResumeOnSeekComplete = _state5.awaitingResumeOnSeekComplete;
     var baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
     };
+    var currentTime = typeof targetTime === 'number' ? targetTime : seekPreviewTime;
 
-    if (isNaN(seekPreviewTime)) {
+    if (isNaN(currentTime)) {
       this.setState(baseStateUpdate);
       return;
     }
@@ -1448,9 +1607,9 @@ function (_Component) {
        * helps us avoid the progress bar jumping around and confusing the user.
        * https://github.com/benwiley4000/cassette/issues/209
        */
-      currentTime: seekPreviewTime
+      currentTime: currentTime
     }));
-    this.media.currentTime = seekPreviewTime;
+    this.media.currentTime = currentTime;
 
     if (awaitingResumeOnSeekComplete) {
       if (this.media.ended) {
@@ -1461,8 +1620,12 @@ function (_Component) {
     }
   };
 
-  _proto.setVolume = function setVolume(volume) {
-    if (!this.state.setVolumeInProgress) {
+  _proto.setVolume = function setVolume(volume, inProgress) {
+    if (inProgress === void 0) {
+      inProgress = true;
+    }
+
+    if (inProgress && !this.state.setVolumeInProgress) {
       this.setState({
         setVolumeInProgress: true
       });
@@ -1473,7 +1636,11 @@ function (_Component) {
     this.media.volume = volumeInBounds;
   };
 
-  _proto.setVolumeComplete = function setVolumeComplete() {
+  _proto.setVolumeComplete = function setVolumeComplete(volume) {
+    if (typeof volume === 'number') {
+      this.setVolume(volume, false);
+    }
+
     this.setState({
       setVolumeInProgress: false
     });
@@ -1501,33 +1668,32 @@ function (_Component) {
 
   _proto.setRepeatStrategy = function setRepeatStrategy(repeatStrategy) {
     if (repeatStrategyOptions.indexOf(repeatStrategy) === -1) {
-      logWarning('repeatStrategy "' + repeatStrategy + '" is not one of: ' + repeatStrategyOptions.split(', ') + '.');
+      Object(console["b" /* logWarning */])('repeatStrategy "' + repeatStrategy + '" is not one of: ' + repeatStrategyOptions.split(', ') + '.');
       return;
     }
 
-    this.setState(function () {
-      switch (repeatStrategy) {
-        case 'track':
-          return {
-            loop: true
-          };
+    switch (repeatStrategy) {
+      case 'track':
+        // state update is automatic
+        this.media.loop = true;
+        break;
 
-        case 'playlist':
-          return {
-            loop: false,
-            cycle: true
-          };
+      case 'playlist':
+        this.setState({
+          loop: false,
+          cycle: true
+        });
+        this.media.loop = false;
+        break;
 
-        case 'none':
-          return {
-            loop: false,
-            cycle: false
-          };
-
-        default:
-          return null;
-      }
-    });
+      case 'none':
+        this.setState({
+          loop: false,
+          cycle: false
+        });
+        this.media.loop = false;
+        break;
+    }
   };
 
   _proto.setPlaybackRate = function setPlaybackRate(rate) {
@@ -1557,7 +1723,9 @@ function (_Component) {
       playbackRate: state.playbackRate,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: utils_getRepeatStrategy(state.loop, state.cycle),
-      pipeVideoStreamToCanvas: this.pipeVideoStreamToCanvas,
+      registerVideoHostElement: this.registerVideoHostElement,
+      renderVideoIntoHostElement: this.renderVideoIntoHostElement,
+      unregisterVideoHostElement: this.unregisterVideoHostElement,
       onTogglePause: this.togglePause,
       onSelectTrackIndex: this.selectTrackIndex,
       onBackSkip: this.backSkip,
@@ -1576,8 +1744,8 @@ function (_Component) {
       // only update this.playerContext if something has changed
       var _arr = Object.keys(this.playerContext);
 
-      for (var _i = 0; _i < _arr.length; _i++) {
-        var key = _arr[_i];
+      for (var _i2 = 0; _i2 < _arr.length; _i2++) {
+        var key = _arr[_i2];
 
         if (playerContext[key] !== this.playerContext[key]) {
           this.playerContext = playerContext;
@@ -1593,32 +1761,15 @@ function (_Component) {
   };
 
   _proto.render = function render() {
-    var sources = utils_getTrackSources(this.props.playlist, this.state.activeTrackIndex);
+    var _this6 = this;
+
     var playerContext = this.getControlProps();
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(external_root_React_commonjs_react_commonjs2_react_amd_react_["Fragment"], null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("video", {
-      hidden: true,
-      ref: this.setMediaElementRef,
-      crossOrigin: this.props.crossOrigin,
-      preload: "metadata",
-      loop: this.state.loop,
-      onPlay: this.handleMediaPlay,
-      onPause: this.handleMediaPause,
-      onEnded: this.handleMediaEnded,
-      onStalled: this.handleMediaStalled,
-      onCanPlayThrough: this.handleMediaCanplaythrough,
-      onTimeUpdate: this.handleMediaTimeupdate,
-      onLoadedMetadata: this.handleMediaLoadedmetadata,
-      onVolumeChange: this.handleMediaVolumechange,
-      onDurationChange: this.handleMediaDurationchange,
-      onProgress: this.handleMediaProgress,
-      onRateChange: this.handleMediaRatechange
-    }, sources.map(function (source) {
-      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("source", {
-        key: source.src,
-        src: source.src,
-        type: source.type
-      });
-    })), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_PlayerContext.Provider, {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(external_root_React_commonjs_react_commonjs2_react_amd_react_["Fragment"], null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
+      ref: function ref(elem) {
+        return _this6.mediaContainer = elem;
+      },
+      hidden: true
+    }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContext.Provider, {
       value: playerContext
     }, typeof this.props.children === 'function' ? this.props.children(playerContext) : this.props.children));
   };
@@ -1650,6 +1801,8 @@ PlayerContextProvider_PlayerContextProvider.propTypes = {
     __unstable__: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object.isRequired
   }),
   onStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+  onActiveTrackUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+  getPosterImageForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   children: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOfType([external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.node, external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func]).isRequired
 };
 PlayerContextProvider_PlayerContextProvider.defaultProps = {
@@ -1669,7 +1822,10 @@ PlayerContextProvider_PlayerContextProvider.defaultProps = {
   allowBackShuffle: false,
   stayOnBackSkipThreshold: 5,
   supportedMediaSessionActions: ['play', 'pause', 'previoustrack', 'nexttrack'],
-  mediaSessionSeekLengthInSeconds: 10
+  mediaSessionSeekLengthInSeconds: 10,
+  getPosterImageForTrack: function getPosterImageForTrack(track) {
+    return track && track.artwork ? track.artwork[0].src : '';
+  }
 };
 var PlayerContextProvider_PlayerContextGroupMember =
 /*#__PURE__*/
@@ -1691,11 +1847,11 @@ function (_Component2) {
   };
 
   _proto2.render = function render() {
-    var _this5 = this;
+    var _this7 = this;
 
-    var _props3 = this.props,
-        groupContext = _props3.groupContext,
-        props = _props3.props;
+    var _props4 = this.props,
+        groupContext = _props4.groupContext,
+        props = _props4.props;
 
     var _mediaElementRef = props.mediaElementRef,
         rest = _objectWithoutProperties(props, ["mediaElementRef"]);
@@ -1706,7 +1862,7 @@ function (_Component2) {
           _mediaElementRef(ref);
         }
 
-        _this5.mediaElement = ref;
+        _this7.mediaElement = ref;
       }
     }));
   };
@@ -1722,7 +1878,7 @@ PlayerContextProvider_PlayerContextGroupMember.propTypes = {
 };
 
 function PlayerContextGroupConsumer(props) {
-  return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Consumer, null, function (groupContext) {
+  return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Consumer, null, function (groupContext) {
     if (!groupContext) {
       return Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createElement"])(PlayerContextProvider_PlayerContextProvider, props);
     }
@@ -1815,7 +1971,7 @@ function (_Component) {
   _proto.render = function render() {
     var _this2 = this;
 
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Consumer, null, function (groupContext) {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Consumer, null, function (groupContext) {
       var value = groupContext ? PlayerContextGroup_objectSpread({}, groupContext, {
         groupProps: PlayerContextGroup_objectSpread({}, groupContext.groupProps, _this2.props)
       }) : {
@@ -1823,7 +1979,7 @@ function (_Component) {
         registerMediaElement: _this2.registerMediaElement,
         unregisterMediaElement: _this2.unregisterMediaElement
       };
-      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Provider, {
+      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Provider, {
         value: value
       }, _this2.props.children);
     });
@@ -1838,17 +1994,15 @@ PlayerContextGroup_PlayerContextGroup.propTypes = {
 // CONCATENATED MODULE: ./packages/core/src/FullscreenContext.js
 
 
-var FullscreenContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])({
+/* harmony default export */ var FullscreenContext = (Object(createSingleGlobalContext["a" /* default */])('FullscreenContext', {
   fullscreen: false,
   requestFullscreen: function requestFullscreen() {
-    logWarning('Fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
+    Object(console["b" /* logWarning */])('Fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
   },
   requestExitFullscreen: function requestExitFullscreen() {
-    logWarning('Exit fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
+    Object(console["b" /* logWarning */])('Exit fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
   }
-});
-FullscreenContext.displayName = 'FullscreenContext';
-/* harmony default export */ var src_FullscreenContext = (FullscreenContext);
+}));
 // CONCATENATED MODULE: ./packages/core/src/FullscreenContextProvider.js
 function FullscreenContextProvider_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -1961,7 +2115,7 @@ function (_PureComponent) {
         return _this2.fullscreenElement = elem;
       },
       style: this.state.fullscreen ? fullscreenStyle : undefined
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_FullscreenContext.Provider, {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(FullscreenContext.Provider, {
       value: fullscreenContext
     }, typeof this.props.children === 'function' ? this.props.children(fullscreenContext) : this.props.children));
   };
@@ -1991,8 +2145,8 @@ function playerContextFilter(component, contextPropNames) {
   var childName = component.displayName || component.name;
 
   function PlayerContextFilter(props) {
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_FullscreenContext.Consumer, null, function (fullscreenContext) {
-      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_PlayerContext.Consumer, null, function (playerContext) {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(FullscreenContext.Consumer, null, function (fullscreenContext) {
+      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContext.Consumer, null, function (playerContext) {
         var childProps = playerContextFilter_objectSpread({}, props);
 
         for (var _iterator = contextPropNames, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
@@ -2014,7 +2168,7 @@ function playerContextFilter(component, contextPropNames) {
           } else if (fullscreenContext.hasOwnProperty(_propName)) {
             childProps[_propName] = fullscreenContext[_propName];
           } else if (!warned[_propName]) {
-            logWarning("Prop '" + _propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
+            Object(console["b" /* logWarning */])("Prop '" + _propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
             warned[_propName] = true;
           }
         }
@@ -2040,8 +2194,8 @@ function playerContextFilter(component, contextPropNames) {
 /* concated harmony reexport FullscreenContextProvider */__webpack_require__.d(__webpack_exports__, "FullscreenContextProvider", function() { return src_FullscreenContextProvider; });
 /* concated harmony reexport playerContextFilter */__webpack_require__.d(__webpack_exports__, "playerContextFilter", function() { return src_playerContextFilter; });
 /* concated harmony reexport PlayerPropTypes */__webpack_require__.d(__webpack_exports__, "PlayerPropTypes", function() { return PlayerPropTypes_namespaceObject; });
-/* concated harmony reexport logError */__webpack_require__.d(__webpack_exports__, "logError", function() { return logError; });
-/* concated harmony reexport logWarning */__webpack_require__.d(__webpack_exports__, "logWarning", function() { return logWarning; });
+/* concated harmony reexport logError */__webpack_require__.d(__webpack_exports__, "logError", function() { return console["a" /* logError */]; });
+/* concated harmony reexport logWarning */__webpack_require__.d(__webpack_exports__, "logWarning", function() { return console["b" /* logWarning */]; });
 /* concated harmony reexport convertToNumberWithinIntervalBounds */__webpack_require__.d(__webpack_exports__, "convertToNumberWithinIntervalBounds", function() { return utils_convertToNumberWithinIntervalBounds; });
 /* concated harmony reexport isPlaylistValid */__webpack_require__.d(__webpack_exports__, "isPlaylistValid", function() { return utils_isPlaylistValid; });
 /* concated harmony reexport repeatStrategyOptions */__webpack_require__.d(__webpack_exports__, "repeatStrategyOptions", function() { return repeatStrategyOptions; });
@@ -2053,10 +2207,10 @@ function playerContextFilter(component, contextPropNames) {
 
 
 
-var PlayerContextConsumer = src_PlayerContext.Consumer;
+var PlayerContextConsumer = PlayerContext.Consumer;
 
 
-var FullscreenContextConsumer = src_FullscreenContext.Consumer;
+var FullscreenContextConsumer = FullscreenContext.Consumer;
 
  // undocumented exports
 

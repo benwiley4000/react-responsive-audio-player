@@ -7,7 +7,7 @@
 		exports["cassettePlayer"] = factory(require("react"), require("prop-types"), require("@cassette/core"), require("@cassette/components"));
 	else
 		root["cassettePlayer"] = factory(root["React"], root["PropTypes"], root["cassetteCore"], root["cassetteComponents"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__) {
+})((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__, __WEBPACK_EXTERNAL_MODULE__2__, __WEBPACK_EXTERNAL_MODULE__3__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -307,12 +307,12 @@ __webpack_require__.r(__webpack_exports__);
 var external_root_React_commonjs_react_commonjs2_react_amd_react_ = __webpack_require__(0);
 var external_root_React_commonjs_react_commonjs2_react_amd_react_default = /*#__PURE__*/__webpack_require__.n(external_root_React_commonjs_react_commonjs2_react_amd_react_);
 
+// EXTERNAL MODULE: external {"root":"cassetteCore","commonjs":"@cassette/core","commonjs2":"@cassette/core","amd":"@cassette/core"}
+var core_ = __webpack_require__(2);
+
 // EXTERNAL MODULE: external {"root":"PropTypes","commonjs":"prop-types","commonjs2":"prop-types","amd":"prop-types"}
 var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_ = __webpack_require__(1);
 var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default = /*#__PURE__*/__webpack_require__.n(external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_);
-
-// EXTERNAL MODULE: external {"root":"cassetteCore","commonjs":"@cassette/core","commonjs2":"@cassette/core","amd":"@cassette/core"}
-var core_ = __webpack_require__(2);
 
 // EXTERNAL MODULE: external {"root":"cassetteComponents","commonjs":"@cassette/components","commonjs2":"@cassette/components","amd":"@cassette/components"}
 var components_ = __webpack_require__(3);
@@ -489,19 +489,19 @@ ForwardSkipButton_ForwardSkipButton.propTypes = {
   onForwardSkip: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_ForwardSkipButton = (Object(core_["playerContextFilter"])(ForwardSkipButton_ForwardSkipButton, ['onForwardSkip']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_off_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_off_48px.svg?
 var ic_volume_off_48px = __webpack_require__(4);
 var ic_volume_off_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_off_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_mute_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_mute_48px.svg?
 var ic_volume_mute_48px = __webpack_require__(5);
 var ic_volume_mute_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_mute_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_down_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_down_48px.svg?
 var ic_volume_down_48px = __webpack_require__(6);
 var ic_volume_down_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_down_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_up_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_up_48px.svg?
 var ic_volume_up_48px = __webpack_require__(7);
 var ic_volume_up_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_up_48px);
 
@@ -703,7 +703,6 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
     const _props = this.props,
           volume = _props.volume,
           muted = _props.muted,
-          setVolumeInProgress = _props.setVolumeInProgress,
           onSetVolume = _props.onSetVolume,
           onSetVolumeComplete = _props.onSetVolumeComplete,
           onToggleMuted = _props.onToggleMuted;
@@ -741,7 +740,6 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
       progress: muted ? 0 : volume,
       progressDirection: utils_getVolumeBarDirectionFromPosition(volumeBarPosition),
       handle: this.renderHandle(),
-      adjusting: setVolumeInProgress,
       onAdjustProgress: onSetVolume,
       onAdjustComplete: onSetVolumeComplete
     })));
@@ -796,11 +794,11 @@ MuteButton_MuteButton.propTypes = {
   onToggleMuted: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_MuteButton = (Object(core_["playerContextFilter"])(MuteButton_MuteButton, ['volume', 'muted', 'onToggleMuted']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_48px.svg?
 var ic_repeat_48px = __webpack_require__(8);
 var ic_repeat_48px_default = /*#__PURE__*/__webpack_require__.n(ic_repeat_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatOneIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_one_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatOneIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_one_48px.svg?
 var ic_repeat_one_48px = __webpack_require__(9);
 var ic_repeat_one_48px_default = /*#__PURE__*/__webpack_require__.n(ic_repeat_one_48px);
 
@@ -861,7 +859,7 @@ RepeatButton_RepeatButton.propTypes = {
   onSetRepeatStrategy: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_RepeatButton = (Object(core_["playerContextFilter"])(RepeatButton_RepeatButton, ['repeatStrategy', 'onSetRepeatStrategy']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=ShuffleIcon!./node_modules/material-design-icons/av/svg/design/ic_shuffle_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=ShuffleIcon!./node_modules/material-design-icons/av/svg/design/ic_shuffle_48px.svg?
 var ic_shuffle_48px = __webpack_require__(10);
 var ic_shuffle_48px_default = /*#__PURE__*/__webpack_require__.n(ic_shuffle_48px);
 
@@ -985,7 +983,6 @@ class MediaProgress_MediaProgress extends external_root_React_commonjs_react_com
       progressClassName: "progress",
       progress: displayedProgress,
       progressDirection: "right",
-      adjusting: seekInProgress,
       readonly: !Object(core_["isPlaylistValid"])(playlist),
       onAdjustProgress: this.handleSeekPreview,
       onAdjustComplete: onSeekComplete
@@ -1057,11 +1054,11 @@ MediaProgressDisplay_MediaProgressDisplay.propTypes = {
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
 };
 /* harmony default export */ var controls_MediaProgressDisplay = (Object(core_["playerContextFilter"])(MediaProgressDisplay_MediaProgressDisplay, ['playlist', 'activeTrackIndex', 'currentTime', 'duration']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_48px.svg?
 var ic_fullscreen_48px = __webpack_require__(11);
 var ic_fullscreen_48px_default = /*#__PURE__*/__webpack_require__.n(ic_fullscreen_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/react-responsive-audio-player/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenExitIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_exit_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenExitIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_exit_48px.svg?
 var ic_fullscreen_exit_48px = __webpack_require__(12);
 var ic_fullscreen_exit_48px_default = /*#__PURE__*/__webpack_require__.n(ic_fullscreen_exit_48px);
 
@@ -1276,7 +1273,6 @@ function MediaPlayer_objectWithoutProperties(source, excluded) { if (source == n
 
 
 
-
 /**
  * A media player component which plays a provided playlist of media
  */
@@ -1302,12 +1298,10 @@ class MediaPlayer_MediaPlayer extends external_root_React_commonjs_react_commonj
   }
 
 }
-MediaPlayer_MediaPlayer.propTypes = _objectSpread({}, core_["PlayerContextProvider"].propTypes, src_MediaPlayerControls.propTypes, {
-  fullscreenEnabled: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired
-});
-MediaPlayer_MediaPlayer.defaultProps = _objectSpread({}, core_["PlayerContextProvider"].defaultProps, src_MediaPlayerControls.defaultProps, {
-  fullscreenEnabled: true
-});
+MediaPlayer_MediaPlayer.propTypes = _objectSpread({}, core_["PlayerContextProvider"].propTypes, src_MediaPlayerControls.propTypes, core_["FullscreenContextProvider"].propTypes);
+delete MediaPlayer_MediaPlayer.propTypes.children;
+MediaPlayer_MediaPlayer.defaultProps = _objectSpread({}, core_["PlayerContextProvider"].defaultProps, src_MediaPlayerControls.defaultProps, core_["FullscreenContextProvider"].defaultProps);
+delete MediaPlayer_MediaPlayer.defaultProps.children;
 /* harmony default export */ var src_MediaPlayer = (MediaPlayer_MediaPlayer);
 // CONCATENATED MODULE: ./src/index.js
 /* concated harmony reexport MediaPlayer */__webpack_require__.d(__webpack_exports__, "MediaPlayer", function() { return src_MediaPlayer; });

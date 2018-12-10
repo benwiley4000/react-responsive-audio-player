@@ -7,7 +7,7 @@
 		exports["cassetteCore"] = factory(require("prop-types"), require("react"));
 	else
 		root["cassetteCore"] = factory(root["PropTypes"], root["React"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
+})((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -108,6 +108,56 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return logError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return logWarning; });
+/* eslint-disable no-console */
+const log = console.log.bind(console);
+const logError = console.error ? console.error.bind(console) : log;
+const logWarning = console.warn ? console.warn.bind(console) : log;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _console__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+
+
+
+const packageVersion = __webpack_require__(6).version;
+
+const _global = typeof window === 'undefined' ? global : window;
+
+_global.__cassette_contexts__ = _global.__cassette_contexts__ || {};
+
+function createSingleGlobalContext(displayName, defaultValue = null) {
+  const ExistingContext = _global.__cassette_contexts__[displayName];
+
+  if (ExistingContext) {
+    if (ExistingContext.packageVersion !== packageVersion) {
+      Object(_console__WEBPACK_IMPORTED_MODULE_1__[/* logWarning */ "b"])(`Warning: multiple versions of ${displayName} from the @cassette/core` + ` package have been loaded. v${packageVersion} will be ignored and` + ` v${ExistingContext.packageVersion} will be used instead.`);
+    }
+
+    return ExistingContext;
+  }
+
+  const Context = Object(react__WEBPACK_IMPORTED_MODULE_0__["createContext"])(defaultValue);
+  Context.displayName = displayName;
+  Context.packageVersion = packageVersion;
+  _global.__cassette_contexts__[displayName] = Context;
+  return Context;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (createSingleGlobalContext);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -139,7 +189,39 @@ module.exports = function (arr, predicate, ctx) {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1, eval)("this");
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module) {
+
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.7","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+
+/***/ }),
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -167,26 +249,23 @@ var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_ty
 var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default = /*#__PURE__*/__webpack_require__.n(external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_);
 
 // EXTERNAL MODULE: ./node_modules/array-find-index/index.js
-var array_find_index = __webpack_require__(2);
+var array_find_index = __webpack_require__(4);
 var array_find_index_default = /*#__PURE__*/__webpack_require__.n(array_find_index);
+
+// EXTERNAL MODULE: ./src/utils/createSingleGlobalContext.js
+var createSingleGlobalContext = __webpack_require__(3);
 
 // CONCATENATED MODULE: ./src/PlayerContext.js
 
-const PlayerContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])(null);
-PlayerContext.displayName = 'PlayerContext';
-/* harmony default export */ var src_PlayerContext = (PlayerContext);
+/* harmony default export */ var PlayerContext = (Object(createSingleGlobalContext["a" /* default */])('PlayerContext'));
 // CONCATENATED MODULE: ./src/GroupContext.js
 
-const GroupContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])(null);
-GroupContext.displayName = 'GroupContext';
-/* harmony default export */ var src_GroupContext = (GroupContext);
+/* harmony default export */ var GroupContext = (Object(createSingleGlobalContext["a" /* default */])('GroupContext'));
 // CONCATENATED MODULE: ./src/constants.js
 const repeatStrategyOptions = ['none', 'playlist', 'track'];
-// CONCATENATED MODULE: ./src/utils/console.js
-/* eslint-disable no-console */
-const log = console.log.bind(console);
-const logError = console.error ? console.error.bind(console) : log;
-const logWarning = console.warn ? console.warn.bind(console) : log;
+// EXTERNAL MODULE: ./src/utils/console.js
+var console = __webpack_require__(2);
+
 // CONCATENATED MODULE: ./src/PlayerPropTypes.js
 
 
@@ -198,7 +277,7 @@ function requiredOnlyUnlessHasProp(propType, altPropName) {
   function validate(props, propName, componentName, ...rest) {
     if (propName in props) {
       if (!warnedAboutDefiningBoth && altPropName in props) {
-        logWarning(`Do not define both the '${propName}' and '${altPropName}' props.`);
+        Object(console["b" /* logWarning */])(`Do not define both the '${propName}' and '${altPropName}' props.`);
         warnedAboutDefiningBoth = true;
       }
 
@@ -253,7 +332,8 @@ function aspectRatio(props, propName) {
 const loopchange = 'loopchange';
 const srcrequest = 'srcrequest';
 
-function createCustomMediaElement(media = document.createElement('media')) {
+function createCustomMediaElement() {
+  const media = document.createElement('video');
   new MutationObserver(() => {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {
@@ -629,81 +709,6 @@ function convertToNumberWithinIntervalBounds(number, min, max) {
 }
 
 /* harmony default export */ var utils_convertToNumberWithinIntervalBounds = (convertToNumberWithinIntervalBounds);
-// CONCATENATED MODULE: ./src/utils/streamVideoElementToCanvas.js
-function streamVideoElementToCanvas(videoElement, canvas, callback) {
-  const ctx = canvas.getContext('2d');
-  let requestId = null;
-  let widthSet = null;
-  let heightSet = null;
-  let placeholderImage = null;
-  requestId = requestAnimationFrame(streamToCanvas);
-  return {
-    endStream() {
-      cancelAnimationFrame(requestId);
-    },
-
-    setCanvasSize(width, height) {
-      widthSet = width || null;
-      heightSet = height || null;
-    },
-
-    setPlaceholderImage(img) {
-      placeholderImage = img || null;
-    }
-
-  };
-
-  function streamToCanvas() {
-    const videoWidth = videoElement.videoWidth,
-          videoHeight = videoElement.videoHeight; // we want to draw the current frame image from the video element
-
-    let imageElement = videoElement;
-    let imageWidth = videoWidth;
-    let imageHeight = videoHeight;
-    let targetWidth = videoWidth;
-    let targetHeight = videoHeight;
-    let isVideo = true; // however if there's no video to display (usually means we're playing
-    // media) then we want to display a placeholder image, if available
-
-    if (!(targetWidth && targetHeight) && placeholderImage) {
-      imageElement = placeholderImage;
-      imageWidth = placeholderImage.naturalWidth;
-      imageHeight = placeholderImage.naturalHeight;
-      targetWidth = placeholderImage.naturalWidth;
-      targetHeight = placeholderImage.naturalHeight;
-      isVideo = false;
-    } // figure out what resolution the drawn image should be
-
-
-    if (widthSet && heightSet) {
-      targetWidth = widthSet;
-      targetHeight = heightSet;
-    } else if (widthSet) {
-      targetWidth = widthSet;
-      targetHeight = widthSet / imageWidth * imageHeight;
-    } else if (heightSet) {
-      targetHeight = heightSet;
-      targetWidth = heightSet / imageHeight * imageWidth;
-    } // resize the canvas to the draw resolution if it doesn't already match
-
-
-    if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-    } // draw
-
-
-    ctx.drawImage(imageElement, 0, 0, targetWidth, targetHeight); // let the callback handle any post-processing
-
-    if (callback) {
-      callback(ctx, isVideo);
-    }
-
-    requestId = requestAnimationFrame(streamToCanvas);
-  }
-}
-
-/* harmony default export */ var utils_streamVideoElementToCanvas = (streamVideoElementToCanvas);
 // CONCATENATED MODULE: ./src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -732,22 +737,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
-
 function playErrorHandler(err) {
-  logError(err);
+  Object(console["a" /* logError */])(err);
 
   if (err.name === 'NotAllowedError') {
     const warningMessage = 'Media playback failed at ' + new Date().toLocaleTimeString() + '! (Perhaps autoplay is disabled in this browser.)';
-    logWarning(warningMessage);
+    Object(console["b" /* logWarning */])(warningMessage);
   }
 } // Existing Media Session API implementations have default handlers
 // for play/pause, and may yield unexpected behavior if custom
 // play/pause handlers are defined - so let's leave them be.
 
 
-const supportableMediaSessionActions = ['previoustrack', 'nexttrack', 'seekbackward', 'seekforward']; // media element readyState
-
-const HAVE_NOTHING = 0;
+const supportableMediaSessionActions = ['previoustrack', 'nexttrack', 'seekbackward', 'seekforward'];
 const defaultState = {
   // indicates whether media player should be paused
   paused: true,
@@ -791,6 +793,30 @@ function getGoToTrackState(prevState, index, shouldPlay = true) {
     paused: !shouldPlay
   };
 }
+
+function setMediaElementSources(mediaElement, sources) {
+  // remove current sources
+  let firstChild;
+
+  while (firstChild = mediaElement.firstChild) {
+    mediaElement.removeChild(firstChild);
+  } // add new sources
+
+
+  for (const source of sources) {
+    const sourceElement = document.createElement('source');
+    sourceElement.src = source.src;
+
+    if (source.type) {
+      sourceElement.type = source.type;
+    }
+
+    mediaElement.appendChild(sourceElement);
+  } // cancel playback and re-scan new sources
+
+
+  mediaElement.load();
+}
 /**
  * Wraps an area which shares a common [`playerContext`](#playercontext)
  */
@@ -833,7 +859,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }); // html media element used for playback
 
     this.media = null;
-    this.setMediaElementRef = this.setMediaElementRef.bind(this); // bind callback methods to pass to descendant elements
+    this.videoHostElementList = [];
+    this.videoHostOccupiedCallbacks = new Map();
+    this.videoHostVacatedCallbacks = new Map(); // bind callback methods to pass to descendant elements
 
     this.togglePause = this.togglePause.bind(this);
     this.selectTrackIndex = this.selectTrackIndex.bind(this);
@@ -847,7 +875,10 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.setRepeatStrategy = this.setRepeatStrategy.bind(this);
     this.setPlaybackRate = this.setPlaybackRate.bind(this);
-    this.pipeVideoStreamToCanvas = this.pipeVideoStreamToCanvas.bind(this); // bind media event handlers
+    this.registerVideoHostElement = this.registerVideoHostElement.bind(this);
+    this.renderVideoIntoHostElement = this.renderVideoIntoHostElement.bind(this);
+    this.unregisterVideoHostElement = this.unregisterVideoHostElement.bind(this);
+    this.updateVideoHostElement = this.updateVideoHostElement.bind(this); // bind media event handlers
 
     this.handleMediaPlay = this.handleMediaPlay.bind(this);
     this.handleMediaPause = this.handleMediaPause.bind(this);
@@ -865,32 +896,71 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   componentDidMount() {
-    const media = this.media = factories_createCustomMediaElement(this.media); // initialize media properties
+    const media = this.media = factories_createCustomMediaElement();
+    const _props = this.props,
+          defaultPlaybackRate = _props.defaultPlaybackRate,
+          crossOrigin = _props.crossOrigin,
+          playlist = _props.playlist,
+          autoplayDelayInSeconds = _props.autoplayDelayInSeconds,
+          mediaElementRef = _props.mediaElementRef,
+          getPosterImageForTrack = _props.getPosterImageForTrack,
+          onActiveTrackUpdate = _props.onActiveTrackUpdate;
+    const _state = this.state,
+          volume = _state.volume,
+          muted = _state.muted,
+          playbackRate = _state.playbackRate,
+          loop = _state.loop,
+          activeTrackIndex = _state.activeTrackIndex,
+          awaitingPlay = _state.awaitingPlay; // initialize media properties
+    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // This avoids an issue where some browsers ignore or delay currentTime
+    // updates when in the HAVE_NOTHING state.
 
-    if (media.readyState !== HAVE_NOTHING) {
-      // we only set the currentTime now if we're beyond the
-      // HAVE_NOTHING readyState. Otherwise we'll let this get
-      // set when the loadedmetadata event fires. This avoids
-      // an issue where some browsers ignore or delay currentTime
-      // updates when in the HAVE_NOTHING state.
-      media.currentTime = this.state.currentTime;
-    }
+    media.defaultPlaybackRate = defaultPlaybackRate;
+    media.crossOrigin = crossOrigin;
+    media.volume = volume;
+    media.muted = muted;
+    media.playbackRate = playbackRate;
+    media.loop = loop;
+    media.setAttribute('playsinline', '');
+    media.setAttribute('webkit-playsinline', '');
+    media.setAttribute('preload', 'metadata');
+    media.setAttribute('poster', getPosterImageForTrack(playlist[activeTrackIndex])); // add listeners for media events
 
-    media.volume = this.state.volume;
-    media.muted = this.state.muted;
-    media.defaultPlaybackRate = this.props.defaultPlaybackRate;
-    media.playbackRate = this.state.playbackRate; // add special event listeners on the media element
+    media.addEventListener('play', this.handleMediaPlay);
+    media.addEventListener('pause', this.handleMediaPause);
+    media.addEventListener('ended', this.handleMediaEnded);
+    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.addEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('volumechange', this.handleMediaVolumechange);
+    media.addEventListener('durationchange', this.handleMediaDurationchange);
+    media.addEventListener('progress', this.handleMediaProgress);
+    media.addEventListener('ratechange', this.handleMediaRatechange); // add listeners for special events
 
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
-    media.addEventListener('loopchange', this.handleMediaLoopchange);
+    media.addEventListener('loopchange', this.handleMediaLoopchange); // set source elements for current track
 
-    if (this.state.awaitingPlay) {
+    setMediaElementSources(media, utils_getTrackSources(playlist, activeTrackIndex)); // initially mount media element in the hidden container (this may change)
+
+    this.mediaContainer.appendChild(media);
+
+    if (awaitingPlay) {
       this.setState({
         awaitingPlay: false
       });
       this.delayTimeout = setTimeout(() => {
         this.togglePause(false);
-      }, this.props.autoplayDelayInSeconds * 1000);
+      }, autoplayDelayInSeconds * 1000);
+    }
+
+    if (mediaElementRef) {
+      mediaElementRef(media);
+    }
+
+    if (onActiveTrackUpdate) {
+      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
     }
   }
 
@@ -942,16 +1012,19 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
 
   componentDidUpdate(prevProps, prevState) {
     this.media.defaultPlaybackRate = this.props.defaultPlaybackRate;
+    this.media.crossOrigin = this.props.crossOrigin;
     this.shuffler.setList(utils_getSourceList(this.props.playlist));
     this.shuffler.setOptions({
       allowBackShuffle: this.props.allowBackShuffle
     });
     const prevSources = utils_getTrackSources(prevProps.playlist, prevState.activeTrackIndex);
     const newSources = utils_getTrackSources(this.props.playlist, this.state.activeTrackIndex);
+    const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
+    const newTrack = this.props.playlist[this.state.activeTrackIndex];
 
     if (prevSources[0].src !== newSources[0].src) {
-      // cancel playback and re-scan current sources
-      this.media.load();
+      setMediaElementSources(this.media, newSources);
+      this.media.setAttribute('poster', this.props.getPosterImageForTrack(newTrack));
 
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -960,6 +1033,10 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
         // lost our history.
         this.shuffler.clear();
       }
+    }
+
+    if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
+      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -993,14 +1070,6 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     media.removeEventListener('loopchange', this.handleMediaLoopchange);
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
-  }
-
-  setMediaElementRef(ref) {
-    this.media = ref;
-
-    if (typeof this.props.mediaElementRef === 'function') {
-      this.props.mediaElementRef(ref);
-    }
   }
 
   stealMediaSession() {
@@ -1045,8 +1114,68 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     });
   }
 
-  pipeVideoStreamToCanvas(canvas, callback) {
-    return utils_streamVideoElementToCanvas(this.media, canvas, callback);
+  registerVideoHostElement(hostElement, {
+    onHostOccupied,
+    onHostVacated
+  }) {
+    this.videoHostElementList = this.videoHostElementList.concat(hostElement);
+    this.videoHostOccupiedCallbacks.set(hostElement, onHostOccupied);
+    this.videoHostVacatedCallbacks.set(hostElement, onHostVacated);
+  }
+
+  renderVideoIntoHostElement(hostElement) {
+    if (this.videoHostElementList.indexOf(hostElement) === -1) {
+      return;
+    }
+
+    cancelAnimationFrame(this.videoHostUpdateRaf);
+    this.videoHostUpdateRaf = requestAnimationFrame(() => this.updateVideoHostElement(hostElement));
+  }
+
+  unregisterVideoHostElement(hostElement) {
+    this.videoHostElementList = this.videoHostElementList.filter(elem => elem !== hostElement);
+    this.videoHostOccupiedCallbacks.delete(hostElement);
+    this.videoHostVacatedCallbacks.delete(hostElement);
+
+    if (this.media.parentNode === hostElement) {
+      this.updateVideoHostElement();
+    }
+  }
+
+  updateVideoHostElement(hostElement) {
+    if (!hostElement) {
+      hostElement = this.videoHostElementList[0] || this.mediaContainer;
+    } else {
+      // move hostElement to front of list
+      this.videoHostElementList = [hostElement].concat(this.videoHostElementList.filter(elem => elem !== hostElement));
+    }
+
+    const playing = !this.media.paused;
+    const oldHostElement = this.media.parentNode;
+
+    if (hostElement === oldHostElement) {
+      return;
+    }
+
+    hostElement.appendChild(this.media); // according to the HTML spec playback should continue, but
+    // some browsers pause the element whenever it is moved around, so
+    // let's make sure playback resumes if that's the case.
+
+    if (playing && this.media.paused) {
+      this.media.play();
+    }
+
+    const onVacated = this.videoHostVacatedCallbacks.get(oldHostElement);
+
+    if (onVacated) {
+      onVacated(this.media);
+    }
+
+    const onOccupied = this.videoHostOccupiedCallbacks.get(hostElement);
+
+    if (onOccupied) {
+      onOccupied(this.media);
+    }
   }
 
   handleMediaPlay() {
@@ -1076,7 +1205,7 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     const newTrackIndex = utils_findTrackIndexByUrl(playlist, e.srcRequested);
 
     if (newTrackIndex === -1) {
-      logError(`Source '${e.srcRequested}' does not exist in the loaded playlist. ` + `Make sure you've updated the 'playlist' prop to ` + `PlayerContextProvider before you select this track!`);
+      Object(console["a" /* logError */])(`Source '${e.srcRequested}' does not exist in the loaded playlist. ` + `Make sure you've updated the 'playlist' prop to ` + `PlayerContextProvider before you select this track!`);
       return;
     }
 
@@ -1091,17 +1220,17 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
 
     clearTimeout(this.gapLengthTimeout);
-    const _props = this.props,
-          playlist = _props.playlist,
-          loadFirstTrackOnPlaylistComplete = _props.loadFirstTrackOnPlaylistComplete;
+    const _props2 = this.props,
+          playlist = _props2.playlist,
+          loadFirstTrackOnPlaylistComplete = _props2.loadFirstTrackOnPlaylistComplete;
 
     if (!utils_isPlaylistValid(playlist)) {
       return;
     }
 
-    const _state = this.state,
-          cycle = _state.cycle,
-          activeTrackIndex = _state.activeTrackIndex;
+    const _state2 = this.state,
+          cycle = _state2.cycle,
+          activeTrackIndex = _state2.activeTrackIndex;
 
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
@@ -1130,6 +1259,13 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     const _media = this.media,
           currentTime = _media.currentTime,
           played = _media.played;
+
+    if (this.state.trackLoading) {
+      // correct currentTime to preset, if applicable, during load
+      this.media.currentTime = this.state.currentTime;
+      return;
+    }
+
     this.setState({
       currentTime,
       playedRanges: utils_getTimeRangesArray(played)
@@ -1229,7 +1365,7 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
 
     if (index < 0 || index > playlist.length) {
-      logWarning(`Playlist index ${index} is out of bounds!`);
+      Object(console["b" /* logWarning */])(`Playlist index ${index} is out of bounds!`);
       return;
     }
 
@@ -1241,14 +1377,14 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   backSkip() {
-    const _props2 = this.props,
-          playlist = _props2.playlist,
-          stayOnBackSkipThreshold = _props2.stayOnBackSkipThreshold;
+    const _props3 = this.props,
+          playlist = _props3.playlist,
+          stayOnBackSkipThreshold = _props3.stayOnBackSkipThreshold;
     const media = this.media;
-    const _state2 = this.state,
-          cycle = _state2.cycle,
-          activeTrackIndex = _state2.activeTrackIndex,
-          shuffle = _state2.shuffle;
+    const _state3 = this.state,
+          cycle = _state3.cycle,
+          activeTrackIndex = _state3.activeTrackIndex,
+          shuffle = _state3.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || media.currentTime >= stayOnBackSkipThreshold || !cycle && activeTrackIndex < 1) {
       media.currentTime = 0;
@@ -1280,10 +1416,10 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
 
   forwardSkip() {
     const playlist = this.props.playlist;
-    const _state3 = this.state,
-          cycle = _state3.cycle,
-          activeTrackIndex = _state3.activeTrackIndex,
-          shuffle = _state3.shuffle;
+    const _state4 = this.state,
+          cycle = _state4.cycle,
+          activeTrackIndex = _state4.activeTrackIndex,
+          shuffle = _state4.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || !cycle && activeTrackIndex + 1 >= playlist.length) {
       return;
@@ -1353,16 +1489,17 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
   }
 
-  seekComplete() {
-    const _state4 = this.state,
-          seekPreviewTime = _state4.seekPreviewTime,
-          awaitingResumeOnSeekComplete = _state4.awaitingResumeOnSeekComplete;
+  seekComplete(targetTime) {
+    const _state5 = this.state,
+          seekPreviewTime = _state5.seekPreviewTime,
+          awaitingResumeOnSeekComplete = _state5.awaitingResumeOnSeekComplete;
     const baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
     };
+    const currentTime = typeof targetTime === 'number' ? targetTime : seekPreviewTime;
 
-    if (isNaN(seekPreviewTime)) {
+    if (isNaN(currentTime)) {
       this.setState(baseStateUpdate);
       return;
     }
@@ -1373,9 +1510,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
        * helps us avoid the progress bar jumping around and confusing the user.
        * https://github.com/benwiley4000/cassette/issues/209
        */
-      currentTime: seekPreviewTime
+      currentTime
     }));
-    this.media.currentTime = seekPreviewTime;
+    this.media.currentTime = currentTime;
 
     if (awaitingResumeOnSeekComplete) {
       if (this.media.ended) {
@@ -1386,8 +1523,8 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
   }
 
-  setVolume(volume) {
-    if (!this.state.setVolumeInProgress) {
+  setVolume(volume, inProgress = true) {
+    if (inProgress && !this.state.setVolumeInProgress) {
       this.setState({
         setVolumeInProgress: true
       });
@@ -1398,7 +1535,11 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     this.media.volume = volumeInBounds;
   }
 
-  setVolumeComplete() {
+  setVolumeComplete(volume) {
+    if (typeof volume === 'number') {
+      this.setVolume(volume, false);
+    }
+
     this.setState({
       setVolumeInProgress: false
     });
@@ -1426,33 +1567,32 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
 
   setRepeatStrategy(repeatStrategy) {
     if (repeatStrategyOptions.indexOf(repeatStrategy) === -1) {
-      logWarning('repeatStrategy "' + repeatStrategy + '" is not one of: ' + repeatStrategyOptions.split(', ') + '.');
+      Object(console["b" /* logWarning */])('repeatStrategy "' + repeatStrategy + '" is not one of: ' + repeatStrategyOptions.split(', ') + '.');
       return;
     }
 
-    this.setState(() => {
-      switch (repeatStrategy) {
-        case 'track':
-          return {
-            loop: true
-          };
+    switch (repeatStrategy) {
+      case 'track':
+        // state update is automatic
+        this.media.loop = true;
+        break;
 
-        case 'playlist':
-          return {
-            loop: false,
-            cycle: true
-          };
+      case 'playlist':
+        this.setState({
+          loop: false,
+          cycle: true
+        });
+        this.media.loop = false;
+        break;
 
-        case 'none':
-          return {
-            loop: false,
-            cycle: false
-          };
-
-        default:
-          return null;
-      }
-    });
+      case 'none':
+        this.setState({
+          loop: false,
+          cycle: false
+        });
+        this.media.loop = false;
+        break;
+    }
   }
 
   setPlaybackRate(rate) {
@@ -1482,7 +1622,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
       playbackRate: state.playbackRate,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: utils_getRepeatStrategy(state.loop, state.cycle),
-      pipeVideoStreamToCanvas: this.pipeVideoStreamToCanvas,
+      registerVideoHostElement: this.registerVideoHostElement,
+      renderVideoIntoHostElement: this.renderVideoIntoHostElement,
+      unregisterVideoHostElement: this.unregisterVideoHostElement,
       onTogglePause: this.togglePause,
       onSelectTrackIndex: this.selectTrackIndex,
       onBackSkip: this.backSkip,
@@ -1514,30 +1656,11 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   render() {
-    const sources = utils_getTrackSources(this.props.playlist, this.state.activeTrackIndex);
     const playerContext = this.getControlProps();
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(external_root_React_commonjs_react_commonjs2_react_amd_react_["Fragment"], null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("video", {
-      hidden: true,
-      ref: this.setMediaElementRef,
-      crossOrigin: this.props.crossOrigin,
-      preload: "metadata",
-      loop: this.state.loop,
-      onPlay: this.handleMediaPlay,
-      onPause: this.handleMediaPause,
-      onEnded: this.handleMediaEnded,
-      onStalled: this.handleMediaStalled,
-      onCanPlayThrough: this.handleMediaCanplaythrough,
-      onTimeUpdate: this.handleMediaTimeupdate,
-      onLoadedMetadata: this.handleMediaLoadedmetadata,
-      onVolumeChange: this.handleMediaVolumechange,
-      onDurationChange: this.handleMediaDurationchange,
-      onProgress: this.handleMediaProgress,
-      onRateChange: this.handleMediaRatechange
-    }, sources.map(source => external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("source", {
-      key: source.src,
-      src: source.src,
-      type: source.type
-    }))), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_PlayerContext.Provider, {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(external_root_React_commonjs_react_commonjs2_react_amd_react_["Fragment"], null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
+      ref: elem => this.mediaContainer = elem,
+      hidden: true
+    }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContext.Provider, {
       value: playerContext
     }, typeof this.props.children === 'function' ? this.props.children(playerContext) : this.props.children));
   }
@@ -1568,6 +1691,8 @@ PlayerContextProvider_PlayerContextProvider.propTypes = {
     __unstable__: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object.isRequired
   }),
   onStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+  onActiveTrackUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+  getPosterImageForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   children: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOfType([external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.node, external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func]).isRequired
 };
 PlayerContextProvider_PlayerContextProvider.defaultProps = {
@@ -1587,7 +1712,12 @@ PlayerContextProvider_PlayerContextProvider.defaultProps = {
   allowBackShuffle: false,
   stayOnBackSkipThreshold: 5,
   supportedMediaSessionActions: ['play', 'pause', 'previoustrack', 'nexttrack'],
-  mediaSessionSeekLengthInSeconds: 10
+  mediaSessionSeekLengthInSeconds: 10,
+
+  getPosterImageForTrack(track) {
+    return track && track.artwork ? track.artwork[0].src : '';
+  }
+
 };
 class PlayerContextProvider_PlayerContextGroupMember extends external_root_React_commonjs_react_commonjs2_react_amd_react_["Component"] {
   componentDidMount() {
@@ -1599,9 +1729,9 @@ class PlayerContextProvider_PlayerContextGroupMember extends external_root_React
   }
 
   render() {
-    const _props3 = this.props,
-          groupContext = _props3.groupContext,
-          props = _props3.props;
+    const _props4 = this.props,
+          groupContext = _props4.groupContext,
+          props = _props4.props;
 
     const _mediaElementRef = props.mediaElementRef,
           rest = _objectWithoutProperties(props, ["mediaElementRef"]);
@@ -1627,7 +1757,7 @@ PlayerContextProvider_PlayerContextGroupMember.propTypes = {
 };
 
 function PlayerContextGroupConsumer(props) {
-  return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Consumer, null, groupContext => {
+  return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Consumer, null, groupContext => {
     if (!groupContext) {
       return Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createElement"])(PlayerContextProvider_PlayerContextProvider, props);
     }
@@ -1690,7 +1820,7 @@ class PlayerContextGroup_PlayerContextGroup extends external_root_React_commonjs
   }
 
   render() {
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Consumer, null, groupContext => {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Consumer, null, groupContext => {
       const value = groupContext ? PlayerContextGroup_objectSpread({}, groupContext, {
         groupProps: PlayerContextGroup_objectSpread({}, groupContext.groupProps, this.props)
       }) : {
@@ -1698,7 +1828,7 @@ class PlayerContextGroup_PlayerContextGroup extends external_root_React_commonjs
         registerMediaElement: this.registerMediaElement,
         unregisterMediaElement: this.unregisterMediaElement
       };
-      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_GroupContext.Provider, {
+      return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(GroupContext.Provider, {
         value: value
       }, this.props.children);
     });
@@ -1712,20 +1842,18 @@ PlayerContextGroup_PlayerContextGroup.propTypes = {
 // CONCATENATED MODULE: ./src/FullscreenContext.js
 
 
-const FullscreenContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["createContext"])({
+/* harmony default export */ var FullscreenContext = (Object(createSingleGlobalContext["a" /* default */])('FullscreenContext', {
   fullscreen: false,
 
   requestFullscreen() {
-    logWarning('Fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
+    Object(console["b" /* logWarning */])('Fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
   },
 
   requestExitFullscreen() {
-    logWarning('Exit fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
+    Object(console["b" /* logWarning */])('Exit fullscreen request ignored since there is no ' + 'FullscreenContextProvider ancestor.');
   }
 
-});
-FullscreenContext.displayName = 'FullscreenContext';
-/* harmony default export */ var src_FullscreenContext = (FullscreenContext);
+}));
 // CONCATENATED MODULE: ./src/FullscreenContextProvider.js
 
 
@@ -1821,7 +1949,7 @@ class FullscreenContextProvider_FullscreenContextProvider extends external_root_
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       ref: elem => this.fullscreenElement = elem,
       style: this.state.fullscreen ? fullscreenStyle : undefined
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_FullscreenContext.Provider, {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(FullscreenContext.Provider, {
       value: fullscreenContext
     }, typeof this.props.children === 'function' ? this.props.children(fullscreenContext) : this.props.children));
   }
@@ -1850,7 +1978,7 @@ function playerContextFilter(component, contextPropNames) {
   const childName = component.displayName || component.name;
 
   function PlayerContextFilter(props) {
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_FullscreenContext.Consumer, null, fullscreenContext => external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_PlayerContext.Consumer, null, playerContext => {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(FullscreenContext.Consumer, null, fullscreenContext => external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContext.Consumer, null, playerContext => {
       const childProps = playerContextFilter_objectSpread({}, props);
 
       for (const propName of contextPropNames) {
@@ -1859,7 +1987,7 @@ function playerContextFilter(component, contextPropNames) {
         } else if (fullscreenContext.hasOwnProperty(propName)) {
           childProps[propName] = fullscreenContext[propName];
         } else if (!warned[propName]) {
-          logWarning("Prop '" + propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
+          Object(console["b" /* logWarning */])("Prop '" + propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
           warned[propName] = true;
         }
       }
@@ -1884,8 +2012,8 @@ function playerContextFilter(component, contextPropNames) {
 /* concated harmony reexport FullscreenContextProvider */__webpack_require__.d(__webpack_exports__, "FullscreenContextProvider", function() { return src_FullscreenContextProvider; });
 /* concated harmony reexport playerContextFilter */__webpack_require__.d(__webpack_exports__, "playerContextFilter", function() { return src_playerContextFilter; });
 /* concated harmony reexport PlayerPropTypes */__webpack_require__.d(__webpack_exports__, "PlayerPropTypes", function() { return PlayerPropTypes_namespaceObject; });
-/* concated harmony reexport logError */__webpack_require__.d(__webpack_exports__, "logError", function() { return logError; });
-/* concated harmony reexport logWarning */__webpack_require__.d(__webpack_exports__, "logWarning", function() { return logWarning; });
+/* concated harmony reexport logError */__webpack_require__.d(__webpack_exports__, "logError", function() { return console["a" /* logError */]; });
+/* concated harmony reexport logWarning */__webpack_require__.d(__webpack_exports__, "logWarning", function() { return console["b" /* logWarning */]; });
 /* concated harmony reexport convertToNumberWithinIntervalBounds */__webpack_require__.d(__webpack_exports__, "convertToNumberWithinIntervalBounds", function() { return utils_convertToNumberWithinIntervalBounds; });
 /* concated harmony reexport isPlaylistValid */__webpack_require__.d(__webpack_exports__, "isPlaylistValid", function() { return utils_isPlaylistValid; });
 /* concated harmony reexport repeatStrategyOptions */__webpack_require__.d(__webpack_exports__, "repeatStrategyOptions", function() { return repeatStrategyOptions; });
@@ -1897,10 +2025,10 @@ function playerContextFilter(component, contextPropNames) {
 
 
 
-const PlayerContextConsumer = src_PlayerContext.Consumer;
+const PlayerContextConsumer = PlayerContext.Consumer;
 
 
-const FullscreenContextConsumer = src_FullscreenContext.Consumer;
+const FullscreenContextConsumer = FullscreenContext.Consumer;
 
  // undocumented exports
 
