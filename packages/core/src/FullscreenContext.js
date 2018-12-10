@@ -1,8 +1,7 @@
-import { createContext } from 'react';
-
+import createSingleGlobalContext from './utils/createSingleGlobalContext';
 import { logWarning } from './utils/console';
 
-const FullscreenContext = createContext({
+export default createSingleGlobalContext('FullscreenContext', {
   fullscreen: false,
   requestFullscreen() {
     logWarning(
@@ -17,6 +16,3 @@ const FullscreenContext = createContext({
     );
   }
 });
-FullscreenContext.displayName = 'FullscreenContext';
-
-export default FullscreenContext;

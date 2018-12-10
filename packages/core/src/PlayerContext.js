@@ -1,6 +1,3 @@
-import { createContext } from 'react';
+import createSingleGlobalContext from './utils/createSingleGlobalContext';
 
-const PlayerContext = createContext(null);
-PlayerContext.displayName = 'PlayerContext';
-
-export default PlayerContext;
+export default createSingleGlobalContext('PlayerContext');

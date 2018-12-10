@@ -1,13 +1,16 @@
 `MediaPlayer` takes all the non-`children` props (including prop requirements) of [`MediaPlayer`](#mediaplayer), [`PlayerContextProvider`](#playercontextprovider) and [`FullscreenContextProvider`](#fullscreencontextprovider).
 
 ```jsx
+// helper code for docs; feel free to ignore!
+window.enhanceVideoDisplayForDocs(VideoDisplay);
+
 const { MediaPlayer } = require('@cassette/player');
 const playlist = [
   {
     url:
-      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    title: 'Big Buck Bunny',
-    artist: 'Peach Open Movie Project'
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    title: 'Elephants Dream',
+    artist: 'Orange Open Movie Project'
   }
 ];
 <MediaPlayer

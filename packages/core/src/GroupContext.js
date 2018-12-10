@@ -1,6 +1,3 @@
-import { createContext } from 'react';
+import createSingleGlobalContext from './utils/createSingleGlobalContext';
 
-const GroupContext = createContext(null);
-GroupContext.displayName = 'GroupContext';
-
-export default GroupContext;
+export default createSingleGlobalContext('GroupContext');

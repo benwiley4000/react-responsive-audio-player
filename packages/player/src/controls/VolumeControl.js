@@ -169,7 +169,6 @@ export class VolumeControl extends PureComponent {
     const {
       volume,
       muted,
-      setVolumeInProgress,
       onSetVolume,
       onSetVolumeComplete,
       onToggleMuted
@@ -220,7 +219,6 @@ export class VolumeControl extends PureComponent {
               volumeBarPosition
             )}
             handle={this.renderHandle()}
-            adjusting={setVolumeInProgress}
             onAdjustProgress={onSetVolume}
             onAdjustComplete={onSetVolumeComplete}
           />

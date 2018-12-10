@@ -50,7 +50,6 @@ export class MediaProgress extends PureComponent {
           progressClassName="progress"
           progress={displayedProgress}
           progressDirection="right"
-          adjusting={seekInProgress}
           readonly={!isPlaylistValid(playlist)}
           onAdjustProgress={this.handleSeekPreview}
           onAdjustComplete={onSeekComplete}

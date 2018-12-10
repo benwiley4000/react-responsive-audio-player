@@ -15,7 +15,6 @@ import findTrackIndexByUrl from './utils/findTrackIndexByUrl';
 import isPlaylistValid from './utils/isPlaylistValid';
 import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
-import streamVideoElementToCanvas from './utils/streamVideoElementToCanvas';
 import { logError, logWarning } from './utils/console';
 import { repeatStrategyOptions } from './constants';
 
@@ -39,9 +38,6 @@ const supportableMediaSessionActions = [
   'seekbackward',
   'seekforward'
 ];
-
-// media element readyState
-const HAVE_NOTHING = 0;
 
 const defaultState = {
   // indicates whether media player should be paused
@@ -84,6 +80,25 @@ function getGoToTrackState(prevState, index, shouldPlay = true) {
     awaitingPlay: Boolean(shouldPlay),
     paused: !shouldPlay
   };
+}
+
+function setMediaElementSources(mediaElement, sources) {
+  // remove current sources
+  let firstChild;
+  while ((firstChild = mediaElement.firstChild)) {
+    mediaElement.removeChild(firstChild);
+  }
+  // add new sources
+  for (const source of sources) {
+    const sourceElement = document.createElement('source');
+    sourceElement.src = source.src;
+    if (source.type) {
+      sourceElement.type = source.type;
+    }
+    mediaElement.appendChild(sourceElement);
+  }
+  // cancel playback and re-scan new sources
+  mediaElement.load();
 }
 
 /**
@@ -139,7 +154,9 @@ export class PlayerContextProvider extends Component {
     // html media element used for playback
     this.media = null;
 
-    this.setMediaElementRef = this.setMediaElementRef.bind(this);
+    this.videoHostElementList = [];
+    this.videoHostOccupiedCallbacks = new Map();
+    this.videoHostVacatedCallbacks = new Map();
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -154,7 +171,14 @@ export class PlayerContextProvider extends Component {
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.setRepeatStrategy = this.setRepeatStrategy.bind(this);
     this.setPlaybackRate = this.setPlaybackRate.bind(this);
-    this.pipeVideoStreamToCanvas = this.pipeVideoStreamToCanvas.bind(this);
+    this.registerVideoHostElement = this.registerVideoHostElement.bind(this);
+    this.renderVideoIntoHostElement = this.renderVideoIntoHostElement.bind(
+      this
+    );
+    this.unregisterVideoHostElement = this.unregisterVideoHostElement.bind(
+      this
+    );
+    this.updateVideoHostElement = this.updateVideoHostElement.bind(this);
 
     // bind media event handlers
     this.handleMediaPlay = this.handleMediaPlay.bind(this);
@@ -173,33 +197,81 @@ export class PlayerContextProvider extends Component {
   }
 
   componentDidMount() {
-    const media = (this.media = createCustomMediaElement(this.media));
+    const media = (this.media = createCustomMediaElement());
+
+    const {
+      defaultPlaybackRate,
+      crossOrigin,
+      playlist,
+      autoplayDelayInSeconds,
+      mediaElementRef,
+      getPosterImageForTrack,
+      onActiveTrackUpdate
+    } = this.props;
+    const {
+      volume,
+      muted,
+      playbackRate,
+      loop,
+      activeTrackIndex,
+      awaitingPlay
+    } = this.state;
 
     // initialize media properties
-    if (media.readyState !== HAVE_NOTHING) {
-      // we only set the currentTime now if we're beyond the
-      // HAVE_NOTHING readyState. Otherwise we'll let this get
-      // set when the loadedmetadata event fires. This avoids
-      // an issue where some browsers ignore or delay currentTime
-      // updates when in the HAVE_NOTHING state.
-      media.currentTime = this.state.currentTime;
-    }
-    media.volume = this.state.volume;
-    media.muted = this.state.muted;
-    media.defaultPlaybackRate = this.props.defaultPlaybackRate;
-    media.playbackRate = this.state.playbackRate;
+    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // This avoids an issue where some browsers ignore or delay currentTime
+    // updates when in the HAVE_NOTHING state.
+    media.defaultPlaybackRate = defaultPlaybackRate;
+    media.crossOrigin = crossOrigin;
+    media.volume = volume;
+    media.muted = muted;
+    media.playbackRate = playbackRate;
+    media.loop = loop;
+    media.setAttribute('playsinline', '');
+    media.setAttribute('webkit-playsinline', '');
+    media.setAttribute('preload', 'metadata');
+    media.setAttribute(
+      'poster',
+      getPosterImageForTrack(playlist[activeTrackIndex])
+    );
 
-    // add special event listeners on the media element
+    // add listeners for media events
+    media.addEventListener('play', this.handleMediaPlay);
+    media.addEventListener('pause', this.handleMediaPause);
+    media.addEventListener('ended', this.handleMediaEnded);
+    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.addEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('volumechange', this.handleMediaVolumechange);
+    media.addEventListener('durationchange', this.handleMediaDurationchange);
+    media.addEventListener('progress', this.handleMediaProgress);
+    media.addEventListener('ratechange', this.handleMediaRatechange);
+    // add listeners for special events
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
-    if (this.state.awaitingPlay) {
+    // set source elements for current track
+    setMediaElementSources(media, getTrackSources(playlist, activeTrackIndex));
+
+    // initially mount media element in the hidden container (this may change)
+    this.mediaContainer.appendChild(media);
+
+    if (awaitingPlay) {
       this.setState({
         awaitingPlay: false
       });
       this.delayTimeout = setTimeout(() => {
         this.togglePause(false);
-      }, this.props.autoplayDelayInSeconds * 1000);
+      }, autoplayDelayInSeconds * 1000);
+    }
+
+    if (mediaElementRef) {
+      mediaElementRef(media);
+    }
+
+    if (onActiveTrackUpdate) {
+      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
     }
   }
 
@@ -262,6 +334,7 @@ export class PlayerContextProvider extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     this.media.defaultPlaybackRate = this.props.defaultPlaybackRate;
+    this.media.crossOrigin = this.props.crossOrigin;
 
     this.shuffler.setList(getSourceList(this.props.playlist));
     this.shuffler.setOptions({
@@ -276,9 +349,14 @@ export class PlayerContextProvider extends Component {
       this.props.playlist,
       this.state.activeTrackIndex
     );
+    const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
+    const newTrack = this.props.playlist[this.state.activeTrackIndex];
     if (prevSources[0].src !== newSources[0].src) {
-      // cancel playback and re-scan current sources
-      this.media.load();
+      setMediaElementSources(this.media, newSources);
+      this.media.setAttribute(
+        'poster',
+        this.props.getPosterImageForTrack(newTrack)
+      );
 
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -287,6 +365,10 @@ export class PlayerContextProvider extends Component {
         // lost our history.
         this.shuffler.clear();
       }
+    }
+
+    if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
+      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -321,13 +403,6 @@ export class PlayerContextProvider extends Component {
 
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
-  }
-
-  setMediaElementRef(ref) {
-    this.media = ref;
-    if (typeof this.props.mediaElementRef === 'function') {
-      this.props.mediaElementRef(ref);
-    }
   }
 
   stealMediaSession() {
@@ -372,8 +447,62 @@ export class PlayerContextProvider extends Component {
       });
   }
 
-  pipeVideoStreamToCanvas(canvas, callback) {
-    return streamVideoElementToCanvas(this.media, canvas, callback);
+  registerVideoHostElement(hostElement, { onHostOccupied, onHostVacated }) {
+    this.videoHostElementList = this.videoHostElementList.concat(hostElement);
+    this.videoHostOccupiedCallbacks.set(hostElement, onHostOccupied);
+    this.videoHostVacatedCallbacks.set(hostElement, onHostVacated);
+  }
+
+  renderVideoIntoHostElement(hostElement) {
+    if (this.videoHostElementList.indexOf(hostElement) === -1) {
+      return;
+    }
+    cancelAnimationFrame(this.videoHostUpdateRaf);
+    this.videoHostUpdateRaf = requestAnimationFrame(() =>
+      this.updateVideoHostElement(hostElement)
+    );
+  }
+
+  unregisterVideoHostElement(hostElement) {
+    this.videoHostElementList = this.videoHostElementList.filter(
+      elem => elem !== hostElement
+    );
+    this.videoHostOccupiedCallbacks.delete(hostElement);
+    this.videoHostVacatedCallbacks.delete(hostElement);
+    if (this.media.parentNode === hostElement) {
+      this.updateVideoHostElement();
+    }
+  }
+
+  updateVideoHostElement(hostElement) {
+    if (!hostElement) {
+      hostElement = this.videoHostElementList[0] || this.mediaContainer;
+    } else {
+      // move hostElement to front of list
+      this.videoHostElementList = [hostElement].concat(
+        this.videoHostElementList.filter(elem => elem !== hostElement)
+      );
+    }
+    const playing = !this.media.paused;
+    const oldHostElement = this.media.parentNode;
+    if (hostElement === oldHostElement) {
+      return;
+    }
+    hostElement.appendChild(this.media);
+    // according to the HTML spec playback should continue, but
+    // some browsers pause the element whenever it is moved around, so
+    // let's make sure playback resumes if that's the case.
+    if (playing && this.media.paused) {
+      this.media.play();
+    }
+    const onVacated = this.videoHostVacatedCallbacks.get(oldHostElement);
+    if (onVacated) {
+      onVacated(this.media);
+    }
+    const onOccupied = this.videoHostOccupiedCallbacks.get(hostElement);
+    if (onOccupied) {
+      onOccupied(this.media);
+    }
   }
 
   handleMediaPlay() {
@@ -442,6 +571,11 @@ export class PlayerContextProvider extends Component {
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
+    if (this.state.trackLoading) {
+      // correct currentTime to preset, if applicable, during load
+      this.media.currentTime = this.state.currentTime;
+      return;
+    }
     this.setState({
       currentTime,
       playedRanges: getTimeRangesArray(played)
@@ -631,13 +765,16 @@ export class PlayerContextProvider extends Component {
     }
   }
 
-  seekComplete() {
+  seekComplete(targetTime) {
     const { seekPreviewTime, awaitingResumeOnSeekComplete } = this.state;
     const baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
     };
-    if (isNaN(seekPreviewTime)) {
+    const currentTime =
+      typeof targetTime === 'number' ? targetTime : seekPreviewTime;
+
+    if (isNaN(currentTime)) {
       this.setState(baseStateUpdate);
       return;
     }
@@ -648,9 +785,9 @@ export class PlayerContextProvider extends Component {
        * helps us avoid the progress bar jumping around and confusing the user.
        * https://github.com/benwiley4000/cassette/issues/209
        */
-      currentTime: seekPreviewTime
+      currentTime
     });
-    this.media.currentTime = seekPreviewTime;
+    this.media.currentTime = currentTime;
     if (awaitingResumeOnSeekComplete) {
       if (this.media.ended) {
         this.forwardSkip();
@@ -660,8 +797,8 @@ export class PlayerContextProvider extends Component {
     }
   }
 
-  setVolume(volume) {
-    if (!this.state.setVolumeInProgress) {
+  setVolume(volume, inProgress = true) {
+    if (inProgress && !this.state.setVolumeInProgress) {
       this.setState({
         setVolumeInProgress: true
       });
@@ -671,7 +808,10 @@ export class PlayerContextProvider extends Component {
     this.media.volume = volumeInBounds;
   }
 
-  setVolumeComplete() {
+  setVolumeComplete(volume) {
+    if (typeof volume === 'number') {
+      this.setVolume(volume, false);
+    }
     this.setState({
       setVolumeInProgress: false
     });
@@ -704,26 +844,26 @@ export class PlayerContextProvider extends Component {
       );
       return;
     }
-    this.setState(() => {
-      switch (repeatStrategy) {
-        case 'track':
-          return {
-            loop: true
-          };
-        case 'playlist':
-          return {
-            loop: false,
-            cycle: true
-          };
-        case 'none':
-          return {
-            loop: false,
-            cycle: false
-          };
-        default:
-          return null;
-      }
-    });
+    switch (repeatStrategy) {
+      case 'track':
+        // state update is automatic
+        this.media.loop = true;
+        break;
+      case 'playlist':
+        this.setState({
+          loop: false,
+          cycle: true
+        });
+        this.media.loop = false;
+        break;
+      case 'none':
+        this.setState({
+          loop: false,
+          cycle: false
+        });
+        this.media.loop = false;
+        break;
+    }
   }
 
   setPlaybackRate(rate) {
@@ -752,7 +892,9 @@ export class PlayerContextProvider extends Component {
       playbackRate: state.playbackRate,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: getRepeatStrategy(state.loop, state.cycle),
-      pipeVideoStreamToCanvas: this.pipeVideoStreamToCanvas,
+      registerVideoHostElement: this.registerVideoHostElement,
+      renderVideoIntoHostElement: this.renderVideoIntoHostElement,
+      unregisterVideoHostElement: this.unregisterVideoHostElement,
       onTogglePause: this.togglePause,
       onSelectTrackIndex: this.selectTrackIndex,
       onBackSkip: this.backSkip,
@@ -782,35 +924,10 @@ export class PlayerContextProvider extends Component {
   }
 
   render() {
-    const sources = getTrackSources(
-      this.props.playlist,
-      this.state.activeTrackIndex
-    );
     const playerContext = this.getControlProps();
     return (
       <Fragment>
-        <video
-          hidden
-          ref={this.setMediaElementRef}
-          crossOrigin={this.props.crossOrigin}
-          preload="metadata"
-          loop={this.state.loop}
-          onPlay={this.handleMediaPlay}
-          onPause={this.handleMediaPause}
-          onEnded={this.handleMediaEnded}
-          onStalled={this.handleMediaStalled}
-          onCanPlayThrough={this.handleMediaCanplaythrough}
-          onTimeUpdate={this.handleMediaTimeupdate}
-          onLoadedMetadata={this.handleMediaLoadedmetadata}
-          onVolumeChange={this.handleMediaVolumechange}
-          onDurationChange={this.handleMediaDurationchange}
-          onProgress={this.handleMediaProgress}
-          onRateChange={this.handleMediaRatechange}
-        >
-          {sources.map(source => (
-            <source key={source.src} src={source.src} type={source.type} />
-          ))}
-        </video>
+        <div ref={elem => (this.mediaContainer = elem)} hidden />
         <PlayerContext.Provider value={playerContext}>
           {typeof this.props.children === 'function'
             ? this.props.children(playerContext)
@@ -848,6 +965,8 @@ PlayerContextProvider.propTypes = {
     __unstable__: PropTypes.object.isRequired
   }),
   onStateSnapshot: PropTypes.func,
+  onActiveTrackUpdate: PropTypes.func,
+  getPosterImageForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
@@ -868,7 +987,10 @@ PlayerContextProvider.defaultProps = {
   allowBackShuffle: false,
   stayOnBackSkipThreshold: 5,
   supportedMediaSessionActions: ['play', 'pause', 'previoustrack', 'nexttrack'],
-  mediaSessionSeekLengthInSeconds: 10
+  mediaSessionSeekLengthInSeconds: 10,
+  getPosterImageForTrack(track) {
+    return track && track.artwork ? track.artwork[0].src : '';
+  }
 };
 
 export class PlayerContextGroupMember extends Component {

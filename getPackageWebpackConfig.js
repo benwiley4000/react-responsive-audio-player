@@ -123,7 +123,8 @@ function webpackConfig({
       publicPath: '/dist',
       libraryTarget: 'umd',
       library: packages[packageName].library,
-      filename: `${esmodules ? 'esm/' : 'es5/'}[name].js`
+      filename: `${esmodules ? 'esm/' : 'es5/'}[name].js`,
+      globalObject: '(typeof self !== "undefined" ? self : this)'
     },
     module: {
       rules: [

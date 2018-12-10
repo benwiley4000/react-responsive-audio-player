@@ -24,6 +24,10 @@ export class ProgressBar extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      adjusting: false
+    };
+
     this.progressContainer = null;
 
     // bind methods fired on React events
@@ -95,7 +99,8 @@ export class ProgressBar extends PureComponent {
   }
 
   handleAdjustProgress(event) {
-    const { readonly, adjusting, onAdjustProgress } = this.props;
+    const { readonly, onAdjustProgress } = this.props;
+    const { adjusting } = this.state;
     if (readonly) {
       return;
     }
@@ -118,16 +123,20 @@ export class ProgressBar extends PureComponent {
       0,
       1
     );
+    this.setState({
+      adjusting: true
+    });
     onAdjustProgress(progressInBounds);
   }
 
   handleAdjustComplete(event) {
-    const { adjusting, onAdjustComplete } = this.props;
+    const { onAdjustComplete } = this.props;
     /* this function is activated when the user lets go of
      * the mouse, so if noselect was applied
      * to the document body, get rid of it.
      */
     this.toggleNoselect(false);
+    const { adjusting } = this.state;
     if (!adjusting) {
       return;
     }
@@ -135,9 +144,10 @@ export class ProgressBar extends PureComponent {
      * after touch handlers, so prevent default
      */
     event.preventDefault();
-    if (typeof onAdjustComplete === 'function') {
-      onAdjustComplete();
-    }
+    this.setState({
+      adjusting: false
+    });
+    onAdjustComplete();
   }
 
   render() {
@@ -149,7 +159,6 @@ export class ProgressBar extends PureComponent {
       handle,
       ...attributes
     } = this.props;
-    delete attributes.adjusting;
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
@@ -175,7 +184,6 @@ ProgressBar.propTypes = {
   progress: PropTypes.number.isRequired,
   progressDirection: PlayerPropTypes.progressDirection.isRequired,
   handle: PropTypes.element,
-  adjusting: PropTypes.bool.isRequired,
   readonly: PropTypes.bool.isRequired,
   onAdjustProgress: PropTypes.func.isRequired,
   onAdjustComplete: PropTypes.func.isRequired
