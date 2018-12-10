@@ -10,7 +10,7 @@ function contextProviderEmitter(namespace, Provider, Consumer) {
       <Provider {...rest}>
         <Consumer>
           {context => {
-            update(context);
+            requestAnimationFrame(() => update(context));
             if (typeof children === 'function') {
               return children(context);
             }
