@@ -1,7 +1,8 @@
 const loopchange = 'loopchange';
 const srcrequest = 'srcrequest';
 
-function createCustomMediaElement(media = document.createElement('media')) {
+function createCustomMediaElement() {
+  const media = document.createElement('video');
   new MutationObserver(() => {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {

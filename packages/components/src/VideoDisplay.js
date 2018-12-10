@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
 
@@ -8,28 +8,6 @@ import {
   logWarning
 } from '@cassette/core';
 
-/* Here is an explanation of the 4 different types of "height"/"width"
- * referenced in this file:
- *   1. imageResolutionX / imageResolutionY
- *     - These are optional props for determining which resolution
- *       we use to display the video. They are assigned to canvas.width
- *       and canvas.height. If one or both are left out, then we use the
- *       video's regular dimensions to figure it out.
- *       We optionally multiply these by the devicePixelRatio to support
- *       hi-DPI (e.g. Retina) displays.
- *   2. realDisplayWidth / realDisplayHeight
- *     - These reflect whatever canvas.width and canvas.height are.
- *       This is different than imageResolutionX / imageResolutionY since
- *       they are actual values and can't be null.
- *   3. containerWidth / containerHeight
- *     - These reflect the actual client offsetWidth and offsetHeight
- *       of the div container around the canvas, in CSS pixels.
- *   4. canvas.style.width / canvas.style.height
- *     - These values are used to scale the canvas's onscreen area.
- *       They form the same ratio as realDisplayWidth / realDisplayHeight
- *       but are adjusted so the canvas maximally fills the container area.
- */
-
 // 'x:y' -> x / y
 function extractAspectRatio(aspectRatio) {
   const values = aspectRatio.split(':').map(Number);
@@ -38,169 +16,94 @@ function extractAspectRatio(aspectRatio) {
 
 const defaultBgColor = '#000';
 
+class InjectedCanvas extends Component {
+  componentDidMount() {
+    this.div.appendChild(this.props.canvas);
+  }
+
+  render() {
+    return (
+      <div
+        style={{ width: this.props.containerWidth }}
+        ref={elem => (this.div = elem)}
+      />
+    );
+  }
+}
+
+InjectedCanvas.propTypes = {
+  containerWidth: PropTypes.number,
+  canvas: PropTypes.instanceOf(
+    typeof HTMLCanvasElement === 'undefined' ? Object : HTMLCanvasElement
+  )
+};
+
 /**
- * A display canvas for the video content from the surrounding [`playerContext`](#playercontext)
+ * A container for the video content from the surrounding [`playerContext`](#playercontext)
  */
 export class VideoDisplay extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      // realDisplayWidth, realDisplayHeight are in canvas display units
-      realDisplayWidth: 0,
-      realDisplayHeight: 0,
-      // containerWidth, containerHeight are in CSS pixel units
-      containerWidth: 0,
-      containerHeight: 0
-    };
+    // using instance properties instead of React state to make sure
+    // we can avoid annoying race conditions
+    this.containerWidth = 0;
+    this.containerHeight = 0;
+    this.hostedVideo = null;
+    this.videoFrameAtTimeLastVacated = null;
   }
 
   componentDidMount() {
-    // set initial canvas size to 0 to avoid weird layout glitches with
-    // the default canvas size (300x150 px in Chrome)
-    this.canvas.width = 0;
-    this.canvas.height = 0;
-
-    this.checkForBadStuff();
-    const {
-      imageResolutionX,
-      imageResolutionY
-    } = this.getDeviceDisplayDimensions();
-    const {
-      endStream,
-      setCanvasSize,
-      setPlaceholderImage
-    } = this.props.pipeVideoStreamToCanvas(
-      this.canvas,
-      this.handleFrameUpdate.bind(this)
-    );
-    setCanvasSize(imageResolutionX, imageResolutionY);
-    this.getPlaceholderImage(setPlaceholderImage);
-    this.endStream = endStream;
-    this.setCanvasSize = setCanvasSize;
-    this.setPlaceholderImage = setPlaceholderImage;
-    this.updateContainerDimensions();
-
     this.containerResizeObserver = new ResizeObserver(
-      this.updateContainerDimensions.bind(this)
+      this.handleContainerResize.bind(this)
     );
     this.containerResizeObserver.observe(this.containerElement);
-  }
 
-  componentDidUpdate() {
-    this.checkForBadStuff();
-    const {
-      imageResolutionX,
-      imageResolutionY
-    } = this.getDeviceDisplayDimensions();
-    this.setCanvasSize(imageResolutionX, imageResolutionY);
-    this.getPlaceholderImage(this.setPlaceholderImage);
+    this.props.registerVideoHostElement(this.containerElement, {
+      onHostOccupied: videoElement => {
+        videoElement.style.width = `${this.containerWidth}px`;
+        videoElement.style.maxHeight = `${this.containerHeight}px`;
+        this.hostedVideo = videoElement;
+        this.forceUpdate();
+      },
+      onHostVacated: videoElement => {
+        // TODO: take into account container size and pixel density
+        // when sizing videoFrame canvas element?
+        const videoFrame = document.createElement('canvas');
+        videoFrame.width = videoElement.videoWidth;
+        videoFrame.height = videoElement.videoHeight;
+        videoFrame
+          .getContext('2d')
+          .drawImage(videoElement, 0, 0, videoFrame.width, videoFrame.height);
+        videoFrame.style.maxWidth = '100%';
+        this.videoFrameAtTimeLastVacated = videoFrame;
+        this.hostedVideo = null;
+        this.forceUpdate();
+      }
+    });
+    this.props.renderVideoIntoHostElement(this.containerElement);
   }
 
   componentWillUnmount() {
-    this.endStream();
     this.containerResizeObserver.disconnect();
+    this.props.unregisterVideoHostElement(this.containerElement);
   }
 
-  checkForBadStuff() {
-    if (
-      !this.warnedAboutBadStuff &&
-      this.props.processFrame &&
-      !this.props.imageResolutionX &&
-      !this.props.imageResolutionY
-    ) {
-      logWarning(
-        'VideoDisplay: Supplying a processFrame function without also ' +
-          'giving a imageResolutionX or imageResolutionY means the video ' +
-          'will be processed at the full resolution. This may lead to a poor ' +
-          'framerate.'
-      );
-      this.warnedAboutBadStuff = true;
-    }
-  }
-
-  updateContainerDimensions() {
+  handleContainerResize() {
     const { offsetWidth, offsetHeight } = this.containerElement;
-    this.setState(state => {
-      if (
-        offsetWidth === state.containerWidth &&
-        offsetHeight === state.containerHeight
-      ) {
-        return null;
-      }
-      return {
-        containerWidth: offsetWidth,
-        containerHeight: offsetHeight
-      };
-    });
-  }
-
-  getDeviceDisplayDimensions() {
-    const {
-      imageResolutionX,
-      imageResolutionY,
-      scaleForDevicePixelRatio
-    } = this.props;
-    const scale = (scaleForDevicePixelRatio && window.devicePixelRatio) || 1;
-    return {
-      imageResolutionX: imageResolutionX && scale * imageResolutionX,
-      imageResolutionY: imageResolutionY && scale * imageResolutionY
-    };
-  }
-
-  getPlaceholderImage(callback) {
-    const {
-      playlist,
-      activeTrackIndex,
-      getPlaceholderImageForTrack
-    } = this.props;
-    const track = playlist[activeTrackIndex];
-    const img = getPlaceholderImageForTrack(track || null);
-    if (!img) {
-      callback();
-    } else if (img.naturalWidth && img.naturalHeight) {
-      callback(img);
-    } else {
-      img.addEventListener('load', () => callback(img));
-      img.addEventListener('error', () => callback());
-    }
-  }
-
-  handleFrameUpdate(canvasContext, isVideo) {
-    const { width, height } = this.canvas;
-    if (width && height) {
-      this.setState(state => {
-        if (
-          width === state.realDisplayWidth &&
-          height === state.realDisplayHeight
-        ) {
-          return null;
-        }
-        return {
-          realDisplayWidth: width,
-          realDisplayHeight: height
-        };
-      });
-    }
-    if (!(this.props.processFrame && width && height)) {
+    if (
+      offsetWidth === this.containerWidth &&
+      offsetHeight === this.containerHeight
+    ) {
       return;
     }
-    if (!isVideo && !this.props.shouldProcessPlaceholderImages) {
-      return;
+
+    if (this.hostedVideo) {
+      this.hostedVideo.style.width = `${offsetWidth}px`;
+      this.hostedVideo.style.maxHeight = `${offsetHeight}px`;
     }
-    const frameData = canvasContext.getImageData(0, 0, width, height);
-    const newFrameData = this.props.processFrame(frameData);
-    if (newFrameData instanceof ImageData) {
-      canvasContext.putImageData(newFrameData, 0, 0);
-      return;
-    }
-    if (!this.warnedAboutNoImageData) {
-      logWarning(
-        'The processFrame function should return an ImageData object. ' +
-          "Normally you'll just mutate the provided ImageData and " +
-          'return it.'
-      );
-      this.warnedAboutNoImageData = true;
-    }
+    this.containerWidth = offsetWidth;
+    this.containerHeight = offsetHeight;
+    this.forceUpdate();
   }
 
   render() {
@@ -208,47 +111,12 @@ export class VideoDisplay extends PureComponent {
       aspectRatio,
       fullscreen,
       maintainAspectRatioInFullscreen,
+      renderPlaceholderContent,
+      renderVideoIntoHostElement,
       ...attributes
     } = this.props;
-    delete attributes.pipeVideoStreamToCanvas;
-    delete attributes.processFrame;
-    delete attributes.imageResolutionX;
-    delete attributes.imageResolutionY;
-    delete attributes.scaleForDevicePixelRatio;
-    delete attributes.playlist;
-    delete attributes.activeTrackIndex;
-    delete attributes.getPlaceholderImageForTrack;
-    delete attributes.shouldProcessPlaceholderImages;
-
-    const {
-      realDisplayWidth,
-      realDisplayHeight,
-      containerWidth,
-      containerHeight
-    } = this.state;
-
-    const canvasStyle = {};
-    if (
-      realDisplayWidth &&
-      realDisplayHeight &&
-      containerWidth &&
-      containerHeight
-    ) {
-      const realDisplayRatio = realDisplayWidth / realDisplayHeight;
-      const containerRatio = containerWidth / containerHeight;
-      if (realDisplayRatio === containerRatio) {
-        canvasStyle.width = containerWidth;
-        canvasStyle.height = containerHeight;
-      } else if (realDisplayRatio > containerRatio) {
-        // video is wider than container - scale with bars on top and bottom
-        canvasStyle.width = containerWidth;
-        canvasStyle.height = containerWidth / realDisplayRatio;
-      } else {
-        // video is taller than container - scale with bars on left and right
-        canvasStyle.height = containerHeight;
-        canvasStyle.width = containerHeight * realDisplayRatio;
-      }
-    }
+    delete attributes.registerVideoHostElement;
+    delete attributes.unregisterVideoHostElement;
 
     const containerStyle = {
       display: 'flex',
@@ -259,18 +127,19 @@ export class VideoDisplay extends PureComponent {
     };
     if (
       aspectRatio &&
-      containerWidth &&
+      this.containerWidth &&
       (!fullscreen || maintainAspectRatioInFullscreen)
     ) {
       if (containerStyle.height && !this.warnedAboutStyleOverride) {
         logWarning(
-          'VideoDisplay cannot style.height prop which is ' +
+          'VideoDisplay cannot use style.height prop because it is ' +
             'overridden by aspectRatio.'
         );
         this.warnedAboutStyleOverride = true;
       }
       // h = w/(x/y)  -->  h*(x/y) = w  -->  x/y = w/h
-      containerStyle.height = containerWidth / extractAspectRatio(aspectRatio);
+      containerStyle.height =
+        this.containerWidth / extractAspectRatio(aspectRatio);
     }
 
     return (
@@ -279,44 +148,60 @@ export class VideoDisplay extends PureComponent {
         style={containerStyle}
         ref={elem => (this.containerElement = elem)}
       >
-        <canvas style={canvasStyle} ref={elem => (this.canvas = elem)} />
+        {this.hostedVideo
+          ? null
+          : renderPlaceholderContent({
+              containerWidth: this.containerWidth,
+              containerHeight: this.containerHeight,
+              stealVideo: () =>
+                renderVideoIntoHostElement(this.containerElement),
+              renderLastShownFrame: () =>
+                this.videoFrameAtTimeLastVacated && (
+                  <InjectedCanvas
+                    canvas={this.videoFrameAtTimeLastVacated}
+                    containerWidth={this.containerWidth}
+                  />
+                )
+            })}
       </div>
     );
   }
 }
 
 VideoDisplay.propTypes = {
-  pipeVideoStreamToCanvas: PropTypes.func.isRequired,
-  playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
-  activeTrackIndex: PropTypes.number.isRequired,
+  registerVideoHostElement: PropTypes.func.isRequired,
+  renderVideoIntoHostElement: PropTypes.func.isRequired,
+  unregisterVideoHostElement: PropTypes.func.isRequired,
   fullscreen: PropTypes.bool,
-  processFrame: PropTypes.func,
-  imageResolutionX: PropTypes.number,
-  imageResolutionY: PropTypes.number,
-  scaleForDevicePixelRatio: PropTypes.bool.isRequired,
   aspectRatio: PlayerPropTypes.aspectRatio,
-  getPlaceholderImageForTrack: PropTypes.func.isRequired,
-  shouldProcessPlaceholderImages: PropTypes.bool.isRequired,
-  maintainAspectRatioInFullscreen: PropTypes.bool.isRequired
+  maintainAspectRatioInFullscreen: PropTypes.bool.isRequired,
+  renderPlaceholderContent: PropTypes.func.isRequired
 };
 
 VideoDisplay.defaultProps = {
-  scaleForDevicePixelRatio: true,
   aspectRatio: '16:9',
-  getPlaceholderImageForTrack(track) {
-    if (track && track.artwork) {
-      const img = new Image();
-      img.src = track.artwork[0].src;
-      return img;
-    }
-  },
-  shouldProcessPlaceholderImages: false,
-  maintainAspectRatioInFullscreen: false
+  maintainAspectRatioInFullscreen: false,
+  renderPlaceholderContent(params) {
+    const { containerWidth, containerHeight, renderLastShownFrame } = params;
+    return (
+      <div
+        style={{
+          width: containerWidth,
+          height: containerHeight,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {renderLastShownFrame()}
+      </div>
+    );
+  }
 };
 
 export default playerContextFilter(VideoDisplay, [
-  'pipeVideoStreamToCanvas',
-  'playlist',
-  'activeTrackIndex',
+  'registerVideoHostElement',
+  'renderVideoIntoHostElement',
+  'unregisterVideoHostElement',
   'fullscreen'
 ]);
