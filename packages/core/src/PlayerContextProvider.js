@@ -205,7 +205,8 @@ export class PlayerContextProvider extends Component {
       playlist,
       autoplayDelayInSeconds,
       mediaElementRef,
-      getPosterImageForTrack
+      getPosterImageForTrack,
+      onActiveTrackUpdate
     } = this.props;
     const {
       volume,
@@ -267,6 +268,10 @@ export class PlayerContextProvider extends Component {
 
     if (mediaElementRef) {
       mediaElementRef(media);
+    }
+
+    if (onActiveTrackUpdate) {
+      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
     }
   }
 
@@ -344,13 +349,13 @@ export class PlayerContextProvider extends Component {
       this.props.playlist,
       this.state.activeTrackIndex
     );
+    const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
+    const newTrack = this.props.playlist[this.state.activeTrackIndex];
     if (prevSources[0].src !== newSources[0].src) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute(
         'poster',
-        this.props.getPosterImageForTrack(
-          this.props.playlist[this.state.activeTrackIndex]
-        )
+        this.props.getPosterImageForTrack(newTrack)
       );
 
       if (!this.state.shuffle) {
@@ -360,6 +365,10 @@ export class PlayerContextProvider extends Component {
         // lost our history.
         this.shuffler.clear();
       }
+    }
+
+    if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
+      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -956,6 +965,7 @@ PlayerContextProvider.propTypes = {
     __unstable__: PropTypes.object.isRequired
   }),
   onStateSnapshot: PropTypes.func,
+  onActiveTrackUpdate: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
