@@ -25,7 +25,7 @@ If you wanted to install, for instance, the `@cassette/core` and `@cassette/play
 npm install @cassette/core @cassette/player
 ```
 
-**I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
+**I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette) (without the `@`).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
 
 **If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases).**
 
