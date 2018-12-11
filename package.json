@@ -1,7 +1,7 @@
 {
   "name": "cassette",
   "private": true,
-  "version": "2.0.0-alpha.9",
+  "version": "2.0.0-alpha.10",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/audioplayer.js",
   "scripts": {
@@ -58,7 +58,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.41",
     "@babel/preset-env": "^7.0.0-beta.41",
     "@babel/preset-react": "^7.0.0-beta.41",
-    "svg-react-loader": "^0.4.6",
     "autoprefixer": "^7.1.1",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0-beta.2",
@@ -91,6 +90,7 @@
     "react-styleguidist": "^8.0.6",
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.5",
+    "svg-react-loader": "^0.4.6",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.2"
