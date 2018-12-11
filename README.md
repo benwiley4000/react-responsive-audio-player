@@ -196,7 +196,7 @@ None of these options are required, though the player will be functionally disab
 
 We don't expose any special props for manipulating the Web Audio API with React.
 
-However, you *can* use the `mediaElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/MediaContext/createMediaElementSource) to process your media before it gets sent to the speaker.
+However, you *can* use the `mediaElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) to process your media before it gets sent to the speaker.
 
 For example, you could use this code to add a low pass to high pass filter transition during the first 10 seconds your media player is mounted:
 
@@ -204,7 +204,7 @@ For example, you could use this code to add a low pass to high pass filter trans
 <MediaPlayer
   playlist={playlist}
   mediaElementRef={media => {
-    const ctx = new MediaContext();
+    const ctx = new AudioContext();
 
     let source = ctx.createMediaElementSource(media);
 
