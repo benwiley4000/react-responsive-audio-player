@@ -58,7 +58,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.41",
     "@babel/preset-env": "^7.0.0-beta.41",
     "@babel/preset-react": "^7.0.0-beta.41",
-    "@benwiley4000/svg-react-loader": "^0.4.5-fix-vulnerabilities",
+    "svg-react-loader": "^0.4.6",
     "autoprefixer": "^7.1.1",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0-beta.2",
