@@ -303,15 +303,18 @@ export class PlayerContextProvider extends Component {
       prevState.__playlist__,
       prevState.activeTrackIndex
     );
-    // the sources if we stay on the same track index
-    const currentSources = getTrackSources(
-      newPlaylist,
-      prevState.activeTrackIndex
-    );
-    // non-comprehensive but probably accurate check
-    if (prevSources[0].src === currentSources[0].src) {
-      // our active track index already matches
-      return baseNewState;
+
+    if (newPlaylist[prevState.activeTrackIndex]) {
+      // the sources if we stay on the same track index
+      const currentSources = getTrackSources(
+        newPlaylist,
+        prevState.activeTrackIndex
+      );
+      // non-comprehensive but probably accurate check
+      if (prevSources[0].src === currentSources[0].src) {
+        // our active track index already matches
+        return baseNewState;
+      }
     }
 
     /* if the track we're already playing is in the new playlist, update the
