@@ -75,6 +75,8 @@ export class VideoDisplay extends PureComponent {
           .getContext('2d')
           .drawImage(videoElement, 0, 0, videoFrame.width, videoFrame.height);
         videoFrame.style.maxWidth = '100%';
+        // 'vertical-align: middle' avoids unneeded 3px buffer below canvas
+        videoFrame.style.verticalAlign = 'middle';
         this.videoFrameAtTimeLastVacated = videoFrame;
         this.hostedVideo = null;
         this.forceUpdate();
