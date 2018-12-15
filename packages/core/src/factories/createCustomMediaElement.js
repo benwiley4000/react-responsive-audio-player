@@ -6,6 +6,7 @@ function createCustomMediaElement() {
   new MutationObserver(() => {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {
+    attributes: true,
     attributeFilter: ['loop']
   });
   // Don't let the media src property get modified directly.
