@@ -4,7 +4,7 @@ function getBabelConfig(esmodules, minimize) {
       [
         '@babel/preset-env',
         {
-          modules: false,
+          modules: process.env.NODE_ENV === 'test' ? 'auto' : false,
           loose: true,
           targets: esmodules ? { esmodules: true } : undefined
         }
