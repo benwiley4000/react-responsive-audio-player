@@ -1,5 +1,1 @@
-module.exports = {
-  env: {
-    test: require('./getBabelConfig')()
-  }
-};
+module.exports = require('./getBabelConfig')();
