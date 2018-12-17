@@ -12,7 +12,7 @@
     "dev:network": "BUILD_MODE=unminimized webpack-serve --host 0.0.0.0 --open --open-path ./example.html",
     "docs": "styleguidist build",
     "docs:serve": "styleguidist server",
-    "preversion": "npm run lint:all",
+    "preversion": "npm run lint:all && npm test",
     "prettier": "pretty-quick --staged --no-restage \"**/*.js\" \"**/*.scss\"",
     "prettier:all": "prettier --write \"**/*.js\" \"**/*.scss\"",
     "publish": "lerna publish",
