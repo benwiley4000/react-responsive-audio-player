@@ -239,7 +239,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
-    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
