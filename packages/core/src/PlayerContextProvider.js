@@ -70,21 +70,21 @@ const defaultState = {
 };
 
 // assumes playlist is valid
-function getGoToTrackState(
+function getGoToTrackState({
   prevState,
   index,
   shouldPlay = true,
   shouldForceLoad = false
-) {
+}) {
   const isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
     currentTime: 0,
-    loop: isNewTrack ? false : prevState.loop,
+    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
     paused: !shouldPlay,
-    awaitingLoad: Boolean(shouldForceLoad)
+    awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
 
@@ -141,7 +141,7 @@ export class PlayerContextProvider extends Component {
       setVolumeInProgress: false,
       // initialize awaitingPlay from autoplay prop
       awaitingPlay: props.autoplay && isPlaylistValid(props.playlist),
-      awaitingLoad: false,
+      awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
@@ -338,7 +338,7 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState(prevState, 0, false, true)
+      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false })
     };
   }
 
@@ -361,14 +361,17 @@ export class PlayerContextProvider extends Component {
     );
     const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
     const newTrack = this.props.playlist[this.state.activeTrackIndex];
-    if (this.state.awaitingLoad || prevSources[0].src !== newSources[0].src) {
+    if (
+      this.state.awaitingForceLoad ||
+      prevSources[0].src !== newSources[0].src
+    ) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
       );
       this.setState({
-        awaitingLoad: false
+        awaitingForceLoad: false
       });
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -561,7 +564,7 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack(0, false, true);
+        this.goToTrack({ index: 0, shouldPlay: false, shouldForceLoad: true });
       }
       return;
     }
@@ -662,11 +665,9 @@ export class PlayerContextProvider extends Component {
   }
 
   // assumes playlist is valid - don't call without checking
-  goToTrack(index, shouldPlay = true, shouldForceLoad = false) {
+  goToTrack(args) {
     clearTimeout(this.delayTimeout);
-    this.setState(state =>
-      getGoToTrackState(state, index, shouldPlay, shouldForceLoad)
-    );
+    this.setState(prevState => getGoToTrackState({ prevState, ...args }));
   }
 
   selectTrackIndex(index) {
@@ -681,7 +682,7 @@ export class PlayerContextProvider extends Component {
     if (this.state.shuffle) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
-    this.goToTrack(index);
+    this.goToTrack({ index });
   }
 
   backSkip() {
@@ -711,7 +712,7 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    this.goToTrack(index, true, true);
+    this.goToTrack({ index, shouldForceLoad: true });
   }
 
   forwardSkip() {
@@ -735,7 +736,7 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    this.goToTrack(index, true, true);
+    this.goToTrack({ index, shouldForceLoad: true });
   }
 
   seekPreview(targetTime) {
