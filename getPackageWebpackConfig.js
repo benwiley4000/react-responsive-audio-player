@@ -3,32 +3,9 @@ var OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
 var path = require('path');
 
-var OUTPUT_DIR = './dist';
+var getBabelConfig = require('./getBabelConfig');
 
-function babelConfig(esmodules, minimize) {
-  return {
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          modules: false,
-          loose: true,
-          targets: esmodules ? { esmodules: true } : undefined
-        }
-      ],
-      '@babel/react'
-    ],
-    plugins: minimize
-      ? [
-          '@babel/plugin-proposal-object-rest-spread',
-          [
-            'transform-react-remove-prop-types',
-            { mode: 'remove', removeImport: true }
-          ]
-        ]
-      : ['@babel/plugin-proposal-object-rest-spread']
-  };
-}
+var OUTPUT_DIR = './dist';
 
 const packages = {
   '@cassette/core': {
@@ -134,7 +111,7 @@ function webpackConfig({
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: babelConfig(esmodules)
+            options: getBabelConfig(esmodules, minimize)
           }
         }
       ]

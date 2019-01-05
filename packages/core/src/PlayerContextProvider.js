@@ -70,15 +70,21 @@ const defaultState = {
 };
 
 // assumes playlist is valid
-function getGoToTrackState(prevState, index, shouldPlay = true) {
+function getGoToTrackState({
+  prevState,
+  index,
+  shouldPlay = true,
+  shouldForceLoad = false
+}) {
   const isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
     currentTime: 0,
-    loop: isNewTrack ? false : prevState.loop,
+    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay
+    paused: !shouldPlay,
+    awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
 
@@ -135,6 +141,7 @@ export class PlayerContextProvider extends Component {
       setVolumeInProgress: false,
       // initialize awaitingPlay from autoplay prop
       awaitingPlay: props.autoplay && isPlaylistValid(props.playlist),
+      awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
@@ -239,7 +246,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
-    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
@@ -303,15 +310,18 @@ export class PlayerContextProvider extends Component {
       prevState.__playlist__,
       prevState.activeTrackIndex
     );
-    // the sources if we stay on the same track index
-    const currentSources = getTrackSources(
-      newPlaylist,
-      prevState.activeTrackIndex
-    );
-    // non-comprehensive but probably accurate check
-    if (prevSources[0].src === currentSources[0].src) {
-      // our active track index already matches
-      return baseNewState;
+
+    if (newPlaylist[prevState.activeTrackIndex]) {
+      // the sources if we stay on the same track index
+      const currentSources = getTrackSources(
+        newPlaylist,
+        prevState.activeTrackIndex
+      );
+      // non-comprehensive but probably accurate check
+      if (prevSources[0].src === currentSources[0].src) {
+        // our active track index already matches
+        return baseNewState;
+      }
     }
 
     /* if the track we're already playing is in the new playlist, update the
@@ -328,7 +338,7 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState(prevState, 0, false)
+      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false })
     };
   }
 
@@ -351,13 +361,18 @@ export class PlayerContextProvider extends Component {
     );
     const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
     const newTrack = this.props.playlist[this.state.activeTrackIndex];
-    if (prevSources[0].src !== newSources[0].src) {
+    if (
+      this.state.awaitingForceLoad ||
+      prevSources[0].src !== newSources[0].src
+    ) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
       );
-
+      this.setState({
+        awaitingForceLoad: false
+      });
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
         // history until we actually change tracks - if the user quickly
@@ -397,6 +412,18 @@ export class PlayerContextProvider extends Component {
 
   componentWillUnmount() {
     const { media } = this;
+    // remove listeners for media events
+    media.removeEventListener('play', this.handleMediaPlay);
+    media.removeEventListener('pause', this.handleMediaPause);
+    media.removeEventListener('ended', this.handleMediaEnded);
+    media.removeEventListener('stalled', this.handleMediaStalled);
+    media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.removeEventListener('volumechange', this.handleMediaVolumechange);
+    media.removeEventListener('durationchange', this.handleMediaDurationchange);
+    media.removeEventListener('progress', this.handleMediaProgress);
+    media.removeEventListener('ratechange', this.handleMediaRatechange);
     // remove special event listeners on the media element
     media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
     media.removeEventListener('loopchange', this.handleMediaLoopchange);
@@ -549,7 +576,7 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack(0, false);
+        this.goToTrack({ index: 0, shouldPlay: false, shouldForceLoad: true });
       }
       return;
     }
@@ -650,9 +677,9 @@ export class PlayerContextProvider extends Component {
   }
 
   // assumes playlist is valid - don't call without checking
-  goToTrack(index, shouldPlay = true) {
+  goToTrack(args) {
     clearTimeout(this.delayTimeout);
-    this.setState(state => getGoToTrackState(state, index, shouldPlay));
+    this.setState(prevState => getGoToTrackState({ prevState, ...args }));
   }
 
   selectTrackIndex(index) {
@@ -667,7 +694,7 @@ export class PlayerContextProvider extends Component {
     if (this.state.shuffle) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
-    this.goToTrack(index);
+    this.goToTrack({ index });
   }
 
   backSkip() {
@@ -697,7 +724,7 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    this.goToTrack(index);
+    this.goToTrack({ index, shouldForceLoad: true });
   }
 
   forwardSkip() {
@@ -721,7 +748,7 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    this.goToTrack(index);
+    this.goToTrack({ index, shouldForceLoad: true });
   }
 
   seekPreview(targetTime) {

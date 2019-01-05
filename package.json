@@ -1,7 +1,7 @@
 {
   "name": "cassette",
   "private": true,
-  "version": "2.0.0-alpha.7",
+  "version": "2.0.0-alpha.13",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/audioplayer.js",
   "scripts": {
@@ -12,13 +12,13 @@
     "dev:network": "BUILD_MODE=unminimized webpack-serve --host 0.0.0.0 --open --open-path ./example.html",
     "docs": "styleguidist build",
     "docs:serve": "styleguidist server",
-    "preversion": "npm run lint:all",
+    "preversion": "npm run lint:all && npm test",
     "prettier": "pretty-quick --staged --no-restage \"**/*.js\" \"**/*.scss\"",
     "prettier:all": "prettier --write \"**/*.js\" \"**/*.scss\"",
     "publish": "lerna publish",
     "lint": "lint-staged",
     "lint:all": "eslint \"**/*.js\" && node prettier-check.js \"**/*.scss\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "husky": {
     "hooks": {
@@ -54,13 +54,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.41",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.41",
-    "@babel/preset-env": "^7.0.0-beta.41",
-    "@babel/preset-react": "^7.0.0-beta.41",
-    "@benwiley4000/svg-react-loader": "^0.4.5-fix-vulnerabilities",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^7.1.1",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.0-beta.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
     "compression-webpack-plugin": "^1.1.11",
@@ -77,6 +78,7 @@
     "gulp-sass": "^3.1.0",
     "gulp-uglifycss": "^1.0.8",
     "husky": "^1.0.0-rc.14",
+    "jest": "^23.6.0",
     "lerna": "^3.4.0",
     "lint-staged": "^7.2.2",
     "mini-css-extract-plugin": "^0.2.0",
@@ -88,9 +90,11 @@
     "prop-types": "^15.5.10",
     "react": "^16.3.2",
     "react-dom": "^16.3.3",
-    "react-styleguidist": "^7.3.8",
+    "react-styleguidist": "^8.0.6",
+    "react-test-renderer": "^16.6.3",
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.5",
+    "svg-react-loader": "^0.4.6",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.2"

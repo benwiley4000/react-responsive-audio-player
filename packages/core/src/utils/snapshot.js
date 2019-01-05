@@ -76,8 +76,10 @@ export function restoreStateFromSnapshot(snapshot, props) {
     activeTrackIndex >= 0
   ) {
     // let's try staying on the same track index
-    const currentSrc = getTrackSources(props.playlist, activeTrackIndex)[0].src;
-    if (activeTrackSrc === currentSrc) {
+    const currentSrc =
+      props.playlist[activeTrackIndex] &&
+      getTrackSources(props.playlist, activeTrackIndex)[0].src;
+    if (currentSrc && activeTrackSrc === currentSrc) {
       restoredStateValues.activeTrackIndex = activeTrackIndex;
       useCurrentTime = true;
     } else {

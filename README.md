@@ -25,7 +25,7 @@ If you wanted to install, for instance, the `@cassette/core` and `@cassette/play
 npm install @cassette/core @cassette/player
 ```
 
-**I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
+**I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette) (without the `@`).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
 
 **If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases).**
 
@@ -196,7 +196,7 @@ None of these options are required, though the player will be functionally disab
 
 We don't expose any special props for manipulating the Web Audio API with React.
 
-However, you *can* use the `mediaElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/MediaContext/createMediaElementSource) to process your media before it gets sent to the speaker.
+However, you *can* use the `mediaElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) to process your media before it gets sent to the speaker.
 
 For example, you could use this code to add a low pass to high pass filter transition during the first 10 seconds your media player is mounted:
 
@@ -204,7 +204,7 @@ For example, you could use this code to add a low pass to high pass filter trans
 <MediaPlayer
   playlist={playlist}
   mediaElementRef={media => {
-    const ctx = new MediaContext();
+    const ctx = new AudioContext();
 
     let source = ctx.createMediaElementSource(media);
 
