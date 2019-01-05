@@ -144,7 +144,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -183,8 +183,8 @@ function (_PureComponent) {
     _this.state = {
       contentHeight: 0
     };
-    _this.moveMarquee = _this.moveMarquee.bind(_assertThisInitialized(_this));
-    _this.handleResize = _this.handleResize.bind(_assertThisInitialized(_this));
+    _this.moveMarquee = _this.moveMarquee.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleResize = _this.handleResize.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -210,9 +210,9 @@ function (_PureComponent) {
   };
 
   _proto.moveMarquee = function moveMarquee() {
-    var _props = this.props,
-        pixelsPerSecond = _props.pixelsPerSecond,
-        scrollDirection = _props.scrollDirection;
+    var _this$props = this.props,
+        pixelsPerSecond = _this$props.pixelsPerSecond,
+        scrollDirection = _this$props.scrollDirection;
     var now = getNow();
     var dt = now - this.lastMovementTime;
     this.lastMovementTime = now;
@@ -255,16 +255,16 @@ function (_PureComponent) {
         _ref = _i.value;
       }
 
-      var _entry = _ref;
+      var entry = _ref;
 
-      if (_entry.target === this.marqueeContainerElement) {
-        this.marqueeContainerElementWidth = _entry.contentRect.width;
+      if (entry.target === this.marqueeContainerElement) {
+        this.marqueeContainerElementWidth = entry.contentRect.width;
       }
 
-      if (_entry.target === this.movingContentContainerElement) {
-        this.movingContentContainerElementWidth = _entry.contentRect.width;
+      if (entry.target === this.movingContentContainerElement) {
+        this.movingContentContainerElementWidth = entry.contentRect.width;
         this.setState({
-          contentHeight: _entry.contentRect.height
+          contentHeight: entry.contentRect.height
         });
       }
     }
@@ -273,9 +273,9 @@ function (_PureComponent) {
   _proto.render = function render() {
     var _this2 = this;
 
-    var _props2 = this.props,
-        content = _props2.content,
-        attributes = _objectWithoutProperties(_props2, ["content"]);
+    var _this$props2 = this.props,
+        content = _this$props2.content,
+        attributes = _objectWithoutPropertiesLoose(_this$props2, ["content"]);
 
     delete attributes.pixelsPerSecond;
     delete attributes.scrollDirection;
@@ -406,7 +406,7 @@ function ProgressBarDisplay_objectSpread(target) { for (var i = 1; i < arguments
 
 function ProgressBarDisplay_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function ProgressBarDisplay_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function ProgressBarDisplay_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function ProgressBarDisplay_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -431,14 +431,14 @@ function (_PureComponent) {
   var _proto = ProgressBarDisplay.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        progressClassName = _props.progressClassName,
-        progressStyle = _props.progressStyle,
-        progress = _props.progress,
-        progressDirection = _props.progressDirection,
-        handle = _props.handle,
-        progressBarRef = _props.progressBarRef,
-        rest = ProgressBarDisplay_objectWithoutProperties(_props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
+    var _this$props = this.props,
+        progressClassName = _this$props.progressClassName,
+        progressStyle = _this$props.progressStyle,
+        progress = _this$props.progress,
+        progressDirection = _this$props.progressDirection,
+        handle = _this$props.handle,
+        progressBarRef = _this$props.progressBarRef,
+        rest = ProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", ProgressBarDisplay_extends({}, rest, {
       ref: progressBarRef
@@ -474,7 +474,7 @@ ProgressBarDisplay_ProgressBarDisplay.propTypes = {
 // CONCATENATED MODULE: ./packages/components/src/ProgressBar.js
 function ProgressBar_extends() { ProgressBar_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return ProgressBar_extends.apply(this, arguments); }
 
-function ProgressBar_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function ProgressBar_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function ProgressBar_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -503,10 +503,10 @@ function (_PureComponent) {
     };
     _this.progressContainer = null; // bind methods fired on React events
 
-    _this.setProgressContainerRef = _this.setProgressContainerRef.bind(ProgressBar_assertThisInitialized(_this));
-    _this.handleAdjustProgress = _this.handleAdjustProgress.bind(ProgressBar_assertThisInitialized(_this)); // bind listeners to add on mount and remove on unmount
+    _this.setProgressContainerRef = _this.setProgressContainerRef.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
+    _this.handleAdjustProgress = _this.handleAdjustProgress.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this))); // bind listeners to add on mount and remove on unmount
 
-    _this.handleAdjustComplete = _this.handleAdjustComplete.bind(ProgressBar_assertThisInitialized(_this));
+    _this.handleAdjustComplete = _this.handleAdjustComplete.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -550,11 +550,11 @@ function (_PureComponent) {
   };
 
   _proto.getProgressFromPageCoordinates = function getProgressFromPageCoordinates(pageX, pageY) {
-    var _progressContainer$ge = this.progressContainer.getBoundingClientRect(),
-        left = _progressContainer$ge.left,
-        top = _progressContainer$ge.top,
-        width = _progressContainer$ge.width,
-        height = _progressContainer$ge.height;
+    var _this$progressContain = this.progressContainer.getBoundingClientRect(),
+        left = _this$progressContain.left,
+        top = _this$progressContain.top,
+        width = _this$progressContain.width,
+        height = _this$progressContain.height;
 
     var _document$body = document.body,
         scrollLeft = _document$body.scrollLeft,
@@ -577,9 +577,9 @@ function (_PureComponent) {
   };
 
   _proto.handleAdjustProgress = function handleAdjustProgress(event) {
-    var _props = this.props,
-        readonly = _props.readonly,
-        onAdjustProgress = _props.onAdjustProgress;
+    var _this$props = this.props,
+        readonly = _this$props.readonly,
+        onAdjustProgress = _this$props.onAdjustProgress;
     var adjusting = this.state.adjusting;
 
     if (readonly) {
@@ -635,13 +635,13 @@ function (_PureComponent) {
   };
 
   _proto.render = function render() {
-    var _props2 = this.props,
-        progressClassName = _props2.progressClassName,
-        progressStyle = _props2.progressStyle,
-        progress = _props2.progress,
-        progressDirection = _props2.progressDirection,
-        handle = _props2.handle,
-        attributes = ProgressBar_objectWithoutProperties(_props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
+    var _this$props2 = this.props,
+        progressClassName = _this$props2.progressClassName,
+        progressStyle = _this$props2.progressStyle,
+        progress = _this$props2.progress,
+        progressDirection = _this$props2.progressDirection,
+        handle = _this$props2.handle,
+        attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
 
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
@@ -681,7 +681,7 @@ function VideoDisplay_objectSpread(target) { for (var i = 1; i < arguments.lengt
 
 function VideoDisplay_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function VideoDisplay_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function VideoDisplay_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function VideoDisplay_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -776,7 +776,9 @@ function (_PureComponent) {
         videoFrame.width = videoElement.videoWidth;
         videoFrame.height = videoElement.videoHeight;
         videoFrame.getContext('2d').drawImage(videoElement, 0, 0, videoFrame.width, videoFrame.height);
-        videoFrame.style.maxWidth = '100%';
+        videoFrame.style.maxWidth = '100%'; // 'vertical-align: middle' avoids unneeded 3px buffer below canvas
+
+        videoFrame.style.verticalAlign = 'middle';
         _this3.videoFrameAtTimeLastVacated = videoFrame;
         _this3.hostedVideo = null;
 
@@ -792,9 +794,9 @@ function (_PureComponent) {
   };
 
   _proto2.handleContainerResize = function handleContainerResize() {
-    var _containerElement = this.containerElement,
-        offsetWidth = _containerElement.offsetWidth,
-        offsetHeight = _containerElement.offsetHeight;
+    var _this$containerElemen = this.containerElement,
+        offsetWidth = _this$containerElemen.offsetWidth,
+        offsetHeight = _this$containerElemen.offsetHeight;
 
     if (offsetWidth === this.containerWidth && offsetHeight === this.containerHeight) {
       return;
@@ -813,13 +815,13 @@ function (_PureComponent) {
   _proto2.render = function render() {
     var _this4 = this;
 
-    var _props = this.props,
-        aspectRatio = _props.aspectRatio,
-        fullscreen = _props.fullscreen,
-        maintainAspectRatioInFullscreen = _props.maintainAspectRatioInFullscreen,
-        renderPlaceholderContent = _props.renderPlaceholderContent,
-        renderVideoIntoHostElement = _props.renderVideoIntoHostElement,
-        attributes = VideoDisplay_objectWithoutProperties(_props, ["aspectRatio", "fullscreen", "maintainAspectRatioInFullscreen", "renderPlaceholderContent", "renderVideoIntoHostElement"]);
+    var _this$props = this.props,
+        aspectRatio = _this$props.aspectRatio,
+        fullscreen = _this$props.fullscreen,
+        maintainAspectRatioInFullscreen = _this$props.maintainAspectRatioInFullscreen,
+        renderPlaceholderContent = _this$props.renderPlaceholderContent,
+        renderVideoIntoHostElement = _this$props.renderVideoIntoHostElement,
+        attributes = VideoDisplay_objectWithoutPropertiesLoose(_this$props, ["aspectRatio", "fullscreen", "maintainAspectRatioInFullscreen", "renderPlaceholderContent", "renderVideoIntoHostElement"]);
 
     delete attributes.registerVideoHostElement;
     delete attributes.unregisterVideoHostElement;

@@ -222,7 +222,7 @@ module.exports = g;
 /* 6 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.7","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.13","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 7 */
@@ -345,6 +345,7 @@ function createCustomMediaElement() {
   new MutationObserver(function () {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {
+    attributes: true,
     attributeFilter: ['loop']
   }); // Don't let the media src property get modified directly.
   // Instead, when it does get set, dispatch an event to be
@@ -664,9 +665,9 @@ function restoreStateFromSnapshot(snapshot, props) {
 
   if (typeof activeTrackSrc === 'string' && typeof activeTrackIndex === 'number' && activeTrackIndex >= 0) {
     // let's try staying on the same track index
-    var currentSrc = utils_getTrackSources(props.playlist, activeTrackIndex)[0].src;
+    var currentSrc = props.playlist[activeTrackIndex] && utils_getTrackSources(props.playlist, activeTrackIndex)[0].src;
 
-    if (activeTrackSrc === currentSrc) {
+    if (currentSrc && activeTrackSrc === currentSrc) {
       restoredStateValues.activeTrackIndex = activeTrackIndex;
       useCurrentTime = true;
     } else {
@@ -739,7 +740,7 @@ function convertToNumberWithinIntervalBounds(number, min, max) {
 // CONCATENATED MODULE: ./src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -813,19 +814,22 @@ var defaultState = {
   awaitingPlay: false
 }; // assumes playlist is valid
 
-function getGoToTrackState(prevState, index, shouldPlay) {
-  if (shouldPlay === void 0) {
-    shouldPlay = true;
-  }
-
+function getGoToTrackState(_ref) {
+  var prevState = _ref.prevState,
+      index = _ref.index,
+      _ref$shouldPlay = _ref.shouldPlay,
+      shouldPlay = _ref$shouldPlay === void 0 ? true : _ref$shouldPlay,
+      _ref$shouldForceLoad = _ref.shouldForceLoad,
+      shouldForceLoad = _ref$shouldForceLoad === void 0 ? false : _ref$shouldForceLoad;
   var isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
     currentTime: 0,
-    loop: isNewTrack ? false : prevState.loop,
+    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay
+    paused: !shouldPlay,
+    awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
 
@@ -839,23 +843,23 @@ function setMediaElementSources(mediaElement, sources) {
 
 
   for (var _iterator = sources, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-    var _ref;
+    var _ref2;
 
     if (_isArray) {
       if (_i >= _iterator.length) break;
-      _ref = _iterator[_i++];
+      _ref2 = _iterator[_i++];
     } else {
       _i = _iterator.next();
       if (_i.done) break;
-      _ref = _i.value;
+      _ref2 = _i.value;
     }
 
-    var _source = _ref;
+    var source = _ref2;
     var sourceElement = document.createElement('source');
-    sourceElement.src = _source.src;
+    sourceElement.src = source.src;
 
-    if (_source.type) {
-      sourceElement.type = _source.type;
+    if (source.type) {
+      sourceElement.type = source.type;
     }
 
     mediaElement.appendChild(sourceElement);
@@ -901,6 +905,7 @@ function (_Component) {
       setVolumeInProgress: false,
       // initialize awaitingPlay from autoplay prop
       awaitingPlay: props.autoplay && utils_isPlaylistValid(props.playlist),
+      awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist
     }, props.initialStateSnapshot ? restoreStateFromSnapshot(props.initialStateSnapshot, props) : {}); // volume at last time we were unmuted and not actively setting volume
@@ -916,36 +921,36 @@ function (_Component) {
     _this.videoHostOccupiedCallbacks = new Map();
     _this.videoHostVacatedCallbacks = new Map(); // bind callback methods to pass to descendant elements
 
-    _this.togglePause = _this.togglePause.bind(_assertThisInitialized(_this));
-    _this.selectTrackIndex = _this.selectTrackIndex.bind(_assertThisInitialized(_this));
-    _this.forwardSkip = _this.forwardSkip.bind(_assertThisInitialized(_this));
-    _this.backSkip = _this.backSkip.bind(_assertThisInitialized(_this));
-    _this.seekPreview = _this.seekPreview.bind(_assertThisInitialized(_this));
-    _this.seekComplete = _this.seekComplete.bind(_assertThisInitialized(_this));
-    _this.setVolume = _this.setVolume.bind(_assertThisInitialized(_this));
-    _this.setVolumeComplete = _this.setVolumeComplete.bind(_assertThisInitialized(_this));
-    _this.toggleMuted = _this.toggleMuted.bind(_assertThisInitialized(_this));
-    _this.toggleShuffle = _this.toggleShuffle.bind(_assertThisInitialized(_this));
-    _this.setRepeatStrategy = _this.setRepeatStrategy.bind(_assertThisInitialized(_this));
-    _this.setPlaybackRate = _this.setPlaybackRate.bind(_assertThisInitialized(_this));
-    _this.registerVideoHostElement = _this.registerVideoHostElement.bind(_assertThisInitialized(_this));
-    _this.renderVideoIntoHostElement = _this.renderVideoIntoHostElement.bind(_assertThisInitialized(_this));
-    _this.unregisterVideoHostElement = _this.unregisterVideoHostElement.bind(_assertThisInitialized(_this));
-    _this.updateVideoHostElement = _this.updateVideoHostElement.bind(_assertThisInitialized(_this)); // bind media event handlers
+    _this.togglePause = _this.togglePause.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.selectTrackIndex = _this.selectTrackIndex.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.forwardSkip = _this.forwardSkip.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.backSkip = _this.backSkip.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.seekPreview = _this.seekPreview.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.seekComplete = _this.seekComplete.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setVolume = _this.setVolume.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setVolumeComplete = _this.setVolumeComplete.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleMuted = _this.toggleMuted.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleShuffle = _this.toggleShuffle.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setRepeatStrategy = _this.setRepeatStrategy.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setPlaybackRate = _this.setPlaybackRate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.registerVideoHostElement = _this.registerVideoHostElement.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.renderVideoIntoHostElement = _this.renderVideoIntoHostElement.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.unregisterVideoHostElement = _this.unregisterVideoHostElement.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.updateVideoHostElement = _this.updateVideoHostElement.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind media event handlers
 
-    _this.handleMediaPlay = _this.handleMediaPlay.bind(_assertThisInitialized(_this));
-    _this.handleMediaPause = _this.handleMediaPause.bind(_assertThisInitialized(_this));
-    _this.handleMediaSrcrequest = _this.handleMediaSrcrequest.bind(_assertThisInitialized(_this));
-    _this.handleMediaEnded = _this.handleMediaEnded.bind(_assertThisInitialized(_this));
-    _this.handleMediaStalled = _this.handleMediaStalled.bind(_assertThisInitialized(_this));
-    _this.handleMediaCanplaythrough = _this.handleMediaCanplaythrough.bind(_assertThisInitialized(_this));
-    _this.handleMediaTimeupdate = _this.handleMediaTimeupdate.bind(_assertThisInitialized(_this));
-    _this.handleMediaLoadedmetadata = _this.handleMediaLoadedmetadata.bind(_assertThisInitialized(_this));
-    _this.handleMediaVolumechange = _this.handleMediaVolumechange.bind(_assertThisInitialized(_this));
-    _this.handleMediaDurationchange = _this.handleMediaDurationchange.bind(_assertThisInitialized(_this));
-    _this.handleMediaProgress = _this.handleMediaProgress.bind(_assertThisInitialized(_this));
-    _this.handleMediaLoopchange = _this.handleMediaLoopchange.bind(_assertThisInitialized(_this));
-    _this.handleMediaRatechange = _this.handleMediaRatechange.bind(_assertThisInitialized(_this));
+    _this.handleMediaPlay = _this.handleMediaPlay.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaPause = _this.handleMediaPause.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaSrcrequest = _this.handleMediaSrcrequest.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaEnded = _this.handleMediaEnded.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaStalled = _this.handleMediaStalled.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaCanplaythrough = _this.handleMediaCanplaythrough.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaTimeupdate = _this.handleMediaTimeupdate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaLoadedmetadata = _this.handleMediaLoadedmetadata.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaVolumechange = _this.handleMediaVolumechange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaDurationchange = _this.handleMediaDurationchange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaProgress = _this.handleMediaProgress.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaLoopchange = _this.handleMediaLoopchange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaRatechange = _this.handleMediaRatechange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -955,21 +960,21 @@ function (_Component) {
     var _this2 = this;
 
     var media = this.media = factories_createCustomMediaElement();
-    var _props = this.props,
-        defaultPlaybackRate = _props.defaultPlaybackRate,
-        crossOrigin = _props.crossOrigin,
-        playlist = _props.playlist,
-        autoplayDelayInSeconds = _props.autoplayDelayInSeconds,
-        mediaElementRef = _props.mediaElementRef,
-        getPosterImageForTrack = _props.getPosterImageForTrack,
-        onActiveTrackUpdate = _props.onActiveTrackUpdate;
-    var _state = this.state,
-        volume = _state.volume,
-        muted = _state.muted,
-        playbackRate = _state.playbackRate,
-        loop = _state.loop,
-        activeTrackIndex = _state.activeTrackIndex,
-        awaitingPlay = _state.awaitingPlay; // initialize media properties
+    var _this$props = this.props,
+        defaultPlaybackRate = _this$props.defaultPlaybackRate,
+        crossOrigin = _this$props.crossOrigin,
+        playlist = _this$props.playlist,
+        autoplayDelayInSeconds = _this$props.autoplayDelayInSeconds,
+        mediaElementRef = _this$props.mediaElementRef,
+        getPosterImageForTrack = _this$props.getPosterImageForTrack,
+        onActiveTrackUpdate = _this$props.onActiveTrackUpdate;
+    var _this$state = this.state,
+        volume = _this$state.volume,
+        muted = _this$state.muted,
+        playbackRate = _this$state.playbackRate,
+        loop = _this$state.loop,
+        activeTrackIndex = _this$state.activeTrackIndex,
+        awaitingPlay = _this$state.awaitingPlay; // initialize media properties
     // We used to set currentTime here.. now waiting for loadedmetadata.
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
@@ -988,7 +993,7 @@ function (_Component) {
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
-    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
@@ -1043,13 +1048,16 @@ function (_Component) {
     } // check if the activeTrackIndex doesn't need to be updated
 
 
-    var prevSources = utils_getTrackSources(prevState.__playlist__, prevState.activeTrackIndex); // the sources if we stay on the same track index
+    var prevSources = utils_getTrackSources(prevState.__playlist__, prevState.activeTrackIndex);
 
-    var currentSources = utils_getTrackSources(newPlaylist, prevState.activeTrackIndex); // non-comprehensive but probably accurate check
+    if (newPlaylist[prevState.activeTrackIndex]) {
+      // the sources if we stay on the same track index
+      var currentSources = utils_getTrackSources(newPlaylist, prevState.activeTrackIndex); // non-comprehensive but probably accurate check
 
-    if (prevSources[0].src === currentSources[0].src) {
-      // our active track index already matches
-      return baseNewState;
+      if (prevSources[0].src === currentSources[0].src) {
+        // our active track index already matches
+        return baseNewState;
+      }
     }
     /* if the track we're already playing is in the new playlist, update the
      * activeTrackIndex.
@@ -1065,7 +1073,11 @@ function (_Component) {
     } // if not, then load the first track in the new playlist, and pause.
 
 
-    return _objectSpread({}, baseNewState, getGoToTrackState(prevState, 0, false));
+    return _objectSpread({}, baseNewState, getGoToTrackState({
+      prevState: prevState,
+      index: 0,
+      shouldPlay: false
+    }));
   };
 
   _proto.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
@@ -1082,9 +1094,12 @@ function (_Component) {
     var prevTrack = prevProps.playlist[prevState.activeTrackIndex];
     var newTrack = this.props.playlist[this.state.activeTrackIndex];
 
-    if (prevSources[0].src !== newSources[0].src) {
+    if (this.state.awaitingForceLoad || prevSources[0].src !== newSources[0].src) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute('poster', this.props.getPosterImageForTrack(newTrack));
+      this.setState({
+        awaitingForceLoad: false
+      });
 
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -1124,7 +1139,19 @@ function (_Component) {
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
-    var media = this.media; // remove special event listeners on the media element
+    var media = this.media; // remove listeners for media events
+
+    media.removeEventListener('play', this.handleMediaPlay);
+    media.removeEventListener('pause', this.handleMediaPause);
+    media.removeEventListener('ended', this.handleMediaEnded);
+    media.removeEventListener('stalled', this.handleMediaStalled);
+    media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.removeEventListener('volumechange', this.handleMediaVolumechange);
+    media.removeEventListener('durationchange', this.handleMediaDurationchange);
+    media.removeEventListener('progress', this.handleMediaProgress);
+    media.removeEventListener('ratechange', this.handleMediaRatechange); // remove special event listeners on the media element
 
     media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
     media.removeEventListener('loopchange', this.handleMediaLoopchange);
@@ -1180,9 +1207,9 @@ function (_Component) {
     });
   };
 
-  _proto.registerVideoHostElement = function registerVideoHostElement(hostElement, _ref2) {
-    var onHostOccupied = _ref2.onHostOccupied,
-        onHostVacated = _ref2.onHostVacated;
+  _proto.registerVideoHostElement = function registerVideoHostElement(hostElement, _ref3) {
+    var onHostOccupied = _ref3.onHostOccupied,
+        onHostVacated = _ref3.onHostVacated;
     this.videoHostElementList = this.videoHostElementList.concat(hostElement);
     this.videoHostOccupiedCallbacks.set(hostElement, onHostOccupied);
     this.videoHostVacatedCallbacks.set(hostElement, onHostVacated);
@@ -1299,21 +1326,25 @@ function (_Component) {
     }
 
     clearTimeout(this.gapLengthTimeout);
-    var _props2 = this.props,
-        playlist = _props2.playlist,
-        loadFirstTrackOnPlaylistComplete = _props2.loadFirstTrackOnPlaylistComplete;
+    var _this$props2 = this.props,
+        playlist = _this$props2.playlist,
+        loadFirstTrackOnPlaylistComplete = _this$props2.loadFirstTrackOnPlaylistComplete;
 
     if (!utils_isPlaylistValid(playlist)) {
       return;
     }
 
-    var _state2 = this.state,
-        cycle = _state2.cycle,
-        activeTrackIndex = _state2.activeTrackIndex;
+    var _this$state2 = this.state,
+        cycle = _this$state2.cycle,
+        activeTrackIndex = _this$state2.activeTrackIndex;
 
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack(0, false);
+        this.goToTrack({
+          index: 0,
+          shouldPlay: false,
+          shouldForceLoad: true
+        });
       }
 
       return;
@@ -1339,9 +1370,9 @@ function (_Component) {
   };
 
   _proto.handleMediaTimeupdate = function handleMediaTimeupdate() {
-    var _media = this.media,
-        currentTime = _media.currentTime,
-        played = _media.played;
+    var _this$media = this.media,
+        currentTime = _this$media.currentTime,
+        played = _this$media.played;
 
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
@@ -1368,9 +1399,9 @@ function (_Component) {
   };
 
   _proto.handleMediaVolumechange = function handleMediaVolumechange() {
-    var _media2 = this.media,
-        volume = _media2.volume,
-        muted = _media2.muted;
+    var _this$media2 = this.media,
+        volume = _this$media2.volume,
+        muted = _this$media2.muted;
     this.setState({
       volume: volume,
       muted: muted
@@ -1438,17 +1469,15 @@ function (_Component) {
     } catch (err) {
       playErrorHandler(err);
     }
-  }; // assumes playlist is valid - don't call without checking
+  } // assumes playlist is valid - don't call without checking
+  ;
 
-
-  _proto.goToTrack = function goToTrack(index, shouldPlay) {
-    if (shouldPlay === void 0) {
-      shouldPlay = true;
-    }
-
+  _proto.goToTrack = function goToTrack(args) {
     clearTimeout(this.delayTimeout);
-    this.setState(function (state) {
-      return getGoToTrackState(state, index, shouldPlay);
+    this.setState(function (prevState) {
+      return getGoToTrackState(_objectSpread({
+        prevState: prevState
+      }, args));
     });
   };
 
@@ -1468,18 +1497,20 @@ function (_Component) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index: index
+    });
   };
 
   _proto.backSkip = function backSkip() {
-    var _props3 = this.props,
-        playlist = _props3.playlist,
-        stayOnBackSkipThreshold = _props3.stayOnBackSkipThreshold;
+    var _this$props3 = this.props,
+        playlist = _this$props3.playlist,
+        stayOnBackSkipThreshold = _this$props3.stayOnBackSkipThreshold;
     var media = this.media;
-    var _state3 = this.state,
-        cycle = _state3.cycle,
-        activeTrackIndex = _state3.activeTrackIndex,
-        shuffle = _state3.shuffle;
+    var _this$state3 = this.state,
+        cycle = _this$state3.cycle,
+        activeTrackIndex = _this$state3.activeTrackIndex,
+        shuffle = _this$state3.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || media.currentTime >= stayOnBackSkipThreshold || !cycle && activeTrackIndex < 1) {
       media.currentTime = 0;
@@ -1506,15 +1537,18 @@ function (_Component) {
       }
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index: index,
+      shouldForceLoad: true
+    });
   };
 
   _proto.forwardSkip = function forwardSkip() {
     var playlist = this.props.playlist;
-    var _state4 = this.state,
-        cycle = _state4.cycle,
-        activeTrackIndex = _state4.activeTrackIndex,
-        shuffle = _state4.shuffle;
+    var _this$state4 = this.state,
+        cycle = _this$state4.cycle,
+        activeTrackIndex = _this$state4.activeTrackIndex,
+        shuffle = _this$state4.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || !cycle && activeTrackIndex + 1 >= playlist.length) {
       return;
@@ -1532,7 +1566,10 @@ function (_Component) {
       }
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index: index,
+      shouldForceLoad: true
+    });
   };
 
   _proto.seekPreview = function seekPreview(targetTime) {
@@ -1547,9 +1584,9 @@ function (_Component) {
 
     switch (this.props.seekMode) {
       case 'paused':
-        this.setState(function (_ref3) {
-          var paused = _ref3.paused,
-              awaitingResumeOnSeekComplete = _ref3.awaitingResumeOnSeekComplete;
+        this.setState(function (_ref4) {
+          var paused = _ref4.paused,
+              awaitingResumeOnSeekComplete = _ref4.awaitingResumeOnSeekComplete;
           return _objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
@@ -1563,9 +1600,9 @@ function (_Component) {
         break;
 
       case 'immediate':
-        this.setState(function (_ref4) {
-          var paused = _ref4.paused,
-              awaitingResumeOnSeekComplete = _ref4.awaitingResumeOnSeekComplete;
+        this.setState(function (_ref5) {
+          var paused = _ref5.paused,
+              awaitingResumeOnSeekComplete = _ref5.awaitingResumeOnSeekComplete;
           return _objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
@@ -1587,9 +1624,9 @@ function (_Component) {
   };
 
   _proto.seekComplete = function seekComplete(targetTime) {
-    var _state5 = this.state,
-        seekPreviewTime = _state5.seekPreviewTime,
-        awaitingResumeOnSeekComplete = _state5.awaitingResumeOnSeekComplete;
+    var _this$state5 = this.state,
+        seekPreviewTime = _this$state5.seekPreviewTime,
+        awaitingResumeOnSeekComplete = _this$state5.awaitingResumeOnSeekComplete;
     var baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
@@ -1849,12 +1886,12 @@ function (_Component2) {
   _proto2.render = function render() {
     var _this7 = this;
 
-    var _props4 = this.props,
-        groupContext = _props4.groupContext,
-        props = _props4.props;
+    var _this$props4 = this.props,
+        groupContext = _this$props4.groupContext,
+        props = _this$props4.props;
 
     var _mediaElementRef = props.mediaElementRef,
-        rest = _objectWithoutProperties(props, ["mediaElementRef"]);
+        rest = _objectWithoutPropertiesLoose(props, ["mediaElementRef"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContextProvider_PlayerContextProvider, _extends({}, groupContext.groupProps, rest, {
       mediaElementRef: function mediaElementRef(ref) {
@@ -1916,9 +1953,9 @@ function (_Component) {
     var _this;
 
     _this = _Component.call(this, props) || this;
-    _this.registerMediaElement = _this.registerMediaElement.bind(PlayerContextGroup_assertThisInitialized(_this));
-    _this.unregisterMediaElement = _this.unregisterMediaElement.bind(PlayerContextGroup_assertThisInitialized(_this));
-    _this.enforceOneMediaSourceOnly = _this.enforceOneMediaSourceOnly.bind(PlayerContextGroup_assertThisInitialized(_this));
+    _this.registerMediaElement = _this.registerMediaElement.bind(PlayerContextGroup_assertThisInitialized(PlayerContextGroup_assertThisInitialized(_this)));
+    _this.unregisterMediaElement = _this.unregisterMediaElement.bind(PlayerContextGroup_assertThisInitialized(PlayerContextGroup_assertThisInitialized(_this)));
+    _this.enforceOneMediaSourceOnly = _this.enforceOneMediaSourceOnly.bind(PlayerContextGroup_assertThisInitialized(PlayerContextGroup_assertThisInitialized(_this)));
     _this.mediaElements = [];
     return _this;
   }
@@ -1960,10 +1997,10 @@ function (_Component) {
         _ref = _i.value;
       }
 
-      var _element = _ref;
+      var element = _ref;
 
-      if (_element !== mediaElement && !_element.muted) {
-        _element.pause();
+      if (element !== mediaElement && !element.muted) {
+        element.pause();
       }
     }
   };
@@ -2031,9 +2068,9 @@ function (_PureComponent) {
     _this.state = {
       fullscreen: false
     };
-    _this.requestFullscreen = _this.requestFullscreen.bind(FullscreenContextProvider_assertThisInitialized(_this));
-    _this.requestExitFullscreen = _this.requestExitFullscreen.bind(FullscreenContextProvider_assertThisInitialized(_this));
-    _this.handleFullscreenChange = _this.handleFullscreenChange.bind(FullscreenContextProvider_assertThisInitialized(_this));
+    _this.requestFullscreen = _this.requestFullscreen.bind(FullscreenContextProvider_assertThisInitialized(FullscreenContextProvider_assertThisInitialized(_this)));
+    _this.requestExitFullscreen = _this.requestExitFullscreen.bind(FullscreenContextProvider_assertThisInitialized(FullscreenContextProvider_assertThisInitialized(_this)));
+    _this.handleFullscreenChange = _this.handleFullscreenChange.bind(FullscreenContextProvider_assertThisInitialized(FullscreenContextProvider_assertThisInitialized(_this)));
     _this.fullscreenElement = null;
     return _this;
   }
@@ -2161,15 +2198,15 @@ function playerContextFilter(component, contextPropNames) {
             _ref = _i.value;
           }
 
-          var _propName = _ref;
+          var propName = _ref;
 
-          if (playerContext.hasOwnProperty(_propName)) {
-            childProps[_propName] = playerContext[_propName];
-          } else if (fullscreenContext.hasOwnProperty(_propName)) {
-            childProps[_propName] = fullscreenContext[_propName];
-          } else if (!warned[_propName]) {
-            Object(console["b" /* logWarning */])("Prop '" + _propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
-            warned[_propName] = true;
+          if (playerContext.hasOwnProperty(propName)) {
+            childProps[propName] = playerContext[propName];
+          } else if (fullscreenContext.hasOwnProperty(propName)) {
+            childProps[propName] = fullscreenContext[propName];
+          } else if (!warned[propName]) {
+            Object(console["b" /* logWarning */])("Prop '" + propName + "' for component " + childName + ' not found in playerContext or fullscreenContext.');
+            warned[propName] = true;
           }
         }
 

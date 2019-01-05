@@ -135,7 +135,11 @@ const _global = typeof window === 'undefined' ? global : window;
 
 _global.__cassette_contexts__ = _global.__cassette_contexts__ || {};
 
-function createSingleGlobalContext(displayName, defaultValue = null) {
+function createSingleGlobalContext(displayName, defaultValue) {
+  if (defaultValue === void 0) {
+    defaultValue = null;
+  }
+
   const ExistingContext = _global.__cassette_contexts__[displayName];
 
   if (ExistingContext) {
@@ -218,7 +222,7 @@ module.exports = g;
 /* 6 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.7","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.13","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 7 */
@@ -274,11 +278,15 @@ var console = __webpack_require__(2);
 function requiredOnlyUnlessHasProp(propType, altPropName) {
   let warnedAboutDefiningBoth = false;
 
-  function validate(props, propName, componentName, ...rest) {
+  function validate(props, propName, componentName) {
     if (propName in props) {
       if (!warnedAboutDefiningBoth && altPropName in props) {
         Object(console["b" /* logWarning */])(`Do not define both the '${propName}' and '${altPropName}' props.`);
         warnedAboutDefiningBoth = true;
+      }
+
+      for (var _len = arguments.length, rest = new Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+        rest[_key - 3] = arguments[_key];
       }
 
       return propType.isRequired(props, propName, componentName, ...rest);
@@ -337,6 +345,7 @@ function createCustomMediaElement() {
   new MutationObserver(() => {
     media.dispatchEvent(new Event(loopchange));
   }).observe(media, {
+    attributes: true,
     attributeFilter: ['loop']
   }); // Don't let the media src property get modified directly.
   // Instead, when it does get set, dispatch an event to be
@@ -366,7 +375,11 @@ function createCustomMediaElement() {
  * - Able to swap source lists and maintain shuffle order for common members
  */
 class ShuffleManager {
-  constructor(list, options = {}) {
+  constructor(list, options) {
+    if (options === void 0) {
+      options = {};
+    }
+
     this._list = list;
     this._forwardStack = [];
     this._backStack = [];
@@ -639,9 +652,9 @@ function restoreStateFromSnapshot(snapshot, props) {
 
   if (typeof activeTrackSrc === 'string' && typeof activeTrackIndex === 'number' && activeTrackIndex >= 0) {
     // let's try staying on the same track index
-    const currentSrc = utils_getTrackSources(props.playlist, activeTrackIndex)[0].src;
+    const currentSrc = props.playlist[activeTrackIndex] && utils_getTrackSources(props.playlist, activeTrackIndex)[0].src;
 
-    if (activeTrackSrc === currentSrc) {
+    if (currentSrc && activeTrackSrc === currentSrc) {
       restoredStateValues.activeTrackIndex = activeTrackIndex;
       useCurrentTime = true;
     } else {
@@ -712,7 +725,7 @@ function convertToNumberWithinIntervalBounds(number, min, max) {
 // CONCATENATED MODULE: ./src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -782,15 +795,22 @@ const defaultState = {
   awaitingPlay: false
 }; // assumes playlist is valid
 
-function getGoToTrackState(prevState, index, shouldPlay = true) {
+function getGoToTrackState(_ref) {
+  let prevState = _ref.prevState,
+      index = _ref.index,
+      _ref$shouldPlay = _ref.shouldPlay,
+      shouldPlay = _ref$shouldPlay === void 0 ? true : _ref$shouldPlay,
+      _ref$shouldForceLoad = _ref.shouldForceLoad,
+      shouldForceLoad = _ref$shouldForceLoad === void 0 ? false : _ref$shouldForceLoad;
   const isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
     currentTime: 0,
-    loop: isNewTrack ? false : prevState.loop,
+    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay
+    paused: !shouldPlay,
+    awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
 
@@ -848,6 +868,7 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
       setVolumeInProgress: false,
       // initialize awaitingPlay from autoplay prop
       awaitingPlay: props.autoplay && utils_isPlaylistValid(props.playlist),
+      awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist
     }, props.initialStateSnapshot ? restoreStateFromSnapshot(props.initialStateSnapshot, props) : {}); // volume at last time we were unmuted and not actively setting volume
@@ -897,21 +918,21 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
 
   componentDidMount() {
     const media = this.media = factories_createCustomMediaElement();
-    const _props = this.props,
-          defaultPlaybackRate = _props.defaultPlaybackRate,
-          crossOrigin = _props.crossOrigin,
-          playlist = _props.playlist,
-          autoplayDelayInSeconds = _props.autoplayDelayInSeconds,
-          mediaElementRef = _props.mediaElementRef,
-          getPosterImageForTrack = _props.getPosterImageForTrack,
-          onActiveTrackUpdate = _props.onActiveTrackUpdate;
-    const _state = this.state,
-          volume = _state.volume,
-          muted = _state.muted,
-          playbackRate = _state.playbackRate,
-          loop = _state.loop,
-          activeTrackIndex = _state.activeTrackIndex,
-          awaitingPlay = _state.awaitingPlay; // initialize media properties
+    const _this$props = this.props,
+          defaultPlaybackRate = _this$props.defaultPlaybackRate,
+          crossOrigin = _this$props.crossOrigin,
+          playlist = _this$props.playlist,
+          autoplayDelayInSeconds = _this$props.autoplayDelayInSeconds,
+          mediaElementRef = _this$props.mediaElementRef,
+          getPosterImageForTrack = _this$props.getPosterImageForTrack,
+          onActiveTrackUpdate = _this$props.onActiveTrackUpdate;
+    const _this$state = this.state,
+          volume = _this$state.volume,
+          muted = _this$state.muted,
+          playbackRate = _this$state.playbackRate,
+          loop = _this$state.loop,
+          activeTrackIndex = _this$state.activeTrackIndex,
+          awaitingPlay = _this$state.awaitingPlay; // initialize media properties
     // We used to set currentTime here.. now waiting for loadedmetadata.
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
@@ -930,7 +951,7 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
-    media.addEventListener('etalled', this.handleMediaStalled);
+    media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
@@ -985,13 +1006,16 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     } // check if the activeTrackIndex doesn't need to be updated
 
 
-    const prevSources = utils_getTrackSources(prevState.__playlist__, prevState.activeTrackIndex); // the sources if we stay on the same track index
+    const prevSources = utils_getTrackSources(prevState.__playlist__, prevState.activeTrackIndex);
 
-    const currentSources = utils_getTrackSources(newPlaylist, prevState.activeTrackIndex); // non-comprehensive but probably accurate check
+    if (newPlaylist[prevState.activeTrackIndex]) {
+      // the sources if we stay on the same track index
+      const currentSources = utils_getTrackSources(newPlaylist, prevState.activeTrackIndex); // non-comprehensive but probably accurate check
 
-    if (prevSources[0].src === currentSources[0].src) {
-      // our active track index already matches
-      return baseNewState;
+      if (prevSources[0].src === currentSources[0].src) {
+        // our active track index already matches
+        return baseNewState;
+      }
     }
     /* if the track we're already playing is in the new playlist, update the
      * activeTrackIndex.
@@ -1007,7 +1031,11 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     } // if not, then load the first track in the new playlist, and pause.
 
 
-    return _objectSpread({}, baseNewState, getGoToTrackState(prevState, 0, false));
+    return _objectSpread({}, baseNewState, getGoToTrackState({
+      prevState,
+      index: 0,
+      shouldPlay: false
+    }));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -1022,9 +1050,12 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
     const newTrack = this.props.playlist[this.state.activeTrackIndex];
 
-    if (prevSources[0].src !== newSources[0].src) {
+    if (this.state.awaitingForceLoad || prevSources[0].src !== newSources[0].src) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute('poster', this.props.getPosterImageForTrack(newTrack));
+      this.setState({
+        awaitingForceLoad: false
+      });
 
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
@@ -1064,7 +1095,19 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   componentWillUnmount() {
-    const media = this.media; // remove special event listeners on the media element
+    const media = this.media; // remove listeners for media events
+
+    media.removeEventListener('play', this.handleMediaPlay);
+    media.removeEventListener('pause', this.handleMediaPause);
+    media.removeEventListener('ended', this.handleMediaEnded);
+    media.removeEventListener('stalled', this.handleMediaStalled);
+    media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
+    media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
+    media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.removeEventListener('volumechange', this.handleMediaVolumechange);
+    media.removeEventListener('durationchange', this.handleMediaDurationchange);
+    media.removeEventListener('progress', this.handleMediaProgress);
+    media.removeEventListener('ratechange', this.handleMediaRatechange); // remove special event listeners on the media element
 
     media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
     media.removeEventListener('loopchange', this.handleMediaLoopchange);
@@ -1114,10 +1157,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     });
   }
 
-  registerVideoHostElement(hostElement, {
-    onHostOccupied,
-    onHostVacated
-  }) {
+  registerVideoHostElement(hostElement, _ref2) {
+    let onHostOccupied = _ref2.onHostOccupied,
+        onHostVacated = _ref2.onHostVacated;
     this.videoHostElementList = this.videoHostElementList.concat(hostElement);
     this.videoHostOccupiedCallbacks.set(hostElement, onHostOccupied);
     this.videoHostVacatedCallbacks.set(hostElement, onHostVacated);
@@ -1220,21 +1262,25 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
 
     clearTimeout(this.gapLengthTimeout);
-    const _props2 = this.props,
-          playlist = _props2.playlist,
-          loadFirstTrackOnPlaylistComplete = _props2.loadFirstTrackOnPlaylistComplete;
+    const _this$props2 = this.props,
+          playlist = _this$props2.playlist,
+          loadFirstTrackOnPlaylistComplete = _this$props2.loadFirstTrackOnPlaylistComplete;
 
     if (!utils_isPlaylistValid(playlist)) {
       return;
     }
 
-    const _state2 = this.state,
-          cycle = _state2.cycle,
-          activeTrackIndex = _state2.activeTrackIndex;
+    const _this$state2 = this.state,
+          cycle = _this$state2.cycle,
+          activeTrackIndex = _this$state2.activeTrackIndex;
 
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack(0, false);
+        this.goToTrack({
+          index: 0,
+          shouldPlay: false,
+          shouldForceLoad: true
+        });
       }
 
       return;
@@ -1256,9 +1302,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   handleMediaTimeupdate() {
-    const _media = this.media,
-          currentTime = _media.currentTime,
-          played = _media.played;
+    const _this$media = this.media,
+          currentTime = _this$media.currentTime,
+          played = _this$media.played;
 
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
@@ -1283,9 +1329,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   handleMediaVolumechange() {
-    const _media2 = this.media,
-          volume = _media2.volume,
-          muted = _media2.muted;
+    const _this$media2 = this.media,
+          volume = _this$media2.volume,
+          muted = _this$media2.muted;
     this.setState({
       volume,
       muted
@@ -1352,9 +1398,11 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   } // assumes playlist is valid - don't call without checking
 
 
-  goToTrack(index, shouldPlay = true) {
+  goToTrack(args) {
     clearTimeout(this.delayTimeout);
-    this.setState(state => getGoToTrackState(state, index, shouldPlay));
+    this.setState(prevState => getGoToTrackState(_objectSpread({
+      prevState
+    }, args)));
   }
 
   selectTrackIndex(index) {
@@ -1373,18 +1421,20 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index
+    });
   }
 
   backSkip() {
-    const _props3 = this.props,
-          playlist = _props3.playlist,
-          stayOnBackSkipThreshold = _props3.stayOnBackSkipThreshold;
+    const _this$props3 = this.props,
+          playlist = _this$props3.playlist,
+          stayOnBackSkipThreshold = _this$props3.stayOnBackSkipThreshold;
     const media = this.media;
-    const _state3 = this.state,
-          cycle = _state3.cycle,
-          activeTrackIndex = _state3.activeTrackIndex,
-          shuffle = _state3.shuffle;
+    const _this$state3 = this.state,
+          cycle = _this$state3.cycle,
+          activeTrackIndex = _this$state3.activeTrackIndex,
+          shuffle = _this$state3.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || media.currentTime >= stayOnBackSkipThreshold || !cycle && activeTrackIndex < 1) {
       media.currentTime = 0;
@@ -1411,15 +1461,18 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
       }
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index,
+      shouldForceLoad: true
+    });
   }
 
   forwardSkip() {
     const playlist = this.props.playlist;
-    const _state4 = this.state,
-          cycle = _state4.cycle,
-          activeTrackIndex = _state4.activeTrackIndex,
-          shuffle = _state4.shuffle;
+    const _this$state4 = this.state,
+          cycle = _this$state4.cycle,
+          activeTrackIndex = _this$state4.activeTrackIndex,
+          shuffle = _this$state4.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || !cycle && activeTrackIndex + 1 >= playlist.length) {
       return;
@@ -1437,7 +1490,10 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
       }
     }
 
-    this.goToTrack(index);
+    this.goToTrack({
+      index,
+      shouldForceLoad: true
+    });
   }
 
   seekPreview(targetTime) {
@@ -1452,12 +1508,13 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
 
     switch (this.props.seekMode) {
       case 'paused':
-        this.setState(({
-          paused,
-          awaitingResumeOnSeekComplete
-        }) => _objectSpread({}, baseStateUpdate, {
-          awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
-        }));
+        this.setState((_ref3) => {
+          let paused = _ref3.paused,
+              awaitingResumeOnSeekComplete = _ref3.awaitingResumeOnSeekComplete;
+          return _objectSpread({}, baseStateUpdate, {
+            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
+          });
+        });
         this.media.currentTime = targetTime;
 
         if (!this.state.paused) {
@@ -1467,12 +1524,13 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
         break;
 
       case 'immediate':
-        this.setState(({
-          paused,
-          awaitingResumeOnSeekComplete
-        }) => _objectSpread({}, baseStateUpdate, {
-          awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
-        }));
+        this.setState((_ref4) => {
+          let paused = _ref4.paused,
+              awaitingResumeOnSeekComplete = _ref4.awaitingResumeOnSeekComplete;
+          return _objectSpread({}, baseStateUpdate, {
+            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
+          });
+        });
         this.media.currentTime = targetTime;
 
         if (this.state.awaitingResumeOnSeekComplete && !this.media.ended) {
@@ -1490,9 +1548,9 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   }
 
   seekComplete(targetTime) {
-    const _state5 = this.state,
-          seekPreviewTime = _state5.seekPreviewTime,
-          awaitingResumeOnSeekComplete = _state5.awaitingResumeOnSeekComplete;
+    const _this$state5 = this.state,
+          seekPreviewTime = _this$state5.seekPreviewTime,
+          awaitingResumeOnSeekComplete = _this$state5.awaitingResumeOnSeekComplete;
     const baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
@@ -1523,7 +1581,11 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     }
   }
 
-  setVolume(volume, inProgress = true) {
+  setVolume(volume, inProgress) {
+    if (inProgress === void 0) {
+      inProgress = true;
+    }
+
     if (inProgress && !this.state.setVolumeInProgress) {
       this.setState({
         setVolumeInProgress: true
@@ -1729,12 +1791,12 @@ class PlayerContextProvider_PlayerContextGroupMember extends external_root_React
   }
 
   render() {
-    const _props4 = this.props,
-          groupContext = _props4.groupContext,
-          props = _props4.props;
+    const _this$props4 = this.props,
+          groupContext = _this$props4.groupContext,
+          props = _this$props4.props;
 
     const _mediaElementRef = props.mediaElementRef,
-          rest = _objectWithoutProperties(props, ["mediaElementRef"]);
+          rest = _objectWithoutPropertiesLoose(props, ["mediaElementRef"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContextProvider_PlayerContextProvider, _extends({}, groupContext.groupProps, rest, {
       mediaElementRef: ref => {

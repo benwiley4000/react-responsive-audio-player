@@ -144,7 +144,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -193,9 +193,9 @@ class MaybeMarquee_MaybeMarquee extends external_root_React_commonjs_react_commo
   }
 
   moveMarquee() {
-    const _props = this.props,
-          pixelsPerSecond = _props.pixelsPerSecond,
-          scrollDirection = _props.scrollDirection;
+    const _this$props = this.props,
+          pixelsPerSecond = _this$props.pixelsPerSecond,
+          scrollDirection = _this$props.scrollDirection;
     const now = getNow();
     const dt = now - this.lastMovementTime;
     this.lastMovementTime = now;
@@ -241,9 +241,9 @@ class MaybeMarquee_MaybeMarquee extends external_root_React_commonjs_react_commo
   }
 
   render() {
-    const _props2 = this.props,
-          content = _props2.content,
-          attributes = _objectWithoutProperties(_props2, ["content"]);
+    const _this$props2 = this.props,
+          content = _this$props2.content,
+          attributes = _objectWithoutPropertiesLoose(_this$props2, ["content"]);
 
     delete attributes.pixelsPerSecond;
     delete attributes.scrollDirection;
@@ -369,7 +369,7 @@ function ProgressBarDisplay_objectSpread(target) { for (var i = 1; i < arguments
 
 function ProgressBarDisplay_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function ProgressBarDisplay_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function ProgressBarDisplay_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -382,14 +382,14 @@ function ProgressBarDisplay_objectWithoutProperties(source, excluded) { if (sour
 
 class ProgressBarDisplay_ProgressBarDisplay extends external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"] {
   render() {
-    const _props = this.props,
-          progressClassName = _props.progressClassName,
-          progressStyle = _props.progressStyle,
-          progress = _props.progress,
-          progressDirection = _props.progressDirection,
-          handle = _props.handle,
-          progressBarRef = _props.progressBarRef,
-          rest = ProgressBarDisplay_objectWithoutProperties(_props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
+    const _this$props = this.props,
+          progressClassName = _this$props.progressClassName,
+          progressStyle = _this$props.progressStyle,
+          progress = _this$props.progress,
+          progressDirection = _this$props.progressDirection,
+          handle = _this$props.handle,
+          progressBarRef = _this$props.progressBarRef,
+          rest = ProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", ProgressBarDisplay_extends({}, rest, {
       ref: progressBarRef
@@ -424,7 +424,7 @@ ProgressBarDisplay_ProgressBarDisplay.propTypes = {
 // CONCATENATED MODULE: ./packages/components/src/ProgressBar.js
 function ProgressBar_extends() { ProgressBar_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return ProgressBar_extends.apply(this, arguments); }
 
-function ProgressBar_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function ProgressBar_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -492,11 +492,11 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
   }
 
   getProgressFromPageCoordinates(pageX, pageY) {
-    const _progressContainer$ge = this.progressContainer.getBoundingClientRect(),
-          left = _progressContainer$ge.left,
-          top = _progressContainer$ge.top,
-          width = _progressContainer$ge.width,
-          height = _progressContainer$ge.height;
+    const _this$progressContain = this.progressContainer.getBoundingClientRect(),
+          left = _this$progressContain.left,
+          top = _this$progressContain.top,
+          width = _this$progressContain.width,
+          height = _this$progressContain.height;
 
     const _document$body = document.body,
           scrollLeft = _document$body.scrollLeft,
@@ -519,9 +519,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
   }
 
   handleAdjustProgress(event) {
-    const _props = this.props,
-          readonly = _props.readonly,
-          onAdjustProgress = _props.onAdjustProgress;
+    const _this$props = this.props,
+          readonly = _this$props.readonly,
+          onAdjustProgress = _this$props.onAdjustProgress;
     const adjusting = this.state.adjusting;
 
     if (readonly) {
@@ -577,13 +577,13 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
   }
 
   render() {
-    const _props2 = this.props,
-          progressClassName = _props2.progressClassName,
-          progressStyle = _props2.progressStyle,
-          progress = _props2.progress,
-          progressDirection = _props2.progressDirection,
-          handle = _props2.handle,
-          attributes = ProgressBar_objectWithoutProperties(_props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
+    const _this$props2 = this.props,
+          progressClassName = _this$props2.progressClassName,
+          progressStyle = _this$props2.progressStyle,
+          progress = _this$props2.progress,
+          progressDirection = _this$props2.progressDirection,
+          handle = _this$props2.handle,
+          attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
 
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
@@ -622,7 +622,7 @@ function VideoDisplay_objectSpread(target) { for (var i = 1; i < arguments.lengt
 
 function VideoDisplay_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function VideoDisplay_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function VideoDisplay_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -688,7 +688,9 @@ class VideoDisplay_VideoDisplay extends external_root_React_commonjs_react_commo
         videoFrame.width = videoElement.videoWidth;
         videoFrame.height = videoElement.videoHeight;
         videoFrame.getContext('2d').drawImage(videoElement, 0, 0, videoFrame.width, videoFrame.height);
-        videoFrame.style.maxWidth = '100%';
+        videoFrame.style.maxWidth = '100%'; // 'vertical-align: middle' avoids unneeded 3px buffer below canvas
+
+        videoFrame.style.verticalAlign = 'middle';
         this.videoFrameAtTimeLastVacated = videoFrame;
         this.hostedVideo = null;
         this.forceUpdate();
@@ -703,9 +705,9 @@ class VideoDisplay_VideoDisplay extends external_root_React_commonjs_react_commo
   }
 
   handleContainerResize() {
-    const _containerElement = this.containerElement,
-          offsetWidth = _containerElement.offsetWidth,
-          offsetHeight = _containerElement.offsetHeight;
+    const _this$containerElemen = this.containerElement,
+          offsetWidth = _this$containerElemen.offsetWidth,
+          offsetHeight = _this$containerElemen.offsetHeight;
 
     if (offsetWidth === this.containerWidth && offsetHeight === this.containerHeight) {
       return;
@@ -722,13 +724,13 @@ class VideoDisplay_VideoDisplay extends external_root_React_commonjs_react_commo
   }
 
   render() {
-    const _props = this.props,
-          aspectRatio = _props.aspectRatio,
-          fullscreen = _props.fullscreen,
-          maintainAspectRatioInFullscreen = _props.maintainAspectRatioInFullscreen,
-          renderPlaceholderContent = _props.renderPlaceholderContent,
-          renderVideoIntoHostElement = _props.renderVideoIntoHostElement,
-          attributes = VideoDisplay_objectWithoutProperties(_props, ["aspectRatio", "fullscreen", "maintainAspectRatioInFullscreen", "renderPlaceholderContent", "renderVideoIntoHostElement"]);
+    const _this$props = this.props,
+          aspectRatio = _this$props.aspectRatio,
+          fullscreen = _this$props.fullscreen,
+          maintainAspectRatioInFullscreen = _this$props.maintainAspectRatioInFullscreen,
+          renderPlaceholderContent = _this$props.renderPlaceholderContent,
+          renderVideoIntoHostElement = _this$props.renderVideoIntoHostElement,
+          attributes = VideoDisplay_objectWithoutPropertiesLoose(_this$props, ["aspectRatio", "fullscreen", "maintainAspectRatioInFullscreen", "renderPlaceholderContent", "renderVideoIntoHostElement"]);
 
     delete attributes.registerVideoHostElement;
     delete attributes.unregisterVideoHostElement;

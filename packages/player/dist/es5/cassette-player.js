@@ -128,8 +128,6 @@ function RepeatIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M33 24c0-3.53-2.04-6.58-5-8.05v4.42l4.91 4.91c.06-.42.09-.85.09-1.28zm5 0c0 1.88-.41 3.65-1.08 5.28l3.03 3.03C41.25 29.82 42 27 42 24c0-8.56-5.99-15.72-14-17.54v4.13c5.78 1.72 10 7.07 10 13.41zM8.55 6L6 8.55 15.45 18H6v12h8l10 10V26.55l8.51 8.51c-1.34 1.03-2.85 1.86-4.51 2.36v4.13c2.75-.63 5.26-1.89 7.37-3.62L39.45 42 42 39.45l-18-18L8.55 6zM24 8l-4.18 4.18L24 16.36V8z","key":0}),React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":1})]);
 }
 
-RepeatIcon.displayName = "RepeatIcon";
-
 RepeatIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
 module.exports = RepeatIcon;
@@ -146,8 +144,6 @@ var React = __webpack_require__(0);
 function RepeatIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M14 18v12h8l10 10V8L22 18h-8z","key":0}),React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":1})]);
 }
-
-RepeatIcon.displayName = "RepeatIcon";
 
 RepeatIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
@@ -166,8 +162,6 @@ function RepeatIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M37 24c0-3.53-2.04-6.58-5-8.05v16.11c2.96-1.48 5-4.53 5-8.06zm-27-6v12h8l10 10V8L18 18h-8z","key":0}),React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":1})]);
 }
 
-RepeatIcon.displayName = "RepeatIcon";
-
 RepeatIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
 module.exports = RepeatIcon;
@@ -184,8 +178,6 @@ var React = __webpack_require__(0);
 function RepeatIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M6 18v12h8l10 10V8L14 18H6zm27 6c0-3.53-2.04-6.58-5-8.05v16.11c2.96-1.48 5-4.53 5-8.06zM28 6.46v4.13c5.78 1.72 10 7.07 10 13.41s-4.22 11.69-10 13.41v4.13c8.01-1.82 14-8.97 14-17.54S36.01 8.28 28 6.46z","key":0}),React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":1})]);
 }
-
-RepeatIcon.displayName = "RepeatIcon";
 
 RepeatIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
@@ -204,8 +196,6 @@ function RepeatIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":0}),React.createElement("path",{"d":"M14 14h20v6l8-8-8-8v6H10v12h4v-8zm20 20H14v-6l-8 8 8 8v-6h24V26h-4v8z","key":1})]);
 }
 
-RepeatIcon.displayName = "RepeatIcon";
-
 RepeatIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
 module.exports = RepeatIcon;
@@ -222,8 +212,6 @@ var React = __webpack_require__(0);
 function RepeatOneIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":0}),React.createElement("path",{"d":"M14 14h20v6l8-8-8-8v6H10v12h4v-8zm20 20H14v-6l-8 8 8 8v-6h24V26h-4v8zm-8-4V18h-2l-4 2v2h3v8h3z","key":1})]);
 }
-
-RepeatOneIcon.displayName = "RepeatOneIcon";
 
 RepeatOneIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
@@ -242,8 +230,6 @@ function ShuffleIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":0}),React.createElement("path",{"d":"M21.17 18.34L10.83 8 8 10.83l10.34 10.34 2.83-2.83zM29 8l4.09 4.09L8 37.17 10.83 40l25.09-25.09L40 19V8H29zm.66 18.83l-2.83 2.83 6.26 6.26L29 40h11V29l-4.09 4.09-6.25-6.26z","key":1})]);
 }
 
-ShuffleIcon.displayName = "ShuffleIcon";
-
 ShuffleIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
 module.exports = ShuffleIcon;
@@ -261,8 +247,6 @@ function FullscreenIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":0}),React.createElement("path",{"d":"M14 28h-4v10h10v-4h-6v-6zm-4-8h4v-6h6v-4H10v10zm24 14h-6v4h10V28h-4v6zm-6-24v4h6v6h4V10H28z","key":1})]);
 }
 
-FullscreenIcon.displayName = "FullscreenIcon";
-
 FullscreenIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
 module.exports = FullscreenIcon;
@@ -279,8 +263,6 @@ var React = __webpack_require__(0);
 function FullscreenExitIcon (props) {
     return React.createElement("svg",props,[React.createElement("path",{"d":"M0 0h48v48H0z","fill":"none","key":0}),React.createElement("path",{"d":"M10 32h6v6h4V28H10v4zm6-16h-6v4h10V10h-4v6zm12 22h4v-6h6v-4H28v10zm4-22v-6h-4v10h10v-4h-6z","key":1})]);
 }
-
-FullscreenExitIcon.displayName = "FullscreenExitIcon";
 
 FullscreenExitIcon.defaultProps = {"width":"48","height":"48","viewBox":"0 0 48 48"};
 
@@ -361,7 +343,7 @@ function reduceHash(obj) {
 // CONCATENATED MODULE: ./src/controls/common/ButtonWrapper.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
@@ -369,7 +351,7 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 var ButtonWrapper = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["forwardRef"])(function (_ref, ref) {
   var className = _ref.className,
       children = _ref.children,
-      rest = _objectWithoutProperties(_ref, ["className", "children"]);
+      rest = _objectWithoutPropertiesLoose(_ref, ["className", "children"]);
 
   return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", _extends({
     ref: ref,
@@ -405,10 +387,10 @@ function (_PureComponent) {
   var _proto = PlayPauseButton.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        paused = _props.paused,
-        awaitingResumeOnSeekComplete = _props.awaitingResumeOnSeekComplete,
-        onTogglePause = _props.onTogglePause;
+    var _this$props = this.props,
+        paused = _this$props.paused,
+        awaitingResumeOnSeekComplete = _this$props.awaitingResumeOnSeekComplete,
+        onTogglePause = _this$props.onTogglePause;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
       className: utils_classNames('cassette__play_pause_button cassette__media_button', {
@@ -451,9 +433,9 @@ function (_PureComponent) {
   var _proto = SkipButton.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        back = _props.back,
-        onClick = _props.onClick;
+    var _this$props = this.props,
+        back = _this$props.back,
+        onClick = _this$props.onClick;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
       className: utils_classNames('cassette__skip_button cassette__media_button', {
@@ -547,19 +529,19 @@ ForwardSkipButton_ForwardSkipButton.propTypes = {
   onForwardSkip: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_ForwardSkipButton = (Object(core_["playerContextFilter"])(ForwardSkipButton_ForwardSkipButton, ['onForwardSkip']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_off_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_off_48px.svg?
 var ic_volume_off_48px = __webpack_require__(4);
 var ic_volume_off_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_off_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_mute_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_mute_48px.svg?
 var ic_volume_mute_48px = __webpack_require__(5);
 var ic_volume_mute_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_mute_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_down_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_down_48px.svg?
 var ic_volume_down_48px = __webpack_require__(6);
 var ic_volume_down_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_down_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_up_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_volume_up_48px.svg?
 var ic_volume_up_48px = __webpack_require__(7);
 var ic_volume_up_48px_default = /*#__PURE__*/__webpack_require__.n(ic_volume_up_48px);
 
@@ -660,13 +642,13 @@ function (_PureComponent) {
     _this.muteToggleRef = null;
     _this.volumeBarContainerRef = null; // bind methods fired on React events
 
-    _this.setVolumeControlRef = _this.setVolumeControlRef.bind(_assertThisInitialized(_this));
-    _this.setMuteToggleRef = _this.setMuteToggleRef.bind(_assertThisInitialized(_this));
-    _this.setVolumeBarContainerRef = _this.setVolumeBarContainerRef.bind(_assertThisInitialized(_this));
-    _this.handleMouseEnter = _this.handleMouseEnter.bind(_assertThisInitialized(_this));
-    _this.handleMouseLeave = _this.handleMouseLeave.bind(_assertThisInitialized(_this)); // bind listeners to add on mount and remove on unmount
+    _this.setVolumeControlRef = _this.setVolumeControlRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setMuteToggleRef = _this.setMuteToggleRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.setVolumeBarContainerRef = _this.setVolumeBarContainerRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMouseEnter = _this.handleMouseEnter.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMouseLeave = _this.handleMouseLeave.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind listeners to add on mount and remove on unmount
 
-    _this.handleMuteToggleTouchStart = _this.handleMuteToggleTouchStart.bind(_assertThisInitialized(_this));
+    _this.handleMuteToggleTouchStart = _this.handleMuteToggleTouchStart.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -771,15 +753,15 @@ function (_PureComponent) {
   };
 
   _proto.render = function render() {
-    var _props = this.props,
-        volume = _props.volume,
-        muted = _props.muted,
-        onSetVolume = _props.onSetVolume,
-        onSetVolumeComplete = _props.onSetVolumeComplete,
-        onToggleMuted = _props.onToggleMuted;
-    var _state = this.state,
-        hover = _state.hover,
-        volumeBarPosition = _state.volumeBarPosition;
+    var _this$props = this.props,
+        volume = _this$props.volume,
+        muted = _this$props.muted,
+        onSetVolume = _this$props.onSetVolume,
+        onSetVolumeComplete = _this$props.onSetVolumeComplete,
+        onToggleMuted = _this$props.onToggleMuted;
+    var _this$state = this.state,
+        hover = _this$state.hover,
+        volumeBarPosition = _this$state.volumeBarPosition;
     var VolumeIcon = utils_getVolumeIconComponent(volume, muted);
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, {
       ref: this.setVolumeControlRef,
@@ -852,10 +834,10 @@ function (_PureComponent) {
   var _proto = MuteButton.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        volume = _props.volume,
-        muted = _props.muted,
-        onToggleMuted = _props.onToggleMuted;
+    var _this$props = this.props,
+        volume = _this$props.volume,
+        muted = _this$props.muted,
+        onToggleMuted = _this$props.onToggleMuted;
     var VolumeIcon = utils_getVolumeIconComponent(volume, muted);
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
@@ -879,11 +861,11 @@ MuteButton_MuteButton.propTypes = {
   onToggleMuted: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_MuteButton = (Object(core_["playerContextFilter"])(MuteButton_MuteButton, ['volume', 'muted', 'onToggleMuted']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_48px.svg?
 var ic_repeat_48px = __webpack_require__(8);
 var ic_repeat_48px_default = /*#__PURE__*/__webpack_require__.n(ic_repeat_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=RepeatOneIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_one_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=RepeatOneIcon!./node_modules/material-design-icons/av/svg/design/ic_repeat_one_48px.svg?
 var ic_repeat_one_48px = __webpack_require__(9);
 var ic_repeat_one_48px_default = /*#__PURE__*/__webpack_require__.n(ic_repeat_one_48px);
 
@@ -924,7 +906,7 @@ function (_PureComponent) {
 
     _this = _PureComponent.call(this, props) || this; // bind methods fired on React events
 
-    _this.handleNextRepeatStrategy = _this.handleNextRepeatStrategy.bind(RepeatButton_assertThisInitialized(_this));
+    _this.handleNextRepeatStrategy = _this.handleNextRepeatStrategy.bind(RepeatButton_assertThisInitialized(RepeatButton_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -958,7 +940,7 @@ RepeatButton_RepeatButton.propTypes = {
   onSetRepeatStrategy: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 /* harmony default export */ var controls_RepeatButton = (Object(core_["playerContextFilter"])(RepeatButton_RepeatButton, ['repeatStrategy', 'onSetRepeatStrategy']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=ShuffleIcon!./node_modules/material-design-icons/av/svg/design/ic_shuffle_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=ShuffleIcon!./node_modules/material-design-icons/av/svg/design/ic_shuffle_48px.svg?
 var ic_shuffle_48px = __webpack_require__(10);
 var ic_shuffle_48px_default = /*#__PURE__*/__webpack_require__.n(ic_shuffle_48px);
 
@@ -987,9 +969,9 @@ function (_PureComponent) {
   var _proto = ShuffleButton.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        shuffle = _props.shuffle,
-        onToggleShuffle = _props.onToggleShuffle;
+    var _this$props = this.props,
+        shuffle = _this$props.shuffle,
+        onToggleShuffle = _this$props.onToggleShuffle;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
       className: utils_classNames('cassette__material_toggle cassette__media_button cassette__shuffle_btn', {
@@ -1029,10 +1011,10 @@ function (_PureComponent) {
   var _proto = MediaStatusBar.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        style = _props.style,
-        displayText = _props.displayText,
-        displayTime = _props.displayTime;
+    var _this$props = this.props,
+        style = _this$props.style,
+        displayText = _this$props.displayText,
+        displayTime = _this$props.displayTime;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_status_bar",
       style: style
@@ -1093,7 +1075,7 @@ function (_PureComponent) {
 
     _this = _PureComponent.call(this, props) || this; // bind methods fired on React events
 
-    _this.handleSeekPreview = _this.handleSeekPreview.bind(MediaProgress_assertThisInitialized(_this));
+    _this.handleSeekPreview = _this.handleSeekPreview.bind(MediaProgress_assertThisInitialized(MediaProgress_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -1104,14 +1086,14 @@ function (_PureComponent) {
   };
 
   _proto.render = function render() {
-    var _props = this.props,
-        playlist = _props.playlist,
-        activeTrackIndex = _props.activeTrackIndex,
-        currentTime = _props.currentTime,
-        seekPreviewTime = _props.seekPreviewTime,
-        seekInProgress = _props.seekInProgress,
-        duration = _props.duration,
-        onSeekComplete = _props.onSeekComplete;
+    var _this$props = this.props,
+        playlist = _this$props.playlist,
+        activeTrackIndex = _this$props.activeTrackIndex,
+        currentTime = _this$props.currentTime,
+        seekPreviewTime = _this$props.seekPreviewTime,
+        seekInProgress = _this$props.seekInProgress,
+        duration = _this$props.duration,
+        onSeekComplete = _this$props.onSeekComplete;
     var time = seekInProgress ? seekPreviewTime : currentTime;
     var displayedProgress = duration ? time / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
@@ -1177,11 +1159,11 @@ function (_PureComponent) {
   var _proto = MediaProgressDisplay.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        playlist = _props.playlist,
-        activeTrackIndex = _props.activeTrackIndex,
-        currentTime = _props.currentTime,
-        duration = _props.duration;
+    var _this$props = this.props,
+        playlist = _this$props.playlist,
+        activeTrackIndex = _this$props.activeTrackIndex,
+        currentTime = _this$props.currentTime,
+        duration = _this$props.duration;
     var progress = duration ? currentTime / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
@@ -1206,11 +1188,11 @@ MediaProgressDisplay_MediaProgressDisplay.propTypes = {
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
 };
 /* harmony default export */ var controls_MediaProgressDisplay = (Object(core_["playerContextFilter"])(MediaProgressDisplay_MediaProgressDisplay, ['playlist', 'activeTrackIndex', 'currentTime', 'duration']));
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=FullscreenIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_48px.svg?
 var ic_fullscreen_48px = __webpack_require__(11);
 var ic_fullscreen_48px_default = /*#__PURE__*/__webpack_require__.n(ic_fullscreen_48px);
 
-// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/@benwiley4000/svg-react-loader/lib/loader.js?name=FullscreenExitIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_exit_48px.svg?
+// EXTERNAL MODULE: /home/ben/Documents/Code/cassette/node_modules/svg-react-loader/lib/loader.js?name=FullscreenExitIcon!./node_modules/material-design-icons/navigation/svg/design/ic_fullscreen_exit_48px.svg?
 var ic_fullscreen_exit_48px = __webpack_require__(12);
 var ic_fullscreen_exit_48px_default = /*#__PURE__*/__webpack_require__.n(ic_fullscreen_exit_48px);
 
@@ -1240,10 +1222,10 @@ function (_PureComponent) {
   var _proto = FullscreenButton.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        fullscreen = _props.fullscreen,
-        requestFullscreen = _props.requestFullscreen,
-        requestExitFullscreen = _props.requestExitFullscreen;
+    var _this$props = this.props,
+        fullscreen = _this$props.fullscreen,
+        requestFullscreen = _this$props.requestFullscreen,
+        requestExitFullscreen = _this$props.requestExitFullscreen;
     var IconComponent = fullscreen ? ic_fullscreen_exit_48px_default.a : ic_fullscreen_48px_default.a;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
@@ -1422,11 +1404,11 @@ function (_Component) {
   _proto.render = function render() {
     var _this2 = this;
 
-    var _props = this.props,
-        getDisplayText = _props.getDisplayText,
-        controls = _props.controls,
-        showVideo = _props.showVideo,
-        renderVideoDisplay = _props.renderVideoDisplay;
+    var _this$props = this.props,
+        getDisplayText = _this$props.getDisplayText,
+        controls = _this$props.controls,
+        showVideo = _this$props.showVideo,
+        renderVideoDisplay = _this$props.renderVideoDisplay;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(core_["FullscreenContextConsumer"], null, function (fullscreenContext) {
       return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(core_["PlayerContextConsumer"], null, function (playerContext) {
         return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
@@ -1468,7 +1450,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function MediaPlayer_objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+function MediaPlayer_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 function MediaPlayer_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -1491,13 +1473,13 @@ function (_Component) {
   var _proto = MediaPlayer.prototype;
 
   _proto.render = function render() {
-    var _props = this.props,
-        getDisplayText = _props.getDisplayText,
-        controls = _props.controls,
-        showVideo = _props.showVideo,
-        renderVideoDisplay = _props.renderVideoDisplay,
-        fullscreenEnabled = _props.fullscreenEnabled,
-        rest = MediaPlayer_objectWithoutProperties(_props, ["getDisplayText", "controls", "showVideo", "renderVideoDisplay", "fullscreenEnabled"]);
+    var _this$props = this.props,
+        getDisplayText = _this$props.getDisplayText,
+        controls = _this$props.controls,
+        showVideo = _this$props.showVideo,
+        renderVideoDisplay = _this$props.renderVideoDisplay,
+        fullscreenEnabled = _this$props.fullscreenEnabled,
+        rest = MediaPlayer_objectWithoutPropertiesLoose(_this$props, ["getDisplayText", "controls", "showVideo", "renderVideoDisplay", "fullscreenEnabled"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(core_["FullscreenContextProvider"], {
       fullscreenEnabled: fullscreenEnabled
