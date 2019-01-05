@@ -70,7 +70,12 @@ const defaultState = {
 };
 
 // assumes playlist is valid
-function getGoToTrackState(prevState, index, shouldPlay = true) {
+function getGoToTrackState(
+  prevState,
+  index,
+  shouldPlay = true,
+  shouldForceLoad = false
+) {
   const isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
@@ -78,7 +83,8 @@ function getGoToTrackState(prevState, index, shouldPlay = true) {
     currentTime: 0,
     loop: isNewTrack ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay
+    paused: !shouldPlay,
+    awaitingLoad: Boolean(shouldForceLoad)
   };
 }
 
@@ -135,6 +141,7 @@ export class PlayerContextProvider extends Component {
       setVolumeInProgress: false,
       // initialize awaitingPlay from autoplay prop
       awaitingPlay: props.autoplay && isPlaylistValid(props.playlist),
+      awaitingLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
@@ -331,7 +338,7 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState(prevState, 0, false)
+      ...getGoToTrackState(prevState, 0, false, true)
     };
   }
 
@@ -354,13 +361,15 @@ export class PlayerContextProvider extends Component {
     );
     const prevTrack = prevProps.playlist[prevState.activeTrackIndex];
     const newTrack = this.props.playlist[this.state.activeTrackIndex];
-    if (prevSources[0].src !== newSources[0].src) {
+    if (this.state.awaitingLoad || prevSources[0].src !== newSources[0].src) {
       setMediaElementSources(this.media, newSources);
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
       );
-
+      this.setState({
+        awaitingLoad: false
+      });
       if (!this.state.shuffle) {
         // after toggling off shuffle, we defer clearing the shuffle
         // history until we actually change tracks - if the user quickly
@@ -552,7 +561,7 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack(0, false);
+        this.goToTrack(0, false, true);
       }
       return;
     }
@@ -653,9 +662,11 @@ export class PlayerContextProvider extends Component {
   }
 
   // assumes playlist is valid - don't call without checking
-  goToTrack(index, shouldPlay = true) {
+  goToTrack(index, shouldPlay = true, shouldForceLoad = false) {
     clearTimeout(this.delayTimeout);
-    this.setState(state => getGoToTrackState(state, index, shouldPlay));
+    this.setState(state =>
+      getGoToTrackState(state, index, shouldPlay, shouldForceLoad)
+    );
   }
 
   selectTrackIndex(index) {
@@ -700,7 +711,7 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    this.goToTrack(index);
+    this.goToTrack(index, true, true);
   }
 
   forwardSkip() {
@@ -724,7 +735,7 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    this.goToTrack(index);
+    this.goToTrack(index, true, true);
   }
 
   seekPreview(targetTime) {
