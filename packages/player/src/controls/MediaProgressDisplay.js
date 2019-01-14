@@ -8,14 +8,6 @@ import MediaStatusBar from './common/MediaStatusBar';
 import convertToTime from '../utils/convertToTime';
 import getDisplayText from '../utils/getDisplayText';
 
-const mediaStatusBarStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0
-};
-
 /**
  * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
  */
@@ -32,7 +24,6 @@ export class MediaProgressDisplay extends PureComponent {
           progressDirection="right"
         />
         <MediaStatusBar
-          style={mediaStatusBarStyle}
           displayText={getDisplayText(playlist[activeTrackIndex]) || ''}
           displayTime={`${convertToTime(currentTime)} / ${convertToTime(
             duration
