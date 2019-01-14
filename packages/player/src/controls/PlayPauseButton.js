@@ -11,7 +11,15 @@ import classNames from '../utils/classNames';
  */
 export class PlayPauseButton extends PureComponent {
   render() {
-    const { paused, awaitingResumeOnSeekComplete, onTogglePause } = this.props;
+    const {
+      paused,
+      awaitingResumeOnSeekComplete,
+      activeTrackIndex,
+      onTogglePause,
+      onSelectTrackIndex,
+      trackIndex = activeTrackIndex
+    } = this.props;
+    const isCurrent = activeTrackIndex === trackIndex;
     return (
       <ButtonWrapper>
         <button
@@ -19,10 +27,12 @@ export class PlayPauseButton extends PureComponent {
           className={classNames(
             'cassette__play_pause_button cassette__media_button',
             {
-              playing: !paused || awaitingResumeOnSeekComplete
+              playing: isCurrent && (!paused || awaitingResumeOnSeekComplete)
             }
           )}
-          onClick={onTogglePause}
+          onClick={
+            isCurrent ? onTogglePause : () => onSelectTrackIndex(trackIndex)
+          }
         >
           <div className="foreground">
             <div className="left" />
@@ -37,11 +47,16 @@ export class PlayPauseButton extends PureComponent {
 PlayPauseButton.propTypes = {
   paused: PropTypes.bool.isRequired,
   awaitingResumeOnSeekComplete: PropTypes.bool.isRequired,
-  onTogglePause: PropTypes.func.isRequired
+  activeTrackIndex: PropTypes.number.isRequired,
+  onTogglePause: PropTypes.func.isRequired,
+  onSelectTrackIndex: PropTypes.func.isRequired,
+  trackIndex: PropTypes.number
 };
 
 export default playerContextFilter(PlayPauseButton, [
   'paused',
   'awaitingResumeOnSeekComplete',
-  'onTogglePause'
+  'activeTrackIndex',
+  'onTogglePause',
+  'onSelectTrackIndex'
 ]);
