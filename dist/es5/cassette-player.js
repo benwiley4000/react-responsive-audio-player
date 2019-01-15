@@ -390,13 +390,20 @@ function (_PureComponent) {
     var _this$props = this.props,
         paused = _this$props.paused,
         awaitingResumeOnSeekComplete = _this$props.awaitingResumeOnSeekComplete,
-        onTogglePause = _this$props.onTogglePause;
+        activeTrackIndex = _this$props.activeTrackIndex,
+        onTogglePause = _this$props.onTogglePause,
+        onSelectTrackIndex = _this$props.onSelectTrackIndex,
+        _this$props$trackInde = _this$props.trackIndex,
+        trackIndex = _this$props$trackInde === void 0 ? activeTrackIndex : _this$props$trackInde;
+    var isCurrent = activeTrackIndex === trackIndex;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
       className: utils_classNames('cassette__play_pause_button cassette__media_button', {
-        playing: !paused || awaitingResumeOnSeekComplete
+        playing: isCurrent && (!paused || awaitingResumeOnSeekComplete)
       }),
-      onClick: onTogglePause
+      onClick: isCurrent ? onTogglePause : function () {
+        return onSelectTrackIndex(trackIndex);
+      }
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "foreground"
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
@@ -411,9 +418,12 @@ function (_PureComponent) {
 PlayPauseButton_PlayPauseButton.propTypes = {
   paused: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   awaitingResumeOnSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
-  onTogglePause: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  activeTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  onTogglePause: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  onSelectTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  trackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
-/* harmony default export */ var controls_PlayPauseButton = (Object(core_["playerContextFilter"])(PlayPauseButton_PlayPauseButton, ['paused', 'awaitingResumeOnSeekComplete', 'onTogglePause']));
+/* harmony default export */ var controls_PlayPauseButton = (Object(core_["playerContextFilter"])(PlayPauseButton_PlayPauseButton, ['paused', 'awaitingResumeOnSeekComplete', 'activeTrackIndex', 'onTogglePause', 'onSelectTrackIndex']));
 // CONCATENATED MODULE: ./packages/player/src/controls/common/SkipButton.js
 function SkipButton_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -1049,8 +1059,6 @@ function convertToTime(number) {
 // CONCATENATED MODULE: ./packages/player/src/controls/MediaProgress.js
 function MediaProgress_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-function MediaProgress_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 
 
 
@@ -1070,20 +1078,11 @@ var MediaProgress_MediaProgress =
 function (_PureComponent) {
   MediaProgress_inheritsLoose(MediaProgress, _PureComponent);
 
-  function MediaProgress(props) {
-    var _this;
-
-    _this = _PureComponent.call(this, props) || this; // bind methods fired on React events
-
-    _this.handleSeekPreview = _this.handleSeekPreview.bind(MediaProgress_assertThisInitialized(MediaProgress_assertThisInitialized(_this)));
-    return _this;
+  function MediaProgress() {
+    return _PureComponent.apply(this, arguments) || this;
   }
 
   var _proto = MediaProgress.prototype;
-
-  _proto.handleSeekPreview = function handleSeekPreview(progress) {
-    this.props.onSeekPreview(progress * this.props.duration);
-  };
 
   _proto.render = function render() {
     var _this$props = this.props,
@@ -1092,20 +1091,14 @@ function (_PureComponent) {
         currentTime = _this$props.currentTime,
         seekPreviewTime = _this$props.seekPreviewTime,
         seekInProgress = _this$props.seekInProgress,
-        duration = _this$props.duration,
-        onSeekComplete = _this$props.onSeekComplete;
+        duration = _this$props.duration;
     var time = seekInProgress ? seekPreviewTime : currentTime;
-    var displayedProgress = duration ? time / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBar"], {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["MediaProgressBar"], {
       className: "cassette__media_progress_bar",
       progressClassName: "progress",
-      progress: displayedProgress,
-      progressDirection: "right",
-      readonly: !Object(core_["isPlaylistValid"])(playlist),
-      onAdjustProgress: this.handleSeekPreview,
-      onAdjustComplete: onSeekComplete
+      progressDirection: "right"
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
       style: mediaStatusBarStyle,
       displayText: utils_getDisplayText(playlist[activeTrackIndex]) || '',
@@ -1121,11 +1114,9 @@ MediaProgress_MediaProgress.propTypes = {
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekPreviewTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
-  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
-  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
 };
-/* harmony default export */ var controls_MediaProgress = (Object(core_["playerContextFilter"])(MediaProgress_MediaProgress, ['playlist', 'activeTrackIndex', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
+/* harmony default export */ var controls_MediaProgress = (Object(core_["playerContextFilter"])(MediaProgress_MediaProgress, ['playlist', 'activeTrackIndex', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration']));
 // CONCATENATED MODULE: ./packages/player/src/controls/MediaProgressDisplay.js
 function MediaProgressDisplay_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -1136,13 +1127,6 @@ function MediaProgressDisplay_inheritsLoose(subClass, superClass) { subClass.pro
 
 
 
-var MediaProgressDisplay_mediaStatusBarStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0
-};
 /**
  * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
  */
@@ -1164,16 +1148,13 @@ function (_PureComponent) {
         activeTrackIndex = _this$props.activeTrackIndex,
         currentTime = _this$props.currentTime,
         duration = _this$props.duration;
-    var progress = duration ? currentTime / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBarDisplay"], {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["MediaProgressBarDisplay"], {
       className: "cassette__media_progress_bar",
       progressClassName: "progress",
-      progress: progress,
       progressDirection: "right"
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
-      style: MediaProgressDisplay_mediaStatusBarStyle,
       displayText: utils_getDisplayText(playlist[activeTrackIndex]) || '',
       displayTime: utils_convertToTime(currentTime) + " / " + utils_convertToTime(duration)
     }));

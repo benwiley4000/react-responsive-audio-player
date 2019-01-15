@@ -1,6 +1,6 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[1],{
 
-/***/ 387:
+/***/ 393:
 /***/ (function(module, exports, __webpack_require__) {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -9731,7 +9731,7 @@
 
 /***/ }),
 
-/***/ 388:
+/***/ 394:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9782,7 +9782,7 @@ var React = __webpack_require__(0);
 var SERVER_RENDERED = typeof navigator === 'undefined' || global['PREVENT_CODEMIRROR_RENDER'] === true;
 var cm;
 if (!SERVER_RENDERED) {
-  cm = __webpack_require__(387);
+  cm = __webpack_require__(393);
 }
 var Helper = function() {
   function Helper() {}
@@ -10381,7 +10381,7 @@ exports.UnControlled = UnControlled;
 
 /***/ }),
 
-/***/ 389:
+/***/ 395:
 /***/ (function(module, exports, __webpack_require__) {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -10389,7 +10389,7 @@ exports.UnControlled = UnControlled;
 
 (function(mod) {
   if (true) // CommonJS
-    mod(__webpack_require__(387), __webpack_require__(390), __webpack_require__(391))
+    mod(__webpack_require__(393), __webpack_require__(396), __webpack_require__(397))
   else {}
 })(function(CodeMirror) {
   "use strict"
@@ -10533,7 +10533,7 @@ exports.UnControlled = UnControlled;
 
 /***/ }),
 
-/***/ 390:
+/***/ 396:
 /***/ (function(module, exports, __webpack_require__) {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -10541,7 +10541,7 @@ exports.UnControlled = UnControlled;
 
 (function(mod) {
   if (true) // CommonJS
-    mod(__webpack_require__(387));
+    mod(__webpack_require__(393));
   else {}
 })(function(CodeMirror) {
 "use strict";
@@ -10939,7 +10939,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 
 /***/ }),
 
-/***/ 391:
+/***/ 397:
 /***/ (function(module, exports, __webpack_require__) {
 
 // CodeMirror, copyright (c) by Marijn Haverbeke and others
@@ -10947,7 +10947,7 @@ if (!CodeMirror.mimeModes.hasOwnProperty("text/html"))
 
 (function(mod) {
   if (true) // CommonJS
-    mod(__webpack_require__(387));
+    mod(__webpack_require__(393));
   else {}
 })(function(CodeMirror) {
 "use strict";
@@ -11843,11 +11843,11 @@ CodeMirror.defineMIME("application/typescript", { name: "javascript", typescript
 
 /***/ }),
 
-/***/ 392:
+/***/ 398:
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(393);
+var content = __webpack_require__(399);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -11861,7 +11861,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(179)(content, options);
+var update = __webpack_require__(181)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -11869,10 +11869,10 @@ if(false) {}
 
 /***/ }),
 
-/***/ 393:
+/***/ 399:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(178)(false);
+exports = module.exports = __webpack_require__(180)(false);
 // imports
 
 
@@ -11884,11 +11884,11 @@ exports.push([module.i, "/* BASICS */\n\n.CodeMirror {\n  /* Set height, width, 
 
 /***/ }),
 
-/***/ 394:
+/***/ 400:
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(395);
+var content = __webpack_require__(401);
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -11902,7 +11902,7 @@ var options = {"hmr":true}
 options.transform = transform
 options.insertInto = undefined;
 
-var update = __webpack_require__(179)(content, options);
+var update = __webpack_require__(181)(content, options);
 
 if(content.locals) module.exports = content.locals;
 
@@ -11910,10 +11910,10 @@ if(false) {}
 
 /***/ }),
 
-/***/ 395:
+/***/ 401:
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(178)(false);
+exports = module.exports = __webpack_require__(180)(false);
 // imports
 
 
@@ -11925,7 +11925,7 @@ exports.push([module.i, "/*\n\n    Name:       Base16 Default Light\n    Author:
 
 /***/ }),
 
-/***/ 396:
+/***/ 402:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11936,11 +11936,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var rsg_components_Styled__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(146);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(148);
 /* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_codemirror2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(388);
+/* harmony import */ var react_codemirror2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(394);
 /* harmony import */ var react_codemirror2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_codemirror2__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var codemirror_mode_jsx_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(389);
+/* harmony import */ var codemirror_mode_jsx_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(395);
 /* harmony import */ var codemirror_mode_jsx_jsx__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(codemirror_mode_jsx_jsx__WEBPACK_IMPORTED_MODULE_5__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -11962,9 +11962,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 // We’re explicitly specifying Webpack loaders here so we could skip specifying them in Webpack configuration.
 // That way we could avoid clashes between our loaders and user loaders.
 // eslint-disable-next-line import/no-unresolved
-__webpack_require__(392);
+__webpack_require__(398);
 // eslint-disable-next-line import/no-unresolved
-__webpack_require__(394);
+__webpack_require__(400);
 
 var UPDATE_DELAY = 10;
 

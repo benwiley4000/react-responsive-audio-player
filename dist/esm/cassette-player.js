@@ -376,13 +376,18 @@ class PlayPauseButton_PlayPauseButton extends external_root_React_commonjs_react
     const _this$props = this.props,
           paused = _this$props.paused,
           awaitingResumeOnSeekComplete = _this$props.awaitingResumeOnSeekComplete,
-          onTogglePause = _this$props.onTogglePause;
+          activeTrackIndex = _this$props.activeTrackIndex,
+          onTogglePause = _this$props.onTogglePause,
+          onSelectTrackIndex = _this$props.onSelectTrackIndex,
+          _this$props$trackInde = _this$props.trackIndex,
+          trackIndex = _this$props$trackInde === void 0 ? activeTrackIndex : _this$props$trackInde;
+    const isCurrent = activeTrackIndex === trackIndex;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("button", {
       type: "button",
       className: utils_classNames('cassette__play_pause_button cassette__media_button', {
-        playing: !paused || awaitingResumeOnSeekComplete
+        playing: isCurrent && (!paused || awaitingResumeOnSeekComplete)
       }),
-      onClick: onTogglePause
+      onClick: isCurrent ? onTogglePause : () => onSelectTrackIndex(trackIndex)
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "foreground"
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
@@ -396,9 +401,12 @@ class PlayPauseButton_PlayPauseButton extends external_root_React_commonjs_react
 PlayPauseButton_PlayPauseButton.propTypes = {
   paused: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   awaitingResumeOnSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
-  onTogglePause: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  activeTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  onTogglePause: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  onSelectTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  trackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
-/* harmony default export */ var controls_PlayPauseButton = (Object(core_["playerContextFilter"])(PlayPauseButton_PlayPauseButton, ['paused', 'awaitingResumeOnSeekComplete', 'onTogglePause']));
+/* harmony default export */ var controls_PlayPauseButton = (Object(core_["playerContextFilter"])(PlayPauseButton_PlayPauseButton, ['paused', 'awaitingResumeOnSeekComplete', 'activeTrackIndex', 'onTogglePause', 'onSelectTrackIndex']));
 // CONCATENATED MODULE: ./packages/player/src/controls/common/SkipButton.js
 
 
@@ -941,16 +949,6 @@ const mediaStatusBarStyle = {
  */
 
 class MediaProgress_MediaProgress extends external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"] {
-  constructor(props) {
-    super(props); // bind methods fired on React events
-
-    this.handleSeekPreview = this.handleSeekPreview.bind(this);
-  }
-
-  handleSeekPreview(progress) {
-    this.props.onSeekPreview(progress * this.props.duration);
-  }
-
   render() {
     const _this$props = this.props,
           playlist = _this$props.playlist,
@@ -958,20 +956,14 @@ class MediaProgress_MediaProgress extends external_root_React_commonjs_react_com
           currentTime = _this$props.currentTime,
           seekPreviewTime = _this$props.seekPreviewTime,
           seekInProgress = _this$props.seekInProgress,
-          duration = _this$props.duration,
-          onSeekComplete = _this$props.onSeekComplete;
+          duration = _this$props.duration;
     const time = seekInProgress ? seekPreviewTime : currentTime;
-    const displayedProgress = duration ? time / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBar"], {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["MediaProgressBar"], {
       className: "cassette__media_progress_bar",
       progressClassName: "progress",
-      progress: displayedProgress,
-      progressDirection: "right",
-      readonly: !Object(core_["isPlaylistValid"])(playlist),
-      onAdjustProgress: this.handleSeekPreview,
-      onAdjustComplete: onSeekComplete
+      progressDirection: "right"
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
       style: mediaStatusBarStyle,
       displayText: utils_getDisplayText(playlist[activeTrackIndex]) || '',
@@ -986,11 +978,9 @@ MediaProgress_MediaProgress.propTypes = {
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekPreviewTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
-  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
-  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
 };
-/* harmony default export */ var controls_MediaProgress = (Object(core_["playerContextFilter"])(MediaProgress_MediaProgress, ['playlist', 'activeTrackIndex', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
+/* harmony default export */ var controls_MediaProgress = (Object(core_["playerContextFilter"])(MediaProgress_MediaProgress, ['playlist', 'activeTrackIndex', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration']));
 // CONCATENATED MODULE: ./packages/player/src/controls/MediaProgressDisplay.js
 
 
@@ -999,13 +989,6 @@ MediaProgress_MediaProgress.propTypes = {
 
 
 
-const MediaProgressDisplay_mediaStatusBarStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0
-};
 /**
  * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
  */
@@ -1017,16 +1000,13 @@ class MediaProgressDisplay_MediaProgressDisplay extends external_root_React_comm
           activeTrackIndex = _this$props.activeTrackIndex,
           currentTime = _this$props.currentTime,
           duration = _this$props.duration;
-    const progress = duration ? currentTime / duration : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
-    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBarDisplay"], {
+    }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["MediaProgressBarDisplay"], {
       className: "cassette__media_progress_bar",
       progressClassName: "progress",
-      progress: progress,
       progressDirection: "right"
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
-      style: MediaProgressDisplay_mediaStatusBarStyle,
       displayText: utils_getDisplayText(playlist[activeTrackIndex]) || '',
       displayTime: `${utils_convertToTime(currentTime)} / ${utils_convertToTime(duration)}`
     }));
