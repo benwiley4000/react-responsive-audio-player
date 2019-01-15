@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { playerContextFilter, PlayerPropTypes } from '@cassette/core';
+import { playerContextFilter } from '@cassette/core';
 
 import ProgressBarDisplay from './ProgressBarDisplay';
 
