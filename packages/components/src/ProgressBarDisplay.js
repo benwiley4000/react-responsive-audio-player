@@ -18,10 +18,10 @@ export class ProgressBarDisplay extends PureComponent {
       progressDirection,
       handle,
       progressBarRef,
-      ...rest
+      ...attributes
     } = this.props;
     return (
-      <div {...rest} ref={progressBarRef}>
+      <div {...attributes} ref={progressBarRef}>
         <div
           style={{
             position: 'relative',
@@ -33,8 +33,8 @@ export class ProgressBarDisplay extends PureComponent {
           <div
             className={progressClassName}
             style={{
-              ...getProgressStyle(progress, progressDirection),
-              ...(progressStyle || {})
+              ...(progressStyle || {}),
+              ...getProgressStyle(progress, progressDirection)
             }}
           />
           {handle && (

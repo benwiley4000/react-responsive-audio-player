@@ -1,20 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import { ProgressBarDisplay } from '@cassette/components';
+import { MediaProgressBarDisplay } from '@cassette/components';
 import { playerContextFilter, PlayerPropTypes } from '@cassette/core';
 
 import MediaStatusBar from './common/MediaStatusBar';
 import convertToTime from '../utils/convertToTime';
 import getDisplayText from '../utils/getDisplayText';
-
-const mediaStatusBarStyle = {
-  position: 'absolute',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  right: 0
-};
 
 /**
  * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
@@ -22,17 +14,14 @@ const mediaStatusBarStyle = {
 export class MediaProgressDisplay extends PureComponent {
   render() {
     const { playlist, activeTrackIndex, currentTime, duration } = this.props;
-    const progress = duration ? currentTime / duration : 0;
     return (
       <div className="cassette__media_progress_container">
-        <ProgressBarDisplay
+        <MediaProgressBarDisplay
           className="cassette__media_progress_bar"
           progressClassName="progress"
-          progress={progress}
           progressDirection="right"
         />
         <MediaStatusBar
-          style={mediaStatusBarStyle}
           displayText={getDisplayText(playlist[activeTrackIndex]) || ''}
           displayTime={`${convertToTime(currentTime)} / ${convertToTime(
             duration
