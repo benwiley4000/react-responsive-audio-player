@@ -412,22 +412,32 @@ export class PlayerContextProvider extends Component {
 
   componentWillUnmount() {
     const { media } = this;
-    // remove listeners for media events
-    media.removeEventListener('play', this.handleMediaPlay);
-    media.removeEventListener('pause', this.handleMediaPause);
-    media.removeEventListener('ended', this.handleMediaEnded);
-    media.removeEventListener('stalled', this.handleMediaStalled);
-    media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
-    media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
-    media.removeEventListener('volumechange', this.handleMediaVolumechange);
-    media.removeEventListener('durationchange', this.handleMediaDurationchange);
-    media.removeEventListener('progress', this.handleMediaProgress);
-    media.removeEventListener('ratechange', this.handleMediaRatechange);
-    // remove special event listeners on the media element
-    media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
-    media.removeEventListener('loopchange', this.handleMediaLoopchange);
-
+    if (media) {
+      // remove listeners for media events
+      media.removeEventListener('play', this.handleMediaPlay);
+      media.removeEventListener('pause', this.handleMediaPause);
+      media.removeEventListener('ended', this.handleMediaEnded);
+      media.removeEventListener('stalled', this.handleMediaStalled);
+      media.removeEventListener(
+        'canplaythrough',
+        this.handleMediaCanplaythrough
+      );
+      media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
+      media.removeEventListener(
+        'loadedmetadata',
+        this.handleMediaLoadedmetadata
+      );
+      media.removeEventListener('volumechange', this.handleMediaVolumechange);
+      media.removeEventListener(
+        'durationchange',
+        this.handleMediaDurationchange
+      );
+      media.removeEventListener('progress', this.handleMediaProgress);
+      media.removeEventListener('ratechange', this.handleMediaRatechange);
+      // remove special event listeners on the media element
+      media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
+      media.removeEventListener('loopchange', this.handleMediaLoopchange);
+    }
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
   }
@@ -1026,7 +1036,9 @@ export class PlayerContextGroupMember extends Component {
   }
 
   componentWillUnmount() {
-    this.props.groupContext.unregisterMediaElement(this.mediaElement);
+    if (this.mediaElement) {
+      this.props.groupContext.unregisterMediaElement(this.mediaElement);
+    }
   }
 
   render() {
