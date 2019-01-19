@@ -412,6 +412,7 @@ export class PlayerContextProvider extends Component {
 
   componentWillUnmount() {
     const { media } = this;
+    // Media element might not exist if MutationObserver isn't supported by the browser
     if (media) {
       // remove listeners for media events
       media.removeEventListener('play', this.handleMediaPlay);
@@ -1036,6 +1037,7 @@ export class PlayerContextGroupMember extends Component {
   }
 
   componentWillUnmount() {
+    // Media element might not exist if MutationObserver isn't supported by the browser
     if (this.mediaElement) {
       this.props.groupContext.unregisterMediaElement(this.mediaElement);
     }
