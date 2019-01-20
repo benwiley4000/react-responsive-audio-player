@@ -111,10 +111,12 @@ export class VolumeControl extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.muteToggleRef.removeEventListener(
-      'touchstart',
-      this.handleMuteToggleTouchStart
-    );
+    if (this.muteToggleRef) {
+      this.muteToggleRef.removeEventListener(
+        'touchstart',
+        this.handleMuteToggleTouchStart
+      );
+    }
     document.removeEventListener('touchstart', this.handleMouseLeave);
   }
 

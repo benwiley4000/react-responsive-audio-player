@@ -66,7 +66,11 @@ export class ProgressBar extends PureComponent {
 
     // remove noselect class in case a drag is in progress
     this.toggleNoselect(false);
-    this.noselectStyleElement.parentNode.removeChild(this.noselectStyleElement);
+    if (this.noselectStyleElement) {
+      this.noselectStyleElement.parentNode.removeChild(
+        this.noselectStyleElement
+      );
+    }
   }
 
   setProgressContainerRef(ref) {

@@ -86,7 +86,9 @@ export class VideoDisplay extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.containerResizeObserver.disconnect();
+    if (this.containerResizeObserver) {
+      this.containerResizeObserver.disconnect();
+    }
     this.props.unregisterVideoHostElement(this.containerElement);
   }
 

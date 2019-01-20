@@ -51,7 +51,9 @@ export class MaybeMarquee extends PureComponent {
 
   componentWillUnmount() {
     cancelAnimationFrame(this.animationFrameRequest);
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   moveMarquee() {
