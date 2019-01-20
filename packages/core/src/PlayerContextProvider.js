@@ -412,7 +412,10 @@ export class PlayerContextProvider extends Component {
 
   componentWillUnmount() {
     const { media } = this;
-    // Media element might not exist if MutationObserver isn't supported by the browser
+    // Media element creation will have failed if MutationObserver isn't
+    // supported by the browser. The parent might use an Error Boundary
+    // to display a fallback and so we try to avoid triggering *additional*
+    // errors while the component unmounts.
     if (media) {
       // remove listeners for media events
       media.removeEventListener('play', this.handleMediaPlay);
@@ -1037,7 +1040,8 @@ export class PlayerContextGroupMember extends Component {
   }
 
   componentWillUnmount() {
-    // Media element might not exist if MutationObserver isn't supported by the browser
+    // Media element might not exist
+    // (see componentWillUnmount of PlayerContextProvider)
     if (this.mediaElement) {
       this.props.groupContext.unregisterMediaElement(this.mediaElement);
     }
