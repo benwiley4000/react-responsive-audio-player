@@ -66,7 +66,7 @@ export class ProgressBar extends PureComponent {
 
     // remove noselect class in case a drag is in progress
     this.toggleNoselect(false);
-    // noselectStyleElement might not exist if there's an error
+    // noselectStyleElement might not exist if the component unmounts
     // before the timeout callback is called.
     if (this.noselectStyleElement) {
       this.noselectStyleElement.parentNode.removeChild(
