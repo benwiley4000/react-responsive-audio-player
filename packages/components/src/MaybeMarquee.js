@@ -51,7 +51,12 @@ export class MaybeMarquee extends PureComponent {
 
   componentWillUnmount() {
     cancelAnimationFrame(this.animationFrameRequest);
-    this.resizeObserver.disconnect();
+    // resizeObserver creation will have failed if
+    // ResizeObserver isn't supported by the browser.
+    // (see componentWillUnmount of PlayerContextProvider)
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
 
   moveMarquee() {

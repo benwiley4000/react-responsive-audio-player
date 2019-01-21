@@ -86,7 +86,12 @@ export class VideoDisplay extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.containerResizeObserver.disconnect();
+    // containerResizeObserver creation will have failed if
+    // ResizeObserver isn't supported by the browser.
+    // (see componentWillUnmount of PlayerContextProvider)
+    if (this.containerResizeObserver) {
+      this.containerResizeObserver.disconnect();
+    }
     this.props.unregisterVideoHostElement(this.containerElement);
   }
 
