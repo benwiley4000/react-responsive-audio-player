@@ -213,6 +213,7 @@ export class PlayerContextProvider extends Component {
       autoplayDelayInSeconds,
       mediaElementRef,
       getPosterImageForTrack,
+      getTitleForTrack,
       onActiveTrackUpdate
     } = this.props;
     const {
@@ -241,7 +242,7 @@ export class PlayerContextProvider extends Component {
       'poster',
       getPosterImageForTrack(playlist[activeTrackIndex])
     );
-
+    media.setAttribute('title', getTitleForTrack(playlist[activeTrackIndex]));
     // add listeners for media events
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
@@ -370,6 +371,7 @@ export class PlayerContextProvider extends Component {
         'poster',
         this.props.getPosterImageForTrack(newTrack)
       );
+      this.media.setAttribute('title', this.props.getTitleForTrack(newTrack));
       this.setState({
         awaitingForceLoad: false
       });
@@ -1008,6 +1010,7 @@ PlayerContextProvider.propTypes = {
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
+  getTitleForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
@@ -1031,6 +1034,9 @@ PlayerContextProvider.defaultProps = {
   mediaSessionSeekLengthInSeconds: 10,
   getPosterImageForTrack(track) {
     return track && track.artwork ? track.artwork[0].src : '';
+  },
+  getTitleForTrack(track) {
+    return track ? track.title : '';
   }
 };
 
