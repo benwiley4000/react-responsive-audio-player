@@ -16,6 +16,7 @@ import isPlaylistValid from './utils/isPlaylistValid';
 import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
+import getDisplayText from './utils/getDisplayText';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -1035,9 +1036,7 @@ PlayerContextProvider.defaultProps = {
   getPosterImageForTrack(track) {
     return track && track.artwork ? track.artwork[0].src : '';
   },
-  getTitleForTrack(track) {
-    return track ? track.title : '';
-  }
+  getTitleForTrack: getDisplayText
 };
 
 export class PlayerContextGroupMember extends Component {
