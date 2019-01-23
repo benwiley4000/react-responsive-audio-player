@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import {
   PlayerContextConsumer,
   FullscreenContextConsumer,
-  PlayerPropTypes
+  PlayerPropTypes,
+  getDisplayText
 } from '@cassette/core';
 import { VideoDisplay } from '@cassette/components';
 
-import getDisplayText from './utils/getDisplayText';
 import getControlRenderProp from './utils/getControlRenderProp';
 
 import './styles/index.scss';

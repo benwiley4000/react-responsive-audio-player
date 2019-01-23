@@ -20,4 +20,5 @@ export {
   default as convertToNumberWithinIntervalBounds
 } from './utils/convertToNumberWithinIntervalBounds';
 export { default as isPlaylistValid } from './utils/isPlaylistValid';
+export { default as getDisplayText } from './utils/getDisplayText';
 export { repeatStrategyOptions } from './constants';

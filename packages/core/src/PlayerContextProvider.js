@@ -16,6 +16,7 @@ import isPlaylistValid from './utils/isPlaylistValid';
 import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
+import getDisplayText from './utils/getDisplayText';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -213,6 +214,7 @@ export class PlayerContextProvider extends Component {
       autoplayDelayInSeconds,
       mediaElementRef,
       getPosterImageForTrack,
+      getMediaTitleAttributeForTrack,
       onActiveTrackUpdate
     } = this.props;
     const {
@@ -241,7 +243,10 @@ export class PlayerContextProvider extends Component {
       'poster',
       getPosterImageForTrack(playlist[activeTrackIndex])
     );
-
+    media.setAttribute(
+      'title',
+      getMediaTitleAttributeForTrack(playlist[activeTrackIndex])
+    );
     // add listeners for media events
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
@@ -369,6 +374,10 @@ export class PlayerContextProvider extends Component {
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
+      );
+      this.media.setAttribute(
+        'title',
+        this.props.getMediaTitleAttributeForTrack(newTrack)
       );
       this.setState({
         awaitingForceLoad: false
@@ -1008,6 +1017,7 @@ PlayerContextProvider.propTypes = {
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
+  getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
@@ -1031,7 +1041,8 @@ PlayerContextProvider.defaultProps = {
   mediaSessionSeekLengthInSeconds: 10,
   getPosterImageForTrack(track) {
     return track && track.artwork ? track.artwork[0].src : '';
-  }
+  },
+  getMediaTitleAttributeForTrack: getDisplayText
 };
 
 export class PlayerContextGroupMember extends Component {
