@@ -2,11 +2,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { MediaProgressBar } from '@cassette/components';
-import { playerContextFilter, PlayerPropTypes } from '@cassette/core';
+import {
+  playerContextFilter,
+  PlayerPropTypes,
+  getDisplayText
+} from '@cassette/core';
 
 import MediaStatusBar from './common/MediaStatusBar';
 import convertToTime from '../utils/convertToTime';
-import getDisplayText from '../utils/getDisplayText';
 
 const mediaStatusBarStyle = {
   pointerEvents: 'none'
