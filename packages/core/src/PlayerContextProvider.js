@@ -205,7 +205,9 @@ export class PlayerContextProvider extends Component {
   }
 
   componentDidMount() {
-    const media = (this.media = createCustomMediaElement());
+    const media = (this.media = createCustomMediaElement(
+      this.props.createMediaElement()
+    ));
 
     const {
       defaultPlaybackRate,
@@ -991,6 +993,7 @@ export class PlayerContextProvider extends Component {
 PlayerContextProvider.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   autoplay: PropTypes.bool.isRequired,
+  createMediaElement: PropTypes.func.isRequired,
   autoplayDelayInSeconds: PropTypes.number.isRequired,
   gapLengthInSeconds: PropTypes.number.isRequired,
   crossOrigin: PlayerPropTypes.crossOriginAttribute,
@@ -1024,6 +1027,7 @@ PlayerContextProvider.propTypes = {
 PlayerContextProvider.defaultProps = {
   autoplay: false,
   autoplayDelayInSeconds: 0,
+  createMediaElement: () => document.createElement('video'),
   gapLengthInSeconds: 0,
   defaultVolume: 1,
   defaultMuted: false,
