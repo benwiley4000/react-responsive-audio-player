@@ -993,7 +993,7 @@ export class PlayerContextProvider extends Component {
 PlayerContextProvider.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   autoplay: PropTypes.bool.isRequired,
-  createMediaElement: PropTypes.func,
+  createMediaElement: PropTypes.func.isRequired,
   autoplayDelayInSeconds: PropTypes.number.isRequired,
   gapLengthInSeconds: PropTypes.number.isRequired,
   crossOrigin: PlayerPropTypes.crossOriginAttribute,
