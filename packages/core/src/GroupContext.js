@@ -1,3 +1,6 @@
 import createSingleGlobalContext from './utils/createSingleGlobalContext';
 
-export default createSingleGlobalContext('GroupContext');
+export default createSingleGlobalContext({
+  displayName: 'GroupContext',
+  keysWillUpdate: ['groupProps']
+});
