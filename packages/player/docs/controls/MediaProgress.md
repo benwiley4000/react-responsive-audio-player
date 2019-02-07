@@ -1,5 +1,6 @@
 ```jsx
-const { MediaProgress } = require('@cassette/player');
+import { MediaProgress } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

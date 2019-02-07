@@ -2,9 +2,11 @@
 
 ```jsx
 // helper code for docs; feel free to ignore!
+import { VideoDisplay } from '@cassette/components';
 window.enhanceVideoDisplayForDocs(VideoDisplay);
 
-const { MediaPlayer } = require('@cassette/player');
+import { MediaPlayer } from '@cassette/player';
+
 const playlist = [
   {
     url:

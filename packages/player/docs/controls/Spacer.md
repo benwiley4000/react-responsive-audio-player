@@ -1,5 +1,6 @@
 ```jsx
-const { Spacer } = require('@cassette/player');
+import { Spacer } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

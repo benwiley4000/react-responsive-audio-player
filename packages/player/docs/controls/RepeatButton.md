@@ -1,5 +1,6 @@
 ```jsx
-const { RepeatButton } = require('@cassette/player');
+import { RepeatButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

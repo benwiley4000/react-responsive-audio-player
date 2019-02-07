@@ -1,5 +1,6 @@
 ```jsx
-const { MuteButton } = require('@cassette/player');
+import { MuteButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

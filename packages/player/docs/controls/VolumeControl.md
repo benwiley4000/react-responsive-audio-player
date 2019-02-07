@@ -1,5 +1,6 @@
 ```jsx
-const { VolumeControl } = require('@cassette/player');
+import { VolumeControl } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

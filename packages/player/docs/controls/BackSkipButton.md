@@ -1,5 +1,6 @@
 ```jsx
-const { BackSkipButton } = require('@cassette/player');
+import { BackSkipButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',
