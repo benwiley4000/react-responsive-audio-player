@@ -511,12 +511,12 @@ export class PlayerContextProvider extends Component {
     this.media.load();
   }
 
-  onTrackPlaybackFailure(e) {
+  onTrackPlaybackFailure(event) {
     this.setState({
       mediaCannotPlay: true
     });
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(e);
+      this.props.onTrackPlaybackFailure(event);
     }
   }
 
