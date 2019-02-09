@@ -24,6 +24,7 @@ export default createSingleGlobalContext({
     'stalled',
     'playbackRate',
     'setVolumeInProgress',
-    'repeatStrategy'
+    'repeatStrategy',
+    'mediaCannotPlay'
   ]
 });
