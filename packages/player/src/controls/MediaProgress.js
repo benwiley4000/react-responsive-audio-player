@@ -26,7 +26,8 @@ export class MediaProgress extends PureComponent {
       currentTime,
       seekPreviewTime,
       seekInProgress,
-      duration
+      duration,
+      getDisplayText
     } = this.props;
     const time = seekInProgress ? seekPreviewTime : currentTime;
     return (
@@ -52,7 +53,12 @@ MediaProgress.propTypes = {
   currentTime: PropTypes.number.isRequired,
   seekPreviewTime: PropTypes.number.isRequired,
   seekInProgress: PropTypes.bool.isRequired,
-  duration: PropTypes.number.isRequired
+  duration: PropTypes.number.isRequired,
+  getDisplayText: PropTypes.func.isRequired
+};
+
+MediaProgress.defaultProps = {
+  getDisplayText: getDisplayText
 };
 
 export default playerContextFilter(MediaProgress, [

@@ -16,7 +16,13 @@ import convertToTime from '../utils/convertToTime';
  */
 export class MediaProgressDisplay extends PureComponent {
   render() {
-    const { playlist, activeTrackIndex, currentTime, duration } = this.props;
+    const {
+      playlist,
+      activeTrackIndex,
+      currentTime,
+      duration,
+      getDisplayText
+    } = this.props;
     return (
       <div className="cassette__media_progress_container">
         <MediaProgressBarDisplay
@@ -39,7 +45,12 @@ MediaProgressDisplay.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   activeTrackIndex: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
-  duration: PropTypes.number.isRequired
+  duration: PropTypes.number.isRequired,
+  getDisplayText: PropTypes.func.isRequired
+};
+
+MediaProgressDisplay.defaultProps = {
+  getDisplayText: getDisplayText
 };
 
 export default playerContextFilter(MediaProgressDisplay, [
