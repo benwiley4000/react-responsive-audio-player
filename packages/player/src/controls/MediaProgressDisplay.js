@@ -12,7 +12,7 @@ import MediaStatusBar from './common/MediaStatusBar';
 import convertToTime from '../utils/convertToTime';
 
 /**
- * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
+ * A non-interactive version of [`MediaProgress`](#mediaprogress) which always uses the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
  */
 export class MediaProgressDisplay extends PureComponent {
   render() {
