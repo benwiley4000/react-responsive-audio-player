@@ -154,7 +154,6 @@ export class PlayerContextProvider extends Component {
     this.videoHostVacatedCallbacks = new Map();
 
     // bind internal methods
-    this.setMediaElementSources = this.setMediaElementSources.bind(this);
     this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
 
     // bind callback methods to pass to descendant elements
