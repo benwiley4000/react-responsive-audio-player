@@ -444,6 +444,11 @@ export class PlayerContextProvider extends Component {
       // remove special event listeners on the media element
       media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
       media.removeEventListener('loopchange', this.handleMediaLoopchange);
+
+      const sourceElements = media.querySelectorAll('source');
+      for (const sourceElement of sourceElements) {
+        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+      }
     }
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
