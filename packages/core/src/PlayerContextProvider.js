@@ -67,7 +67,11 @@ const defaultState = {
   // true if the media is currently stalled pending data buffering
   stalled: false,
   // true if the active track should play on the next componentDidUpdate
-  awaitingPlay: false
+  awaitingPlay: false,
+  /* true if an error occurs while fetching the active track media data
+   * or if its type is not a supported media format
+   */
+  mediaCannotPlay: false
 };
 
 // assumes playlist is valid
@@ -81,31 +85,14 @@ function getGoToTrackState({
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
+    mediaCannotPlay:
+      prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
     currentTime: 0,
     loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
     paused: !shouldPlay,
     awaitingForceLoad: Boolean(shouldForceLoad)
   };
-}
-
-function setMediaElementSources(mediaElement, sources) {
-  // remove current sources
-  let firstChild;
-  while ((firstChild = mediaElement.firstChild)) {
-    mediaElement.removeChild(firstChild);
-  }
-  // add new sources
-  for (const source of sources) {
-    const sourceElement = document.createElement('source');
-    sourceElement.src = source.src;
-    if (source.type) {
-      sourceElement.type = source.type;
-    }
-    mediaElement.appendChild(sourceElement);
-  }
-  // cancel playback and re-scan new sources
-  mediaElement.load();
 }
 
 /**
@@ -165,6 +152,9 @@ export class PlayerContextProvider extends Component {
     this.videoHostElementList = [];
     this.videoHostOccupiedCallbacks = new Map();
     this.videoHostVacatedCallbacks = new Map();
+
+    // bind internal methods
+    this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -266,7 +256,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
     // set source elements for current track
-    setMediaElementSources(media, getTrackSources(playlist, activeTrackIndex));
+    this.setMediaElementSources(getTrackSources(playlist, activeTrackIndex));
 
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
@@ -345,7 +335,8 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false })
+      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
+      mediaCannotPlay: false
     };
   }
 
@@ -372,7 +363,7 @@ export class PlayerContextProvider extends Component {
       this.state.awaitingForceLoad ||
       prevSources[0].src !== newSources[0].src
     ) {
-      setMediaElementSources(this.media, newSources);
+      this.setMediaElementSources(newSources);
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
@@ -452,6 +443,11 @@ export class PlayerContextProvider extends Component {
       // remove special event listeners on the media element
       media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
       media.removeEventListener('loopchange', this.handleMediaLoopchange);
+
+      const sourceElements = media.querySelectorAll('source');
+      for (const sourceElement of sourceElements) {
+        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+      }
     }
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
@@ -497,6 +493,39 @@ export class PlayerContextProvider extends Component {
           handler
         );
       });
+  }
+
+  setMediaElementSources(sources) {
+    // remove current sources
+    let firstChild;
+    while ((firstChild = this.media.firstChild)) {
+      this.media.removeChild(firstChild);
+    }
+    // add new sources
+    for (const source of sources) {
+      const sourceElement = document.createElement('source');
+      sourceElement.src = source.src;
+      if (source.type) {
+        sourceElement.type = source.type;
+      }
+      sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+      this.media.appendChild(sourceElement);
+    }
+    // cancel playback and re-scan new sources
+    this.media.load();
+  }
+
+  onTrackPlaybackFailure(event) {
+    this.setState({
+      mediaCannotPlay: true
+    });
+    if (this.props.onTrackPlaybackFailure) {
+      this.props.onTrackPlaybackFailure(
+        this.props.playlist[this.state.activeTrackIndex],
+        this.state.activeTrackIndex,
+        event
+      );
+    }
   }
 
   registerVideoHostElement(hostElement, { onHostOccupied, onHostVacated }) {
@@ -942,6 +971,7 @@ export class PlayerContextProvider extends Component {
       shuffle: state.shuffle,
       stalled: state.stalled,
       playbackRate: state.playbackRate,
+      mediaCannotPlay: state.mediaCannotPlay,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: getRepeatStrategy(state.loop, state.cycle),
       registerVideoHostElement: this.registerVideoHostElement,
@@ -1019,6 +1049,7 @@ PlayerContextProvider.propTypes = {
   }),
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
