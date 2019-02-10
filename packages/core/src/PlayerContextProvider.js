@@ -520,7 +520,11 @@ export class PlayerContextProvider extends Component {
       mediaCannotPlay: true
     });
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(event);
+      this.props.onTrackPlaybackFailure(
+        this.props.playlist[this.state.activeTrackIndex],
+        this.state.activeTrackIndex,
+        event
+      );
     }
   }
 
