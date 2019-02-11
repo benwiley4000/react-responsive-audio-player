@@ -8,10 +8,11 @@ Cassette is a zero-config-required media player component library for React. The
 
 See version 1 (also known as `react-responsive-audio-player`) [here](https://github.com/benwiley4000/cassette/blob/master/README.md)!
 
-## Cassette is split into three packages
+## Cassette is split into four packages
 * [`@cassette/core`](/packages/core) provides React Context-based components which expose an API for consuming and updating media player state
 * [`@cassette/components`](/packages/components) contains some convenient React component building blocks which can be used in media player user interfaces created with `@cassette/core`
 * [`@cassette/player`](/packages/player) provides a responsive, zero-config-needed React media player component, implemented with `@cassette/core`
+* [`@cassette/hooks`](/packages/hooks) provides optional [React Hooks](https://reactjs.org/docs/hooks-intro.html) for consuming media player state
 
 ### [See a live demo here](https://benwiley4000.github.io/cassette/)
 
