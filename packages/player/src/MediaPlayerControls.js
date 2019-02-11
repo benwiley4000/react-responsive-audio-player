@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  PlayerContextConsumer,
+  donotuse_PlayerContext as PlayerContext,
   FullscreenContextConsumer,
   PlayerPropTypes,
   getDisplayText
@@ -67,7 +67,7 @@ export class MediaPlayerControls extends Component {
     return (
       <FullscreenContextConsumer>
         {fullscreenContext => (
-          <PlayerContextConsumer>
+          <PlayerContext.Consumer>
             {playerContext => (
               <div className="cassette">
                 {showVideo &&
@@ -92,7 +92,7 @@ export class MediaPlayerControls extends Component {
                 </div>
               </div>
             )}
-          </PlayerContextConsumer>
+          </PlayerContext.Consumer>
         )}
       </FullscreenContextConsumer>
     );
