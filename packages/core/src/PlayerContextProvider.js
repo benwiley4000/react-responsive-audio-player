@@ -56,6 +56,8 @@ const defaultState = {
    * complete
    */
   awaitingResumeOnSeekComplete: false,
+  // true if media was playing when the active track changed
+  awaitingPlayAfterNextUpdate: false,
   // the duration in seconds of the loaded track
   duration: 0,
   // array describing the buffered ranges in the loaded track
@@ -90,7 +92,7 @@ function getGoToTrackState({
     currentTime: 0,
     loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay,
+    awaitingPlayAfterNextUpdate: Boolean(shouldPlay),
     awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
@@ -183,6 +185,7 @@ export class PlayerContextProvider extends Component {
     this.handleMediaPause = this.handleMediaPause.bind(this);
     this.handleMediaSrcrequest = this.handleMediaSrcrequest.bind(this);
     this.handleMediaEnded = this.handleMediaEnded.bind(this);
+    this.handleMediaEmptied = this.handleMediaEmptied.bind(this);
     this.handleMediaStalled = this.handleMediaStalled.bind(this);
     this.handleMediaCanplaythrough = this.handleMediaCanplaythrough.bind(this);
     this.handleMediaTimeupdate = this.handleMediaTimeupdate.bind(this);
@@ -244,6 +247,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
+    media.addEventListener('emptied', this.handleMediaEmptied);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
@@ -336,7 +340,8 @@ export class PlayerContextProvider extends Component {
     return {
       ...baseNewState,
       ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
-      mediaCannotPlay: false
+      mediaCannotPlay: false,
+      awaitingPlayAfterNextUpdate: false
     };
   }
 
@@ -424,6 +429,7 @@ export class PlayerContextProvider extends Component {
       media.removeEventListener('pause', this.handleMediaPause);
       media.removeEventListener('ended', this.handleMediaEnded);
       media.removeEventListener('stalled', this.handleMediaStalled);
+      media.removeEventListener('emptied', this.handleMediaEmptied);
       media.removeEventListener(
         'canplaythrough',
         this.handleMediaCanplaythrough
@@ -591,7 +597,12 @@ export class PlayerContextProvider extends Component {
   }
 
   handleMediaPlay() {
-    this.setState(state => (state.paused === false ? null : { paused: false }));
+    this.setState(
+      state =>
+        state.paused === false && state.awaitingPlayAfterNextUpdate === false
+          ? null
+          : { paused: false, awaitingPlayAfterNextUpdate: false }
+    );
     this.stealMediaSession();
   }
 
@@ -646,6 +657,10 @@ export class PlayerContextProvider extends Component {
 
   handleMediaStalled() {
     this.setState(state => (state.stalled === true ? null : { stalled: true }));
+  }
+
+  handleMediaEmptied() {
+    this.setState(state => (state.paused === true ? null : { paused: true }));
   }
 
   handleMediaCanplaythrough() {
@@ -965,7 +980,8 @@ export class PlayerContextProvider extends Component {
       currentTime: state.currentTime,
       seekPreviewTime: state.seekPreviewTime,
       seekInProgress: state.seekInProgress,
-      awaitingResumeOnSeekComplete: state.awaitingResumeOnSeekComplete,
+      awaitingPlayResume:
+        state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterNextUpdate,
       duration: state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,

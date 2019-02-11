@@ -8,7 +8,7 @@ const contextPropNames = [
   'currentTime',
   'seekPreviewTime',
   'seekInProgress',
-  'awaitingResumeOnSeekComplete',
+  'awaitingPlayResume',
   'duration',
   'bufferedRanges',
   'playedRanges',
