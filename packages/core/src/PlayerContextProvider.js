@@ -56,8 +56,8 @@ const defaultState = {
    * complete
    */
   awaitingResumeOnSeekComplete: false,
-  // true if media was playing when the active track changed
-  awaitingPlayAfterNextUpdate: false,
+  // true if media will play once new track has loaded
+  awaitingPlayAfterTrackLoad: false,
   // the duration in seconds of the loaded track
   duration: 0,
   // array describing the buffered ranges in the loaded track
@@ -69,7 +69,7 @@ const defaultState = {
   // true if the media is currently stalled pending data buffering
   stalled: false,
   // true if the active track should play on the next componentDidUpdate
-  awaitingPlay: false,
+  shouldRequestPlayOnNextUpdate: false,
   /* true if an error occurs while fetching the active track media data
    * or if its type is not a supported media format
    */
@@ -91,8 +91,8 @@ function getGoToTrackState({
       prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
     currentTime: 0,
     loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
-    awaitingPlay: Boolean(shouldPlay),
-    awaitingPlayAfterNextUpdate: Boolean(shouldPlay),
+    shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
+    awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
     awaitingForceLoad: Boolean(shouldForceLoad)
   };
 }
@@ -129,8 +129,9 @@ export class PlayerContextProvider extends Component {
       playbackRate: props.defaultPlaybackRate,
       // true if user is currently dragging mouse to change the volume
       setVolumeInProgress: false,
-      // initialize awaitingPlay from autoplay prop
-      awaitingPlay: props.autoplay && isPlaylistValid(props.playlist),
+      // initialize shouldRequestPlayOnNextUpdate from autoplay prop
+      shouldRequestPlayOnNextUpdate:
+        props.autoplay && isPlaylistValid(props.playlist),
       awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
@@ -218,7 +219,7 @@ export class PlayerContextProvider extends Component {
       playbackRate,
       loop,
       activeTrackIndex,
-      awaitingPlay
+      shouldRequestPlayOnNextUpdate
     } = this.state;
 
     // initialize media properties
@@ -265,9 +266,9 @@ export class PlayerContextProvider extends Component {
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
 
-    if (awaitingPlay) {
+    if (shouldRequestPlayOnNextUpdate) {
       this.setState({
-        awaitingPlay: false
+        shouldRequestPlayOnNextUpdate: false
       });
       this.delayTimeout = setTimeout(() => {
         this.togglePause(false);
@@ -341,7 +342,7 @@ export class PlayerContextProvider extends Component {
       ...baseNewState,
       ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
       mediaCannotPlay: false,
-      awaitingPlayAfterNextUpdate: false
+      awaitingPlayAfterTrackLoad: false
     };
   }
 
@@ -398,9 +399,9 @@ export class PlayerContextProvider extends Component {
       this.stealMediaSession();
     }
 
-    if (this.state.awaitingPlay) {
+    if (this.state.shouldRequestPlayOnNextUpdate) {
       this.setState({
-        awaitingPlay: false
+        shouldRequestPlayOnNextUpdate: false
       });
       // media.currentSrc is updated asynchronously so we should
       // play async to avoid weird intermediate state issues
@@ -599,9 +600,9 @@ export class PlayerContextProvider extends Component {
   handleMediaPlay() {
     this.setState(
       state =>
-        state.paused === false && state.awaitingPlayAfterNextUpdate === false
+        state.paused === false && state.awaitingPlayAfterTrackLoad === false
           ? null
-          : { paused: false, awaitingPlayAfterNextUpdate: false }
+          : { paused: false, awaitingPlayAfterTrackLoad: false }
     );
     this.stealMediaSession();
   }
@@ -981,7 +982,7 @@ export class PlayerContextProvider extends Component {
       seekPreviewTime: state.seekPreviewTime,
       seekInProgress: state.seekInProgress,
       awaitingPlayResume:
-        state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterNextUpdate,
+        state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterTrackLoad,
       duration: state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,
