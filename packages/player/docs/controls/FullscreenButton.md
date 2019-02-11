@@ -1,8 +1,9 @@
 Should have an ancestor [`FullscreenContextProvider`](#fullscreencontextprovider):
 
 ```jsx
-const { FullscreenContextProvider } = require('@cassette/core');
-const { FullscreenButton } = require('@cassette/player');
+import { FullscreenContextProvider } from '@cassette/core';
+import { FullscreenButton } from '@cassette/player';
+
 <FullscreenContextProvider>
   <div
     style={{
@@ -24,7 +25,7 @@ const { FullscreenButton } = require('@cassette/player');
 Has no effect if not wrapped by context:
 
 ```jsx
-const { FullscreenButton } = require('@cassette/player');
+import { FullscreenButton } from '@cassette/player';
 <div
   style={{
     background: '#333',

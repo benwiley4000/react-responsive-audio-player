@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import StyleGuideRenderer from 'react-styleguidist/lib/rsg-components/StyleGuide/StyleGuideRenderer';
+import StyleGuideRenderer from 'react-styleguidist/lib/client/rsg-components/StyleGuide/StyleGuideRenderer';
 
 import { FullscreenContextProvider } from '@cassette/core';
 import { VideoDisplay } from '@cassette/components';

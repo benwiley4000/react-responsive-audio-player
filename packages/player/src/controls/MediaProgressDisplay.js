@@ -2,18 +2,27 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import { MediaProgressBarDisplay } from '@cassette/components';
-import { playerContextFilter, PlayerPropTypes } from '@cassette/core';
+import {
+  playerContextFilter,
+  PlayerPropTypes,
+  getDisplayText
+} from '@cassette/core';
 
 import MediaStatusBar from './common/MediaStatusBar';
 import convertToTime from '../utils/convertToTime';
-import getDisplayText from '../utils/getDisplayText';
 
 /**
- * A non-interactive version of [`MediaProgress`](#mediaprogress) which always the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
+ * A non-interactive version of [`MediaProgress`](#mediaprogress) which always uses the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)
  */
 export class MediaProgressDisplay extends PureComponent {
   render() {
-    const { playlist, activeTrackIndex, currentTime, duration } = this.props;
+    const {
+      playlist,
+      activeTrackIndex,
+      currentTime,
+      duration,
+      getDisplayText
+    } = this.props;
     return (
       <div className="cassette__media_progress_container">
         <MediaProgressBarDisplay
@@ -36,7 +45,12 @@ MediaProgressDisplay.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   activeTrackIndex: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
-  duration: PropTypes.number.isRequired
+  duration: PropTypes.number.isRequired,
+  getDisplayText: PropTypes.func.isRequired
+};
+
+MediaProgressDisplay.defaultProps = {
+  getDisplayText: getDisplayText
 };
 
 export default playerContextFilter(MediaProgressDisplay, [

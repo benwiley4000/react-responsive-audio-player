@@ -1,4 +1,6 @@
 ```jsx
+import { MediaProgressBar } from '@cassette/components';
+
 <MediaProgressBar
   progressDirection="right"
   style={{ background: 'black', height: 30 }}

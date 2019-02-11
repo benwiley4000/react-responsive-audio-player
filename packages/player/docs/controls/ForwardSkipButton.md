@@ -1,5 +1,6 @@
 ```jsx
-const { ForwardSkipButton } = require('@cassette/player');
+import { ForwardSkipButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

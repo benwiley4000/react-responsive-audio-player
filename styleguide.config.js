@@ -1,5 +1,6 @@
 var path = require('path');
 
+// TODO: write a test to keep this in sync
 const contextPropNames = [
   'playlist',
   'activeTrackIndex',
@@ -8,7 +9,7 @@ const contextPropNames = [
   'currentTime',
   'seekPreviewTime',
   'seekInProgress',
-  'awaitingResumeOnSeekComplete',
+  'awaitingPlayResume',
   'duration',
   'bufferedRanges',
   'playedRanges',
@@ -18,9 +19,12 @@ const contextPropNames = [
   'shuffle',
   'stalled',
   'playbackRate',
+  'mediaCannotPlay',
   'setVolumeInProgress',
   'repeatStrategy',
-  'pipeVideoStreamToCanvas',
+  'registerVideoHostElement',
+  'renderVideoIntoHostElement',
+  'unregisterVideoHostElement',
   'onTogglePause',
   'onSelectTrackIndex',
   'onBackSkip',
@@ -51,6 +55,8 @@ module.exports = {
         },
         {
           name: 'Consuming Context',
+          description:
+            '`playerContext` and `fullscreenContext` can be consumed by a Context Consumer component, via a special higher-order-component (`playerContext` filter), or via React Hooks (these are available in a [separate package](#cassettehooks)).',
           sections: [
             {
               name: 'FullscreenContextConsumer',
@@ -111,6 +117,25 @@ module.exports = {
           components: 'packages/player/src/controls/[A-Z]*.js'
         }
       ]
+    },
+    {
+      name: '@cassette/hooks',
+      description:
+        '**`@cassette/hooks`** provides [React Hooks](https://reactjs.org/docs/hooks-intro.html) for consuming playerContext and fullscreenContext from inside function components. It requires React 16.8.0 or greater.',
+      sections: [
+        {
+          name: 'useFullscreenContext',
+          description:
+            'Used to read and update the state of the surrounding [`fullscreenContext`](#fullscreencontext)',
+          content: 'packages/hooks/docs/useFullscreenContext.md'
+        },
+        {
+          name: 'usePlayerContext',
+          description:
+            'Used to read and update the state of the surrounding [`playerContext`](#playercontext)',
+          content: 'packages/hooks/docs/usePlayerContext.md'
+        }
+      ]
     }
   ],
   webpackConfig: {
@@ -125,7 +150,9 @@ module.exports = {
         ),
         '@cassette/components': path.join(__dirname, 'packages/components/src'),
         '@cassette/player/src': path.join(__dirname, 'packages/player/src'),
-        '@cassette/player': path.join(__dirname, 'packages/player/src')
+        '@cassette/player': path.join(__dirname, 'packages/player/src'),
+        '@cassette/hooks/src': path.join(__dirname, 'packages/hooks/src'),
+        '@cassette/hooks': path.join(__dirname, 'packages/hooks/src')
       }
     },
     module: {

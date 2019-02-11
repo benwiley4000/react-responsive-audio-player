@@ -20,7 +20,12 @@ export default [
     url:
       'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     title: 'Big Buck Bunny',
-    artist: 'Peach Open Movie Project'
+    artist: 'Peach Open Movie Project',
+    artwork: [
+      {
+        src: 'https://i.imgur.com/mGXC6Fb.jpg'
+      }
+    ]
   },
   {
     url:

@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import {
-  PlayerContextConsumer,
+  donotuse_PlayerContext as PlayerContext,
   FullscreenContextConsumer,
-  PlayerPropTypes
+  PlayerPropTypes,
+  getDisplayText
 } from '@cassette/core';
 import { VideoDisplay } from '@cassette/components';
 
-import getDisplayText from './utils/getDisplayText';
 import getControlRenderProp from './utils/getControlRenderProp';
 
 import './styles/index.scss';
@@ -67,7 +67,7 @@ export class MediaPlayerControls extends Component {
     return (
       <FullscreenContextConsumer>
         {fullscreenContext => (
-          <PlayerContextConsumer>
+          <PlayerContext.Consumer>
             {playerContext => (
               <div className="cassette">
                 {showVideo &&
@@ -83,14 +83,16 @@ export class MediaPlayerControls extends Component {
                       const renderControl = getControlRenderProp(control);
                       return (
                         renderControl &&
-                        renderControl(playerContext, fullscreenContext)
+                        renderControl(playerContext, fullscreenContext, {
+                          getDisplayText
+                        })
                       );
                     })
                   )}
                 </div>
               </div>
             )}
-          </PlayerContextConsumer>
+          </PlayerContext.Consumer>
         )}
       </FullscreenContextConsumer>
     );

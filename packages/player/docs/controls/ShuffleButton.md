@@ -1,5 +1,6 @@
 ```jsx
-const { ShuffleButton } = require('@cassette/player');
+import { ShuffleButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

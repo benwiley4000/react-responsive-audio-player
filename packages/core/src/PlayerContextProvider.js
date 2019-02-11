@@ -16,6 +16,7 @@ import isPlaylistValid from './utils/isPlaylistValid';
 import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
+import getDisplayText from './utils/getDisplayText';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -55,6 +56,8 @@ const defaultState = {
    * complete
    */
   awaitingResumeOnSeekComplete: false,
+  // true if media will play once new track has loaded
+  awaitingPlayAfterTrackLoad: false,
   // the duration in seconds of the loaded track
   duration: 0,
   // array describing the buffered ranges in the loaded track
@@ -66,7 +69,11 @@ const defaultState = {
   // true if the media is currently stalled pending data buffering
   stalled: false,
   // true if the active track should play on the next componentDidUpdate
-  awaitingPlay: false
+  shouldRequestPlayOnNextUpdate: false,
+  /* true if an error occurs while fetching the active track media data
+   * or if its type is not a supported media format
+   */
+  mediaCannotPlay: false
 };
 
 // assumes playlist is valid
@@ -80,31 +87,14 @@ function getGoToTrackState({
   return {
     activeTrackIndex: index,
     trackLoading: isNewTrack,
+    mediaCannotPlay:
+      prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
     currentTime: 0,
     loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
-    awaitingPlay: Boolean(shouldPlay),
-    paused: !shouldPlay,
+    shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
+    awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
     awaitingForceLoad: Boolean(shouldForceLoad)
   };
-}
-
-function setMediaElementSources(mediaElement, sources) {
-  // remove current sources
-  let firstChild;
-  while ((firstChild = mediaElement.firstChild)) {
-    mediaElement.removeChild(firstChild);
-  }
-  // add new sources
-  for (const source of sources) {
-    const sourceElement = document.createElement('source');
-    sourceElement.src = source.src;
-    if (source.type) {
-      sourceElement.type = source.type;
-    }
-    mediaElement.appendChild(sourceElement);
-  }
-  // cancel playback and re-scan new sources
-  mediaElement.load();
 }
 
 /**
@@ -139,8 +129,9 @@ export class PlayerContextProvider extends Component {
       playbackRate: props.defaultPlaybackRate,
       // true if user is currently dragging mouse to change the volume
       setVolumeInProgress: false,
-      // initialize awaitingPlay from autoplay prop
-      awaitingPlay: props.autoplay && isPlaylistValid(props.playlist),
+      // initialize shouldRequestPlayOnNextUpdate from autoplay prop
+      shouldRequestPlayOnNextUpdate:
+        props.autoplay && isPlaylistValid(props.playlist),
       awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
@@ -164,6 +155,9 @@ export class PlayerContextProvider extends Component {
     this.videoHostElementList = [];
     this.videoHostOccupiedCallbacks = new Map();
     this.videoHostVacatedCallbacks = new Map();
+
+    // bind internal methods
+    this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -192,6 +186,7 @@ export class PlayerContextProvider extends Component {
     this.handleMediaPause = this.handleMediaPause.bind(this);
     this.handleMediaSrcrequest = this.handleMediaSrcrequest.bind(this);
     this.handleMediaEnded = this.handleMediaEnded.bind(this);
+    this.handleMediaEmptied = this.handleMediaEmptied.bind(this);
     this.handleMediaStalled = this.handleMediaStalled.bind(this);
     this.handleMediaCanplaythrough = this.handleMediaCanplaythrough.bind(this);
     this.handleMediaTimeupdate = this.handleMediaTimeupdate.bind(this);
@@ -204,7 +199,9 @@ export class PlayerContextProvider extends Component {
   }
 
   componentDidMount() {
-    const media = (this.media = createCustomMediaElement());
+    const media = (this.media = createCustomMediaElement(
+      this.props.createMediaElement()
+    ));
 
     const {
       defaultPlaybackRate,
@@ -213,6 +210,7 @@ export class PlayerContextProvider extends Component {
       autoplayDelayInSeconds,
       mediaElementRef,
       getPosterImageForTrack,
+      getMediaTitleAttributeForTrack,
       onActiveTrackUpdate
     } = this.props;
     const {
@@ -221,7 +219,7 @@ export class PlayerContextProvider extends Component {
       playbackRate,
       loop,
       activeTrackIndex,
-      awaitingPlay
+      shouldRequestPlayOnNextUpdate
     } = this.state;
 
     // initialize media properties
@@ -241,12 +239,16 @@ export class PlayerContextProvider extends Component {
       'poster',
       getPosterImageForTrack(playlist[activeTrackIndex])
     );
-
+    media.setAttribute(
+      'title',
+      getMediaTitleAttributeForTrack(playlist[activeTrackIndex])
+    );
     // add listeners for media events
     media.addEventListener('play', this.handleMediaPlay);
     media.addEventListener('pause', this.handleMediaPause);
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
+    media.addEventListener('emptied', this.handleMediaEmptied);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
     media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
@@ -259,14 +261,14 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
     // set source elements for current track
-    setMediaElementSources(media, getTrackSources(playlist, activeTrackIndex));
+    this.setMediaElementSources();
 
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
 
-    if (awaitingPlay) {
+    if (shouldRequestPlayOnNextUpdate) {
       this.setState({
-        awaitingPlay: false
+        shouldRequestPlayOnNextUpdate: false
       });
       this.delayTimeout = setTimeout(() => {
         this.togglePause(false);
@@ -338,7 +340,9 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false })
+      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
+      mediaCannotPlay: false,
+      awaitingPlayAfterTrackLoad: false
     };
   }
 
@@ -365,10 +369,14 @@ export class PlayerContextProvider extends Component {
       this.state.awaitingForceLoad ||
       prevSources[0].src !== newSources[0].src
     ) {
-      setMediaElementSources(this.media, newSources);
+      this.setMediaElementSources();
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
+      );
+      this.media.setAttribute(
+        'title',
+        this.props.getMediaTitleAttributeForTrack(newTrack)
       );
       this.setState({
         awaitingForceLoad: false
@@ -391,9 +399,9 @@ export class PlayerContextProvider extends Component {
       this.stealMediaSession();
     }
 
-    if (this.state.awaitingPlay) {
+    if (this.state.shouldRequestPlayOnNextUpdate) {
       this.setState({
-        awaitingPlay: false
+        shouldRequestPlayOnNextUpdate: false
       });
       // media.currentSrc is updated asynchronously so we should
       // play async to avoid weird intermediate state issues
@@ -412,22 +420,42 @@ export class PlayerContextProvider extends Component {
 
   componentWillUnmount() {
     const { media } = this;
-    // remove listeners for media events
-    media.removeEventListener('play', this.handleMediaPlay);
-    media.removeEventListener('pause', this.handleMediaPause);
-    media.removeEventListener('ended', this.handleMediaEnded);
-    media.removeEventListener('stalled', this.handleMediaStalled);
-    media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
-    media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
-    media.removeEventListener('volumechange', this.handleMediaVolumechange);
-    media.removeEventListener('durationchange', this.handleMediaDurationchange);
-    media.removeEventListener('progress', this.handleMediaProgress);
-    media.removeEventListener('ratechange', this.handleMediaRatechange);
-    // remove special event listeners on the media element
-    media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
-    media.removeEventListener('loopchange', this.handleMediaLoopchange);
+    // Media element creation will have failed if MutationObserver isn't
+    // supported by the browser. The parent might use an Error Boundary
+    // to display a fallback and so we try to avoid triggering *additional*
+    // errors while the component unmounts.
+    if (media) {
+      // remove listeners for media events
+      media.removeEventListener('play', this.handleMediaPlay);
+      media.removeEventListener('pause', this.handleMediaPause);
+      media.removeEventListener('ended', this.handleMediaEnded);
+      media.removeEventListener('stalled', this.handleMediaStalled);
+      media.removeEventListener('emptied', this.handleMediaEmptied);
+      media.removeEventListener(
+        'canplaythrough',
+        this.handleMediaCanplaythrough
+      );
+      media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
+      media.removeEventListener(
+        'loadedmetadata',
+        this.handleMediaLoadedmetadata
+      );
+      media.removeEventListener('volumechange', this.handleMediaVolumechange);
+      media.removeEventListener(
+        'durationchange',
+        this.handleMediaDurationchange
+      );
+      media.removeEventListener('progress', this.handleMediaProgress);
+      media.removeEventListener('ratechange', this.handleMediaRatechange);
+      // remove special event listeners on the media element
+      media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
+      media.removeEventListener('loopchange', this.handleMediaLoopchange);
 
+      const sourceElements = media.querySelectorAll('source');
+      for (const sourceElement of sourceElements) {
+        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+      }
+    }
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
   }
@@ -472,6 +500,43 @@ export class PlayerContextProvider extends Component {
           handler
         );
       });
+  }
+
+  setMediaElementSources() {
+    // remove current sources
+    const { playlist } = this.props;
+    let firstChild;
+    while ((firstChild = this.media.firstChild)) {
+      this.media.removeChild(firstChild);
+    }
+    if (isPlaylistValid(playlist)) {
+      const sources = getTrackSources(playlist, this.state.activeTrackIndex);
+      // add new sources
+      for (const source of sources) {
+        const sourceElement = document.createElement('source');
+        sourceElement.src = source.src;
+        if (source.type) {
+          sourceElement.type = source.type;
+        }
+        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        this.media.appendChild(sourceElement);
+      }
+    }
+    // cancel playback and re-scan new sources
+    this.media.load();
+  }
+
+  onTrackPlaybackFailure(event) {
+    this.setState({
+      mediaCannotPlay: true
+    });
+    if (this.props.onTrackPlaybackFailure) {
+      this.props.onTrackPlaybackFailure(
+        this.props.playlist[this.state.activeTrackIndex],
+        this.state.activeTrackIndex,
+        event
+      );
+    }
   }
 
   registerVideoHostElement(hostElement, { onHostOccupied, onHostVacated }) {
@@ -533,7 +598,12 @@ export class PlayerContextProvider extends Component {
   }
 
   handleMediaPlay() {
-    this.setState(state => (state.paused === false ? null : { paused: false }));
+    this.setState(
+      state =>
+        state.paused === false && state.awaitingPlayAfterTrackLoad === false
+          ? null
+          : { paused: false, awaitingPlayAfterTrackLoad: false }
+    );
     this.stealMediaSession();
   }
 
@@ -588,6 +658,10 @@ export class PlayerContextProvider extends Component {
 
   handleMediaStalled() {
     this.setState(state => (state.stalled === true ? null : { stalled: true }));
+  }
+
+  handleMediaEmptied() {
+    this.setState(state => (state.paused === true ? null : { paused: true }));
   }
 
   handleMediaCanplaythrough() {
@@ -907,7 +981,8 @@ export class PlayerContextProvider extends Component {
       currentTime: state.currentTime,
       seekPreviewTime: state.seekPreviewTime,
       seekInProgress: state.seekInProgress,
-      awaitingResumeOnSeekComplete: state.awaitingResumeOnSeekComplete,
+      awaitingPlayResume:
+        state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterTrackLoad,
       duration: state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,
@@ -917,6 +992,7 @@ export class PlayerContextProvider extends Component {
       shuffle: state.shuffle,
       stalled: state.stalled,
       playbackRate: state.playbackRate,
+      mediaCannotPlay: state.mediaCannotPlay,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: getRepeatStrategy(state.loop, state.cycle),
       registerVideoHostElement: this.registerVideoHostElement,
@@ -968,6 +1044,7 @@ export class PlayerContextProvider extends Component {
 PlayerContextProvider.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   autoplay: PropTypes.bool.isRequired,
+  createMediaElement: PropTypes.func.isRequired,
   autoplayDelayInSeconds: PropTypes.number.isRequired,
   gapLengthInSeconds: PropTypes.number.isRequired,
   crossOrigin: PlayerPropTypes.crossOriginAttribute,
@@ -993,13 +1070,16 @@ PlayerContextProvider.propTypes = {
   }),
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
+  getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
 PlayerContextProvider.defaultProps = {
   autoplay: false,
   autoplayDelayInSeconds: 0,
+  createMediaElement: () => document.createElement('video'),
   gapLengthInSeconds: 0,
   defaultVolume: 1,
   defaultMuted: false,
@@ -1017,7 +1097,8 @@ PlayerContextProvider.defaultProps = {
   mediaSessionSeekLengthInSeconds: 10,
   getPosterImageForTrack(track) {
     return track && track.artwork ? track.artwork[0].src : '';
-  }
+  },
+  getMediaTitleAttributeForTrack: getDisplayText
 };
 
 export class PlayerContextGroupMember extends Component {
@@ -1026,7 +1107,11 @@ export class PlayerContextGroupMember extends Component {
   }
 
   componentWillUnmount() {
-    this.props.groupContext.unregisterMediaElement(this.mediaElement);
+    // Media element might not exist
+    // (see componentWillUnmount of PlayerContextProvider)
+    if (this.mediaElement) {
+      this.props.groupContext.unregisterMediaElement(this.mediaElement);
+    }
   }
 
   render() {

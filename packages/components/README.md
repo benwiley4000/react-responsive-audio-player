@@ -5,7 +5,7 @@
 ### Installation
 
 ```console
-npm install @cassette/components @cassette/core
+npm install @cassette/components
 ```
 
 #### Components included:

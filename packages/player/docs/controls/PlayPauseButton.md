@@ -1,5 +1,6 @@
 ```jsx
-const { PlayPauseButton } = require('@cassette/player');
+import { PlayPauseButton } from '@cassette/player';
+
 <div
   style={{
     background: '#333',

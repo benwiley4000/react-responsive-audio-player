@@ -26,6 +26,22 @@ const controlComponents = {
   spacer: Spacer
 };
 
+function getRenderPropForControlKey(controlKey) {
+  const component = controlComponents[controlKey];
+  if (!component) {
+    return null;
+  }
+  switch (controlKey) {
+    case 'progress':
+    case 'progressdisplay':
+      return (playerContext, fullscreenContext, { getDisplayText }) => {
+        return createElement(component, { getDisplayText });
+      };
+    default:
+      return () => createElement(component);
+  }
+}
+
 const cache = {};
 function getControlRenderProp(control) {
   if (typeof control === 'function') {
@@ -35,12 +51,9 @@ function getControlRenderProp(control) {
     if (cache[control]) {
       return cache[control];
     }
-    const component = controlComponents[control];
-    if (component) {
-      const fn = () => createElement(component);
-      cache[control] = fn;
-      return fn;
-    }
+    const fn = getRenderPropForControlKey(control);
+    cache[control] = fn;
+    return fn;
   }
   return null;
 }

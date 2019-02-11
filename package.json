@@ -1,7 +1,7 @@
 {
   "name": "cassette",
   "private": true,
-  "version": "2.0.0-alpha.17",
+  "version": "2.0.0-alpha.25",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/audioplayer.js",
   "scripts": {
@@ -88,9 +88,9 @@
     "prettier": "1.14.2",
     "pretty-quick": "^1.7.0",
     "prop-types": "^15.5.10",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.3",
-    "react-styleguidist": "^8.0.6",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-styleguidist": "^9.0.0-beta4",
     "react-test-renderer": "^16.6.3",
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.5",

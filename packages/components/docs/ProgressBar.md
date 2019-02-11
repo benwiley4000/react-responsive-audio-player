@@ -1,4 +1,6 @@
 ```jsx
+import { ProgressBar } from '@cassette/components';
+
 class ProgressBarDemo extends React.Component {
   constructor(props) {
     super(props);

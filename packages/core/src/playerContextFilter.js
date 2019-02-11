@@ -7,11 +7,12 @@ import { logWarning } from './utils/console';
 function playerContextFilter(component, contextPropNames) {
   const warned = {};
   const childName = component.displayName || component.name;
+  const flags = PlayerContext.__cassetteGetObservedBits(contextPropNames);
   function PlayerContextFilter(props) {
     return (
       <FullscreenContext.Consumer>
         {fullscreenContext => (
-          <PlayerContext.Consumer>
+          <PlayerContext.Consumer unstable_observedBits={flags}>
             {playerContext => {
               const childProps = { ...props };
               for (const propName of contextPropNames) {

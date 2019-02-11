@@ -19,6 +19,10 @@ const packages = {
   '@cassette/player': {
     library: 'cassettePlayer',
     file: 'cassette-player'
+  },
+  '@cassette/hooks': {
+    library: 'cassetteHooks',
+    file: 'cassette-hooks'
   }
 };
 
