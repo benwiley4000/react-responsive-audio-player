@@ -13,7 +13,7 @@ export default createSingleGlobalContext({
     'currentTime',
     'seekPreviewTime',
     'seekInProgress',
-    'awaitingResumeOnSeekComplete',
+    'awaitingPlayResume',
     'duration',
     'bufferedRanges',
     'playedRanges',
