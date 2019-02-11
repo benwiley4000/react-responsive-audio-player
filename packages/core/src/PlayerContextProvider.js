@@ -256,7 +256,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
     // set source elements for current track
-    this.setMediaElementSources(getTrackSources(playlist, activeTrackIndex));
+    this.setMediaElementSources(playlist, activeTrackIndex);
 
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
@@ -363,7 +363,10 @@ export class PlayerContextProvider extends Component {
       this.state.awaitingForceLoad ||
       prevSources[0].src !== newSources[0].src
     ) {
-      this.setMediaElementSources(newSources);
+      this.setMediaElementSources(
+        this.props.playlist,
+        this.state.activeTrackIndex
+      );
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
@@ -495,21 +498,24 @@ export class PlayerContextProvider extends Component {
       });
   }
 
-  setMediaElementSources(sources) {
+  setMediaElementSources(playlist, trackIndex) {
     // remove current sources
     let firstChild;
     while ((firstChild = this.media.firstChild)) {
       this.media.removeChild(firstChild);
     }
-    // add new sources
-    for (const source of sources) {
-      const sourceElement = document.createElement('source');
-      sourceElement.src = source.src;
-      if (source.type) {
-        sourceElement.type = source.type;
+    if (isPlaylistValid(playlist)) {
+      const sources = getTrackSources(playlist, trackIndex);
+      // add new sources
+      for (const source of sources) {
+        const sourceElement = document.createElement('source');
+        sourceElement.src = source.src;
+        if (source.type) {
+          sourceElement.type = source.type;
+        }
+        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        this.media.appendChild(sourceElement);
       }
-      sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
-      this.media.appendChild(sourceElement);
     }
     // cancel playback and re-scan new sources
     this.media.load();
