@@ -22,3 +22,5 @@ export {
 export { default as isPlaylistValid } from './utils/isPlaylistValid';
 export { default as getDisplayText } from './utils/getDisplayText';
 export { repeatStrategyOptions } from './constants';
+export const donotuse_PlayerContext = PlayerContext;
+export const donotuse_FullscreenContext = FullscreenContext;
