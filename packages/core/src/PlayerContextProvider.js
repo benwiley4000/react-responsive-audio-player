@@ -256,7 +256,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
     // set source elements for current track
-    this.setMediaElementSources(playlist, activeTrackIndex);
+    this.setMediaElementSources();
 
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
@@ -363,10 +363,7 @@ export class PlayerContextProvider extends Component {
       this.state.awaitingForceLoad ||
       prevSources[0].src !== newSources[0].src
     ) {
-      this.setMediaElementSources(
-        this.props.playlist,
-        this.state.activeTrackIndex
-      );
+      this.setMediaElementSources();
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
@@ -498,14 +495,15 @@ export class PlayerContextProvider extends Component {
       });
   }
 
-  setMediaElementSources(playlist, trackIndex) {
+  setMediaElementSources() {
     // remove current sources
+    const { playlist } = this.props;
     let firstChild;
     while ((firstChild = this.media.firstChild)) {
       this.media.removeChild(firstChild);
     }
     if (isPlaylistValid(playlist)) {
-      const sources = getTrackSources(playlist, trackIndex);
+      const sources = getTrackSources(playlist, this.state.activeTrackIndex);
       // add new sources
       for (const source of sources) {
         const sourceElement = document.createElement('source');
