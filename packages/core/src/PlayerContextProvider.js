@@ -227,7 +227,9 @@ export class PlayerContextProvider extends Component {
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
     media.defaultPlaybackRate = defaultPlaybackRate;
-    media.crossOrigin = crossOrigin;
+    if (crossOrigin) {
+      media.crossOrigin = crossOrigin;
+    }
     media.volume = volume;
     media.muted = muted;
     media.playbackRate = playbackRate;
