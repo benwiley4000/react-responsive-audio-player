@@ -692,10 +692,15 @@ export class PlayerContextProvider extends Component {
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
+    const { onTimeUpdate, playlist } = this.props;
+    const { activeTrackIndex } = this.state;
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
       this.media.currentTime = this.state.currentTime;
       return;
+    }
+    if (onTimeUpdate) {
+      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
     }
     this.setState({
       currentTime,
@@ -1089,6 +1094,7 @@ PlayerContextProvider.propTypes = {
   }),
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  onTimeUpdate: PropTypes.func,
   onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
