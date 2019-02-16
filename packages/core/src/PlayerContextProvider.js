@@ -189,8 +189,9 @@ export class PlayerContextProvider extends Component {
     this.handleMediaEmptied = this.handleMediaEmptied.bind(this);
     this.handleMediaStalled = this.handleMediaStalled.bind(this);
     this.handleMediaCanplaythrough = this.handleMediaCanplaythrough.bind(this);
+    this.handleMediaCanplay = this.handleMediaCanplay.bind(this);
     this.handleMediaTimeupdate = this.handleMediaTimeupdate.bind(this);
-    this.handleMediaLoadedmetadata = this.handleMediaLoadedmetadata.bind(this);
+    this.handleMediaLoadeddata = this.handleMediaLoadeddata.bind(this);
     this.handleMediaVolumechange = this.handleMediaVolumechange.bind(this);
     this.handleMediaDurationchange = this.handleMediaDurationchange.bind(this);
     this.handleMediaProgress = this.handleMediaProgress.bind(this);
@@ -223,7 +224,7 @@ export class PlayerContextProvider extends Component {
     } = this.state;
 
     // initialize media properties
-    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // We used to set currentTime here.. now waiting for loadeddata.
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
     media.defaultPlaybackRate = defaultPlaybackRate;
@@ -251,9 +252,10 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('emptied', this.handleMediaEmptied);
+    media.addEventListener('canplay', this.handleMediaCanplay);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('loadeddata', this.handleMediaLoadeddata);
     media.addEventListener('volumechange', this.handleMediaVolumechange);
     media.addEventListener('durationchange', this.handleMediaDurationchange);
     media.addEventListener('progress', this.handleMediaProgress);
@@ -342,7 +344,12 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
+      ...getGoToTrackState({
+        prevState,
+        index: 0,
+        shouldPlay: false,
+        shouldForceLoad: true
+      }),
       mediaCannotPlay: false,
       awaitingPlayAfterTrackLoad: false
     };
@@ -437,11 +444,9 @@ export class PlayerContextProvider extends Component {
         'canplaythrough',
         this.handleMediaCanplaythrough
       );
+      media.removeEventListener('canplay', this.handleMediaCanplay);
       media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-      media.removeEventListener(
-        'loadedmetadata',
-        this.handleMediaLoadedmetadata
-      );
+      media.removeEventListener('loadeddata', this.handleMediaLoadeddata);
       media.removeEventListener('volumechange', this.handleMediaVolumechange);
       media.removeEventListener(
         'durationchange',
@@ -666,6 +671,12 @@ export class PlayerContextProvider extends Component {
     this.setState(state => (state.paused === true ? null : { paused: true }));
   }
 
+  handleMediaCanplay() {
+    this.setState(
+      state => (state.trackLoading === false ? null : { trackLoading: false })
+    );
+  }
+
   handleMediaCanplaythrough() {
     this.setState(
       state => (state.stalled === false ? null : { stalled: false })
@@ -685,13 +696,10 @@ export class PlayerContextProvider extends Component {
     });
   }
 
-  handleMediaLoadedmetadata() {
+  handleMediaLoadeddata() {
     if (this.media.currentTime !== this.state.currentTime) {
       this.media.currentTime = this.state.currentTime;
     }
-    this.setState(
-      state => (state.trackLoading === false ? null : { trackLoading: false })
-    );
   }
 
   handleMediaVolumechange() {
