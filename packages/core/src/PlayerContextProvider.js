@@ -354,11 +354,11 @@ export class PlayerContextProvider extends Component {
         prevState,
         currentTime,
         index: 0,
-        shouldPlay: false
+        shouldPlay: false,
+        shouldForceLoad: true
       }),
       mediaCannotPlay: false,
-      awaitingPlayAfterTrackLoad: false,
-      trackLoading: true
+      awaitingPlayAfterTrackLoad: false
     };
   }
 
