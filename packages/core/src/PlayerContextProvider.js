@@ -410,14 +410,6 @@ export class PlayerContextProvider extends Component {
       this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
-    if (prevState.currentTime !== this.state.currentTime) {
-      const { onTimeUpdate, playlist } = this.props;
-      const { activeTrackIndex, currentTime } = this.state;
-      if (onTimeUpdate) {
-        onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
-      }
-    }
-
     if (prevProps !== this.props && !this.media.paused) {
       // update running media session based on new props
       this.stealMediaSession();
@@ -706,6 +698,8 @@ export class PlayerContextProvider extends Component {
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
+    const { onTimeUpdate, playlist } = this.props;
+    const { activeTrackIndex } = this.state;
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
       this.media.currentTime = this.state.currentTime;
@@ -715,6 +709,9 @@ export class PlayerContextProvider extends Component {
       currentTime,
       playedRanges: getTimeRangesArray(played)
     });
+    if (onTimeUpdate) {
+      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+    }
   }
 
   handleMediaLoadeddata() {
