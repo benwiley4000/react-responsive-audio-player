@@ -194,8 +194,9 @@ export class PlayerContextProvider extends Component {
     this.handleMediaEmptied = this.handleMediaEmptied.bind(this);
     this.handleMediaStalled = this.handleMediaStalled.bind(this);
     this.handleMediaCanplaythrough = this.handleMediaCanplaythrough.bind(this);
+    this.handleMediaCanplay = this.handleMediaCanplay.bind(this);
     this.handleMediaTimeupdate = this.handleMediaTimeupdate.bind(this);
-    this.handleMediaLoadedData = this.handleMediaLoadedData.bind(this);
+    this.handleMediaLoadeddata = this.handleMediaLoadeddata.bind(this);
     this.handleMediaVolumechange = this.handleMediaVolumechange.bind(this);
     this.handleMediaDurationchange = this.handleMediaDurationchange.bind(this);
     this.handleMediaProgress = this.handleMediaProgress.bind(this);
@@ -256,9 +257,10 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('emptied', this.handleMediaEmptied);
+    media.addEventListener('canplay', this.handleMediaCanplay);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.addEventListener('loadeddata', this.handleMediaLoadedData);
+    media.addEventListener('loadeddata', this.handleMediaLoadeddata);
     media.addEventListener('volumechange', this.handleMediaVolumechange);
     media.addEventListener('durationchange', this.handleMediaDurationchange);
     media.addEventListener('progress', this.handleMediaProgress);
@@ -408,6 +410,14 @@ export class PlayerContextProvider extends Component {
       this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
     }
 
+    if (prevState.currentTime !== this.state.currentTime) {
+      const { onTimeUpdate, playlist } = this.props;
+      const { activeTrackIndex, currentTime } = this.state;
+      if (onTimeUpdate) {
+        onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+      }
+    }
+
     if (prevProps !== this.props && !this.media.paused) {
       // update running media session based on new props
       this.stealMediaSession();
@@ -449,8 +459,9 @@ export class PlayerContextProvider extends Component {
         'canplaythrough',
         this.handleMediaCanplaythrough
       );
+      media.removeEventListener('canplay', this.handleMediaCanplay);
       media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-      media.removeEventListener('loadeddata', this.handleMediaLoadedData);
+      media.removeEventListener('loadeddata', this.handleMediaLoadeddata);
       media.removeEventListener('volumechange', this.handleMediaVolumechange);
       media.removeEventListener(
         'durationchange',
@@ -681,26 +692,24 @@ export class PlayerContextProvider extends Component {
     this.setState(state => (state.paused === true ? null : { paused: true }));
   }
 
+  handleMediaCanplay() {
+    this.setState(
+      state => (state.trackLoading === false ? null : { trackLoading: false })
+    );
+  }
+
   handleMediaCanplaythrough() {
     this.setState(
-      state =>
-        state.stalled === false && state.trackLoading === false
-          ? null
-          : { stalled: false, trackLoading: false }
+      state => (state.stalled === false ? null : { stalled: false })
     );
   }
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
-    const { onTimeUpdate, playlist } = this.props;
-    const { activeTrackIndex } = this.state;
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
       this.media.currentTime = this.state.currentTime;
       return;
-    }
-    if (onTimeUpdate) {
-      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
     }
     this.setState({
       currentTime,
@@ -708,7 +717,7 @@ export class PlayerContextProvider extends Component {
     });
   }
 
-  handleMediaLoadedData() {
+  handleMediaLoadeddata() {
     if (this.media.currentTime !== this.state.currentTime) {
       this.media.currentTime = this.state.currentTime;
     }
