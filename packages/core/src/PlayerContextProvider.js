@@ -88,13 +88,12 @@ function getGoToTrackState({
   const isNewTrack = prevState.activeTrackIndex !== index;
   const currentTime = track.startingTime || 0;
   let duration = 0;
-  if (Number.isFinite(track.duration)) {
-    duration = track.duration;
-  } else if (
-    typeof track.duration === 'string' ||
-    track.duration instanceof String
-  ) {
-    duration = parseTimeString(track.duration);
+  if (track.duration) {
+    if (typeof track.duration === 'string') {
+      duration = parseTimeString(track.duration);
+    } else {
+      duration = track.duration;
+    }
   }
   return {
     duration,
