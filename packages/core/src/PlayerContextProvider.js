@@ -17,6 +17,7 @@ import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
 import getDisplayText from './utils/getDisplayText';
+import parseTimeString from './utils/parseTimeString';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -80,12 +81,23 @@ const defaultState = {
 function getGoToTrackState({
   prevState,
   index,
-  currentTime = 0,
+  track,
   shouldPlay = true,
   shouldForceLoad = false
 }) {
   const isNewTrack = prevState.activeTrackIndex !== index;
+  const currentTime = track.startingTime || 0;
+  let duration = 0;
+  if (Number.isFinite(track.duration)) {
+    duration = track.duration;
+  } else if (
+    typeof track.duration === 'string' ||
+    track.duration instanceof String
+  ) {
+    duration = parseTimeString(track.duration);
+  }
   return {
+    duration,
     activeTrackIndex: index,
     trackLoading: Boolean(isNewTrack || shouldForceLoad),
     mediaCannotPlay:
@@ -347,12 +359,11 @@ export class PlayerContextProvider extends Component {
     }
 
     // if not, then load the first track in the new playlist, and pause.
-    const currentTime = newPlaylist[0].startingTime || 0;
     return {
       ...baseNewState,
       ...getGoToTrackState({
         prevState,
-        currentTime,
+        track: newPlaylist[0],
         index: 0,
         shouldPlay: false,
         shouldForceLoad: true
@@ -660,10 +671,9 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        const currentTime = playlist[0].startingTime || 0;
         this.goToTrack({
           index: 0,
-          currentTime,
+          track: playlist[0],
           shouldPlay: false,
           shouldForceLoad: true
         });
@@ -796,8 +806,7 @@ export class PlayerContextProvider extends Component {
     if (this.state.shuffle) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
-    const currentTime = playlist[index].startingTime || 0;
-    this.goToTrack({ index, currentTime });
+    this.goToTrack({ index, track: playlist[index] });
   }
 
   backSkip() {
@@ -827,8 +836,7 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    const currentTime = playlist[index].startingTime || 0;
-    this.goToTrack({ index, currentTime, shouldForceLoad: true });
+    this.goToTrack({ index, track: playlist[index], shouldForceLoad: true });
   }
 
   forwardSkip() {
@@ -852,8 +860,7 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    const currentTime = playlist[index].startingTime || 0;
-    this.goToTrack({ index, currentTime, shouldForceLoad: true });
+    this.goToTrack({ index, track: playlist[index], shouldForceLoad: true });
   }
 
   seekPreview(targetTime) {
