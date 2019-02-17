@@ -80,16 +80,17 @@ const defaultState = {
 function getGoToTrackState({
   prevState,
   index,
+  currentTime = 0,
   shouldPlay = true,
   shouldForceLoad = false
 }) {
   const isNewTrack = prevState.activeTrackIndex !== index;
   return {
     activeTrackIndex: index,
-    trackLoading: isNewTrack,
+    trackLoading: Boolean(isNewTrack || shouldForceLoad),
     mediaCannotPlay:
       prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
-    currentTime: 0,
+    currentTime: convertToNumberWithinIntervalBounds(currentTime, 0),
     loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
     shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
     awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
@@ -103,18 +104,22 @@ function getGoToTrackState({
 export class PlayerContextProvider extends Component {
   constructor(props) {
     super(props);
-
+    let currentTime = 0;
+    const activeTrackIndex = convertToNumberWithinIntervalBounds(
+      props.startingTrackIndex,
+      0
+    );
+    if (isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
+      currentTime = props.playlist[activeTrackIndex].startingTime || 0;
+    }
     this.state = {
       ...defaultState,
       // index matching requested track (whether track has loaded or not)
-      activeTrackIndex: convertToNumberWithinIntervalBounds(
-        props.startingTrackIndex,
-        0
-      ),
+      activeTrackIndex,
       // whether we're waiting on loading metadata for the active track
       trackLoading: isPlaylistValid(props.playlist),
       // the current timestamp on the active track in seconds
-      currentTime: convertToNumberWithinIntervalBounds(props.startingTime, 0),
+      currentTime: convertToNumberWithinIntervalBounds(currentTime, 0),
       // the latest volume of the media, between 0 and 1.
       volume: convertToNumberWithinIntervalBounds(props.defaultVolume, 0, 1),
       // true if the media has been muted
@@ -342,10 +347,12 @@ export class PlayerContextProvider extends Component {
     }
 
     // if not, then load the first track in the new playlist, and pause.
+    const currentTime = newPlaylist[0].startingTime || 0;
     return {
       ...baseNewState,
       ...getGoToTrackState({
         prevState,
+        currentTime,
         index: 0,
         shouldPlay: false,
         shouldForceLoad: true
@@ -653,7 +660,13 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack({ index: 0, shouldPlay: false, shouldForceLoad: true });
+        const currentTime = playlist[0].startingTime || 0;
+        this.goToTrack({
+          index: 0,
+          currentTime,
+          shouldPlay: false,
+          shouldForceLoad: true
+        });
       }
       return;
     }
@@ -685,6 +698,8 @@ export class PlayerContextProvider extends Component {
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
+    const { onTimeUpdate, playlist } = this.props;
+    const { activeTrackIndex } = this.state;
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
       this.media.currentTime = this.state.currentTime;
@@ -694,6 +709,9 @@ export class PlayerContextProvider extends Component {
       currentTime,
       playedRanges: getTimeRangesArray(played)
     });
+    if (onTimeUpdate) {
+      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+    }
   }
 
   handleMediaLoadeddata() {
@@ -778,7 +796,8 @@ export class PlayerContextProvider extends Component {
     if (this.state.shuffle) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
-    this.goToTrack({ index });
+    const currentTime = playlist[index].startingTime || 0;
+    this.goToTrack({ index, currentTime });
   }
 
   backSkip() {
@@ -808,7 +827,8 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    this.goToTrack({ index, shouldForceLoad: true });
+    const currentTime = playlist[index].startingTime || 0;
+    this.goToTrack({ index, currentTime, shouldForceLoad: true });
   }
 
   forwardSkip() {
@@ -832,7 +852,8 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    this.goToTrack({ index, shouldForceLoad: true });
+    const currentTime = playlist[index].startingTime || 0;
+    this.goToTrack({ index, currentTime, shouldForceLoad: true });
   }
 
   seekPreview(targetTime) {
@@ -1063,7 +1084,6 @@ PlayerContextProvider.propTypes = {
   defaultRepeatStrategy: PlayerPropTypes.repeatStrategy.isRequired,
   defaultShuffle: PropTypes.bool,
   defaultPlaybackRate: PropTypes.number.isRequired,
-  startingTime: PropTypes.number.isRequired,
   startingTrackIndex: PropTypes.number.isRequired,
   loadFirstTrackOnPlaylistComplete: PropTypes.bool,
   seekMode: PlayerPropTypes.seekMode.isRequired,
@@ -1080,6 +1100,8 @@ PlayerContextProvider.propTypes = {
   }),
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  // A function called when the media element's currentTime attribute has changed
+  onTimeUpdate: PropTypes.func,
   onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
@@ -1096,7 +1118,6 @@ PlayerContextProvider.defaultProps = {
   defaultRepeatStrategy: 'playlist',
   defaultShuffle: false,
   defaultPlaybackRate: 1,
-  startingTime: 0,
   startingTrackIndex: 0,
   loadFirstTrackOnPlaylistComplete: true,
   seekMode: 'immediate',
