@@ -1100,6 +1100,7 @@ PlayerContextProvider.propTypes = {
   }),
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  // A function called when the media element's currentTime attribute has changed
   onTimeUpdate: PropTypes.func,
   onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
