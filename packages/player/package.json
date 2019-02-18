@@ -1,6 +1,6 @@
 {
   "name": "@cassette/player",
-  "version": "2.0.0-alpha.27",
+  "version": "2.0.0-alpha.28",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/es5/cassette-player.js",
   "scripts": {
@@ -49,8 +49,8 @@
     "webpack": "^4.17.1"
   },
   "dependencies": {
-    "@cassette/components": "^2.0.0-alpha.27",
-    "@cassette/core": "^2.0.0-alpha.27",
+    "@cassette/components": "^2.0.0-alpha.28",
+    "@cassette/core": "^2.0.0-alpha.28",
     "prop-types": "^15.5.10"
   },
   "publishConfig": {
