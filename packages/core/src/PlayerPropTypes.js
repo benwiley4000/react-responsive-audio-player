@@ -79,6 +79,7 @@ export const track = PropTypes.shape({
   artwork: PropTypes.arrayOf(mediaSessionArtwork.isRequired),
   duration: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
   startingTime: PropTypes.number,
+  isUnboundedStream: PropTypes.bool,
   meta: PropTypes.object
 });
 
