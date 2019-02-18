@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["@cassette/core", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["cassetteCore"] = factory(require("@cassette/core"), require("react"));
+		exports["cassetteHooks"] = factory(require("@cassette/core"), require("react"));
 	else
-		root["cassetteCore"] = factory(root["cassetteCore"], root["React"]);
+		root["cassetteHooks"] = factory(root["cassetteCore"], root["React"]);
 })((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -126,7 +126,7 @@ var external_root_React_commonjs_react_commonjs2_react_amd_react_default = /*#__
 // EXTERNAL MODULE: external {"root":"cassetteCore","commonjs":"@cassette/core","commonjs2":"@cassette/core","amd":"@cassette/core"}
 var core_ = __webpack_require__(0);
 
-// CONCATENATED MODULE: ./src/useFullscreenContext.js
+// CONCATENATED MODULE: ./packages/hooks/src/useFullscreenContext.js
 
 
 
@@ -135,7 +135,7 @@ function useFullscreenContext() {
 }
 
 /* harmony default export */ var src_useFullscreenContext = (useFullscreenContext);
-// CONCATENATED MODULE: ./src/usePlayerContext.js
+// CONCATENATED MODULE: ./packages/hooks/src/usePlayerContext.js
 
 
 
@@ -208,7 +208,7 @@ function usePlayerContext(filterList) {
 }
 
 /* harmony default export */ var src_usePlayerContext = (usePlayerContext);
-// CONCATENATED MODULE: ./src/index.js
+// CONCATENATED MODULE: ./packages/hooks/src/index.js
 /* concated harmony reexport useFullscreenContext */__webpack_require__.d(__webpack_exports__, "useFullscreenContext", function() { return src_useFullscreenContext; });
 /* concated harmony reexport usePlayerContext */__webpack_require__.d(__webpack_exports__, "usePlayerContext", function() { return src_usePlayerContext; });
 
@@ -217,4 +217,4 @@ function usePlayerContext(filterList) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=cassette-core.js.map
+//# sourceMappingURL=cassette-hooks.js.map

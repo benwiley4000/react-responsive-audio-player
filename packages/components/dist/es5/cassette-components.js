@@ -438,9 +438,9 @@ function (_PureComponent) {
         progressDirection = _this$props.progressDirection,
         handle = _this$props.handle,
         progressBarRef = _this$props.progressBarRef,
-        rest = ProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
+        attributes = ProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle", "progressBarRef"]);
 
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", ProgressBarDisplay_extends({}, rest, {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", ProgressBarDisplay_extends({}, attributes, {
       ref: progressBarRef
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       style: {
@@ -451,7 +451,7 @@ function (_PureComponent) {
       }
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: progressClassName,
-      style: ProgressBarDisplay_objectSpread({}, utils_getProgressStyle(progress, progressDirection), progressStyle || {})
+      style: ProgressBarDisplay_objectSpread({}, progressStyle || {}, utils_getProgressStyle(progress, progressDirection))
     }), handle && external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       style: utils_getHandleStyle(progress, progressDirection)
     }, handle)));
@@ -537,8 +537,12 @@ function (_PureComponent) {
     window.removeEventListener('mouseup', this.handleAdjustComplete);
     document.removeEventListener('touchend', this.handleAdjustComplete); // remove noselect class in case a drag is in progress
 
-    this.toggleNoselect(false);
-    this.noselectStyleElement.parentNode.removeChild(this.noselectStyleElement);
+    this.toggleNoselect(false); // noselectStyleElement might not exist if the component unmounts
+    // before the timeout callback is called.
+
+    if (this.noselectStyleElement) {
+      this.noselectStyleElement.parentNode.removeChild(this.noselectStyleElement);
+    }
   };
 
   _proto.setProgressContainerRef = function setProgressContainerRef(ref) {
@@ -674,6 +678,121 @@ ProgressBar_ProgressBar.defaultProps = {
   readonly: false
 };
 /* harmony default export */ var src_ProgressBar = (ProgressBar_ProgressBar);
+// CONCATENATED MODULE: ./src/MediaProgressBar.js
+function MediaProgressBar_extends() { MediaProgressBar_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return MediaProgressBar_extends.apply(this, arguments); }
+
+function MediaProgressBar_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function MediaProgressBar_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+function MediaProgressBar_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+
+
+
+/**
+ * An enhanced [`ProgressBar`](#progressbar) which uses the surrounding [`playerContext`](#playercontext) to set its own props for `progress`, `readonly`, `onAdjustProgress` and `onSeekComplete`, and accepts all the other props available for `ProgressBar`
+ */
+
+var MediaProgressBar_MediaProgressBar =
+/*#__PURE__*/
+function (_PureComponent) {
+  MediaProgressBar_inheritsLoose(MediaProgressBar, _PureComponent);
+
+  function MediaProgressBar(props) {
+    var _this;
+
+    _this = _PureComponent.call(this, props) || this; // bind methods fired on React events
+
+    _this.handleSeekPreview = _this.handleSeekPreview.bind(MediaProgressBar_assertThisInitialized(MediaProgressBar_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  var _proto = MediaProgressBar.prototype;
+
+  _proto.handleSeekPreview = function handleSeekPreview(progress) {
+    this.props.onSeekPreview(progress * this.props.duration);
+  };
+
+  _proto.render = function render() {
+    var _this$props = this.props,
+        playlist = _this$props.playlist,
+        currentTime = _this$props.currentTime,
+        seekPreviewTime = _this$props.seekPreviewTime,
+        seekInProgress = _this$props.seekInProgress,
+        duration = _this$props.duration,
+        onSeekComplete = _this$props.onSeekComplete,
+        attributes = MediaProgressBar_objectWithoutPropertiesLoose(_this$props, ["playlist", "currentTime", "seekPreviewTime", "seekInProgress", "duration", "onSeekComplete"]);
+
+    delete attributes.onSeekPreview;
+    var time = seekInProgress ? seekPreviewTime : currentTime;
+    var displayedProgress = duration ? time / duration : 0;
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBar, MediaProgressBar_extends({}, attributes, {
+      progress: displayedProgress,
+      readonly: !Object(core_["isPlaylistValid"])(playlist),
+      onAdjustProgress: this.handleSeekPreview,
+      onAdjustComplete: onSeekComplete
+    }));
+  };
+
+  return MediaProgressBar;
+}(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
+MediaProgressBar_MediaProgressBar.propTypes = {
+  playlist: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(core_["PlayerPropTypes"].track.isRequired).isRequired,
+  currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  seekPreviewTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+};
+/* harmony default export */ var src_MediaProgressBar = (Object(core_["playerContextFilter"])(MediaProgressBar_MediaProgressBar, ['playlist', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
+// CONCATENATED MODULE: ./src/MediaProgressBarDisplay.js
+function MediaProgressBarDisplay_extends() { MediaProgressBarDisplay_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return MediaProgressBarDisplay_extends.apply(this, arguments); }
+
+function MediaProgressBarDisplay_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function MediaProgressBarDisplay_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+
+
+
+
+
+/**
+ * An enhanced [`ProgressBarDisplay`](#progressbardisplay) which uses the surrounding [`playerContext`](#playercontext) to set its own `progress` prop, and accepts all the other props available for `ProgressBarDisplay`
+ */
+
+var MediaProgressBarDisplay_MediaProgressBarDisplay =
+/*#__PURE__*/
+function (_PureComponent) {
+  MediaProgressBarDisplay_inheritsLoose(MediaProgressBarDisplay, _PureComponent);
+
+  function MediaProgressBarDisplay() {
+    return _PureComponent.apply(this, arguments) || this;
+  }
+
+  var _proto = MediaProgressBarDisplay.prototype;
+
+  _proto.render = function render() {
+    var _this$props = this.props,
+        currentTime = _this$props.currentTime,
+        duration = _this$props.duration,
+        attributes = MediaProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["currentTime", "duration"]);
+
+    var progress = duration ? currentTime / duration : 0;
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, MediaProgressBarDisplay_extends({}, attributes, {
+      progress: progress
+    }));
+  };
+
+  return MediaProgressBarDisplay;
+}(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
+MediaProgressBarDisplay_MediaProgressBarDisplay.propTypes = {
+  currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
+};
+/* harmony default export */ var src_MediaProgressBarDisplay = (Object(core_["playerContextFilter"])(MediaProgressBarDisplay_MediaProgressBarDisplay, ['currentTime', 'duration']));
 // CONCATENATED MODULE: ./src/VideoDisplay.js
 function VideoDisplay_extends() { VideoDisplay_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return VideoDisplay_extends.apply(this, arguments); }
 
@@ -897,7 +1016,13 @@ VideoDisplay_VideoDisplay.defaultProps = {
 /* concated harmony reexport MaybeMarquee */__webpack_require__.d(__webpack_exports__, "MaybeMarquee", function() { return src_MaybeMarquee; });
 /* concated harmony reexport ProgressBar */__webpack_require__.d(__webpack_exports__, "ProgressBar", function() { return src_ProgressBar; });
 /* concated harmony reexport ProgressBarDisplay */__webpack_require__.d(__webpack_exports__, "ProgressBarDisplay", function() { return src_ProgressBarDisplay; });
+/* concated harmony reexport MediaProgressBar */__webpack_require__.d(__webpack_exports__, "MediaProgressBar", function() { return src_MediaProgressBar; });
+/* concated harmony reexport MediaProgressBarDisplay */__webpack_require__.d(__webpack_exports__, "MediaProgressBarDisplay", function() { return src_MediaProgressBarDisplay; });
 /* concated harmony reexport VideoDisplay */__webpack_require__.d(__webpack_exports__, "VideoDisplay", function() { return src_VideoDisplay; });
+
+
+
+
 
 
 

@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["@cassette/core", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["cassetteCore"] = factory(require("@cassette/core"), require("react"));
+		exports["cassetteHooks"] = factory(require("@cassette/core"), require("react"));
 	else
-		root["cassetteCore"] = factory(root["cassetteCore"], root["React"]);
+		root["cassetteHooks"] = factory(root["cassetteCore"], root["React"]);
 })((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -126,7 +126,7 @@ var external_root_React_commonjs_react_commonjs2_react_amd_react_default = /*#__
 // EXTERNAL MODULE: external {"root":"cassetteCore","commonjs":"@cassette/core","commonjs2":"@cassette/core","amd":"@cassette/core"}
 var core_ = __webpack_require__(0);
 
-// CONCATENATED MODULE: ./src/useFullscreenContext.js
+// CONCATENATED MODULE: ./packages/hooks/src/useFullscreenContext.js
 
 
 
@@ -135,29 +135,24 @@ function useFullscreenContext() {
 }
 
 /* harmony default export */ var src_useFullscreenContext = (useFullscreenContext);
-// CONCATENATED MODULE: ./src/usePlayerContext.js
+// CONCATENATED MODULE: ./packages/hooks/src/usePlayerContext.js
 
 
 
-const packageVersion = __webpack_require__(2).version; // TODO: hopefully in the future we'll have a more stable API
+var packageVersion = __webpack_require__(2).version; // TODO: hopefully in the future we'll have a more stable API
 // for observedBits/similar that doesn't require trial and error.
 
 
-let warningLogged = false;
+var warningLogged = false;
 
 function logObservedBitsWarning() {
   if (!warningLogged) {
-    Object(core_["logWarning"])(`
-      Unable to optimize playerContext subscription with @cassette/hooks
-      v${packageVersion} and react v${external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.version}.
-      Please email therealbenwiley@gmail.com to get this fixed!
-      Meanwhile you can try an earlier version of React (v16.8.0 or later).
-    `);
+    Object(core_["logWarning"])("\n      Unable to optimize playerContext subscription with @cassette/hooks\n      v" + packageVersion + " and react v" + external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.version + ".\n      Please email therealbenwiley@gmail.com to get this fixed!\n      Meanwhile you can try an earlier version of React (v16.8.0 or later).\n    ");
     warningLogged = true;
   }
 }
 
-let Dispatcher;
+var Dispatcher;
 
 try {
   Dispatcher = external_root_React_commonjs_react_commonjs2_react_amd_react_["__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED"].ReactCurrentDispatcher;
@@ -167,25 +162,17 @@ try {
 
 function usePlayerContext(filterList) {
   if (!filterList) {
-    Object(core_["logWarning"])(`
-      Please pass list of context items to usePlayerContext in order
-      to avoid unnecessarily frequent re-renders, e.g.
-
-      const { paused, onTogglePause } = usePlayerContext([
-        'paused',
-        'onTogglePause'
-      ]);
-    `);
+    Object(core_["logWarning"])("\n      Please pass list of context items to usePlayerContext in order\n      to avoid unnecessarily frequent re-renders, e.g.\n\n      const { paused, onTogglePause } = usePlayerContext([\n        'paused',\n        'onTogglePause'\n      ]);\n    ");
     return Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["useContext"])(core_["donotuse_PlayerContext"]);
   }
 
-  const _ref = Dispatcher && Dispatcher.current || {},
-        readContext = _ref.readContext;
+  var _ref = Dispatcher && Dispatcher.current || {},
+      readContext = _ref.readContext;
 
-  let playerContext;
+  var playerContext;
 
   if (readContext) {
-    const flags = core_["donotuse_PlayerContext"].__cassetteGetObservedBits(filterList);
+    var flags = core_["donotuse_PlayerContext"].__cassetteGetObservedBits(filterList);
 
     playerContext = readContext(core_["donotuse_PlayerContext"], flags);
   } else {
@@ -196,9 +183,22 @@ function usePlayerContext(filterList) {
     playerContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["useContext"])(core_["donotuse_PlayerContext"]);
   }
 
-  const usedContext = {};
+  var usedContext = {};
 
-  for (const name of filterList) {
+  for (var _iterator = filterList, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref2;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref2 = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref2 = _i.value;
+    }
+
+    var name = _ref2;
+
     if (playerContext.hasOwnProperty(name)) {
       usedContext[name] = playerContext[name];
     }
@@ -208,7 +208,7 @@ function usePlayerContext(filterList) {
 }
 
 /* harmony default export */ var src_usePlayerContext = (usePlayerContext);
-// CONCATENATED MODULE: ./src/index.js
+// CONCATENATED MODULE: ./packages/hooks/src/index.js
 /* concated harmony reexport useFullscreenContext */__webpack_require__.d(__webpack_exports__, "useFullscreenContext", function() { return src_useFullscreenContext; });
 /* concated harmony reexport usePlayerContext */__webpack_require__.d(__webpack_exports__, "usePlayerContext", function() { return src_usePlayerContext; });
 
@@ -217,4 +217,4 @@ function usePlayerContext(filterList) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=cassette-core.js.map
+//# sourceMappingURL=cassette-hooks.js.map
