@@ -740,11 +740,31 @@ export class PlayerContextProvider extends Component {
   handleMediaDurationchange() {
     const { duration } = this.media;
     if (duration === Infinity) {
-      this.setState({
-        duration,
-        currentTime: 0
-      });
-      this.media.currentTime = 0;
+      // This *could* be because we're consuming an unbounded stream.
+      // It could also be because of a weird iOS bug that we want to
+      // try to prevent. See https://github.com/benwiley4000/cassette/issues/355
+
+      // If we still end up with Infinity duration multiple times for
+      // the same track, we'll assume it's correct.
+      const activeTrack = this.props.playlist[this.state.activeTrackIndex];
+      if (activeTrack === this.activeTrackAtLastDurationChange) {
+        this.setState({
+          duration,
+          currentTime: 0
+        });
+        this.media.currentTime = 0;
+      } else {
+        this.activeTrackAtLastDurationChange = activeTrack;
+        const { paused } = this.state;
+        this.media.load();
+        if (!paused) {
+          // media.currentSrc is updated asynchronously so we should
+          // play async to avoid weird intermediate state issues
+          setTimeout(() => {
+            this.togglePause(false);
+          });
+        }
+      }
     } else {
       this.setState({ duration });
     }
