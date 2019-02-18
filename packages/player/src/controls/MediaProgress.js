@@ -27,7 +27,8 @@ export class MediaProgress extends PureComponent {
       seekPreviewTime,
       seekInProgress,
       duration,
-      getDisplayText
+      getDisplayText,
+      durationOverride = duration
     } = this.props;
     const time = seekInProgress ? seekPreviewTime : currentTime;
     return (
@@ -40,7 +41,9 @@ export class MediaProgress extends PureComponent {
         <MediaStatusBar
           style={mediaStatusBarStyle}
           displayText={getDisplayText(playlist[activeTrackIndex]) || ''}
-          displayTime={`${convertToTime(time)} / ${convertToTime(duration)}`}
+          displayTime={`${convertToTime(time)} / ${convertToTime(
+            durationOverride
+          )}`}
         />
       </div>
     );
@@ -54,7 +57,8 @@ MediaProgress.propTypes = {
   seekPreviewTime: PropTypes.number.isRequired,
   seekInProgress: PropTypes.bool.isRequired,
   duration: PropTypes.number.isRequired,
-  getDisplayText: PropTypes.func.isRequired
+  getDisplayText: PropTypes.func.isRequired,
+  durationOverride: PropTypes.number
 };
 
 MediaProgress.defaultProps = {

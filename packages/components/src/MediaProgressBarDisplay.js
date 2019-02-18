@@ -10,15 +10,21 @@ import ProgressBarDisplay from './ProgressBarDisplay';
  */
 export class MediaProgressBarDisplay extends PureComponent {
   render() {
-    const { currentTime, duration, ...attributes } = this.props;
-    const progress = duration ? currentTime / duration : 0;
+    const {
+      currentTime,
+      duration,
+      durationOverride = duration,
+      ...attributes
+    } = this.props;
+    const progress = durationOverride ? currentTime / durationOverride : 0;
     return <ProgressBarDisplay {...attributes} progress={progress} />;
   }
 }
 
 MediaProgressBarDisplay.propTypes = {
   currentTime: PropTypes.number.isRequired,
-  duration: PropTypes.number.isRequired
+  duration: PropTypes.number.isRequired,
+  durationOverride: PropTypes.number
 };
 
 export default playerContextFilter(MediaProgressBarDisplay, [
