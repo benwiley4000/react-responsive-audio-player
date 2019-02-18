@@ -74,7 +74,9 @@ const defaultState = {
   /* true if an error occurs while fetching the active track media data
    * or if its type is not a supported media format
    */
-  mediaCannotPlay: false
+  mediaCannotPlay: false,
+  // maximum currentTime since the current track has been playing
+  maxKnownTime: 0
 };
 
 // assumes playlist is valid
@@ -714,10 +716,11 @@ export class PlayerContextProvider extends Component {
       this.media.currentTime = this.state.currentTime;
       return;
     }
-    this.setState({
+    this.setState(state => ({
       currentTime,
-      playedRanges: getTimeRangesArray(played)
-    });
+      playedRanges: getTimeRangesArray(played),
+      maxKnownTime: Math.max(state.maxKnownTime, currentTime)
+    }));
     if (onTimeUpdate) {
       onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
     }
@@ -1020,7 +1023,8 @@ export class PlayerContextProvider extends Component {
       seekInProgress: state.seekInProgress,
       awaitingPlayResume:
         state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterTrackLoad,
-      duration: state.duration,
+      duration:
+        state.duration === Infinity ? state.maxKnownTime : state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,
       seekableRanges: state.seekableRanges,
