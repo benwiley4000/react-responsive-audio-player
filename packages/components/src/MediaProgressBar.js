@@ -32,11 +32,12 @@ export class MediaProgressBar extends PureComponent {
       seekInProgress,
       duration,
       onSeekComplete,
+      durationOverride = duration,
       ...attributes
     } = this.props;
     delete attributes.onSeekPreview;
     const time = seekInProgress ? seekPreviewTime : currentTime;
-    const displayedProgress = duration ? time / duration : 0;
+    const displayedProgress = durationOverride ? time / durationOverride : 0;
     return (
       <ProgressBar
         {...attributes}
@@ -56,7 +57,8 @@ MediaProgressBar.propTypes = {
   seekInProgress: PropTypes.bool.isRequired,
   duration: PropTypes.number.isRequired,
   onSeekPreview: PropTypes.func.isRequired,
-  onSeekComplete: PropTypes.func.isRequired
+  onSeekComplete: PropTypes.func.isRequired,
+  durationOverride: PropTypes.number
 };
 
 export default playerContextFilter(MediaProgressBar, [

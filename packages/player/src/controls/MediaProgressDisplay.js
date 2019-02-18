@@ -21,7 +21,8 @@ export class MediaProgressDisplay extends PureComponent {
       activeTrackIndex,
       currentTime,
       duration,
-      getDisplayText
+      getDisplayText,
+      durationOverride = duration
     } = this.props;
     return (
       <div className="cassette__media_progress_container">
@@ -33,7 +34,7 @@ export class MediaProgressDisplay extends PureComponent {
         <MediaStatusBar
           displayText={getDisplayText(playlist[activeTrackIndex]) || ''}
           displayTime={`${convertToTime(currentTime)} / ${convertToTime(
-            duration
+            durationOverride
           )}`}
         />
       </div>
@@ -46,7 +47,8 @@ MediaProgressDisplay.propTypes = {
   activeTrackIndex: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
-  getDisplayText: PropTypes.func.isRequired
+  getDisplayText: PropTypes.func.isRequired,
+  durationOverride: PropTypes.number
 };
 
 MediaProgressDisplay.defaultProps = {
