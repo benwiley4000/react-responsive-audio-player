@@ -31,13 +31,15 @@ export function getStateSnapshot(state) {
     cycle,
     shuffle,
     playbackRate,
+    duration,
     __playlist__
   } = state;
   return {
     [versionKey]: migrations.length,
     [veryLongKey]: {
       paused,
-      currentTime,
+      // currentTime can't be restored for unbounded live streams
+      currentTime: duration === Infinity ? 0 : currentTime,
       activeTrackIndex,
       volume,
       muted,
