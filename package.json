@@ -1,7 +1,7 @@
 {
   "name": "cassette",
   "private": true,
-  "version": "2.0.0-alpha.26",
+  "version": "2.0.0-alpha.27",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/audioplayer.js",
   "scripts": {
