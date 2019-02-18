@@ -88,6 +88,7 @@ function getGoToTrackState({
   shouldForceLoad = false
 }) {
   const isNewTrack = prevState.activeTrackIndex !== index;
+  const shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
   const currentTime = track.startingTime || 0;
   let duration = 0;
   if (track.duration) {
@@ -100,11 +101,10 @@ function getGoToTrackState({
   return {
     duration,
     activeTrackIndex: index,
-    trackLoading: Boolean(isNewTrack || shouldForceLoad),
-    mediaCannotPlay:
-      prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
+    trackLoading: shouldLoadAsNew,
+    mediaCannotPlay: prevState.mediaCannotPlay && !shouldLoadAsNew,
     currentTime: convertToNumberWithinIntervalBounds(currentTime, 0),
-    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
+    loop: shouldLoadAsNew ? false : prevState.loop,
     shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
     awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
     awaitingForceLoad: Boolean(shouldForceLoad)
