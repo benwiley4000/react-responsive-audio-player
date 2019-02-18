@@ -739,7 +739,15 @@ export class PlayerContextProvider extends Component {
 
   handleMediaDurationchange() {
     const { duration } = this.media;
-    this.setState({ duration });
+    if (duration === Infinity) {
+      this.setState({
+        duration,
+        currentTime: 0
+      });
+      this.media.currentTime = 0;
+    } else {
+      this.setState({ duration });
+    }
   }
 
   handleMediaProgress() {
