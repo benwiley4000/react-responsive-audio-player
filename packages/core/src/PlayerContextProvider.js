@@ -1136,9 +1136,7 @@ PlayerContextProvider.propTypes = {
   ).isRequired,
   mediaSessionSeekLengthInSeconds: PropTypes.number.isRequired,
   mediaElementRef: PropTypes.func,
-  initialStateSnapshot: PropTypes.shape({
-    __unstable__: PropTypes.object.isRequired
-  }),
+  initialStateSnapshot: PropTypes.object,
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
   // A function called when the media element's currentTime attribute has changed
