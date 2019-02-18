@@ -77,7 +77,7 @@ export const track = PropTypes.shape({
   artist: PropTypes.string,
   album: PropTypes.string,
   artwork: PropTypes.arrayOf(mediaSessionArtwork.isRequired),
-  duration: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+  duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   startingTime: PropTypes.number,
   isUnboundedStream: PropTypes.bool,
   meta: PropTypes.object
