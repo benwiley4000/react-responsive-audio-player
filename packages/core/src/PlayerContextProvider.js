@@ -125,6 +125,22 @@ export class PlayerContextProvider extends Component {
     if (isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
       currentTime = props.playlist[activeTrackIndex].startingTime || 0;
     }
+    const { initialStateSnapshot } = props;
+    let restoredStateFromSnapshot = {};
+    if (initialStateSnapshot) {
+      try {
+        restoredStateFromSnapshot = restoreStateFromSnapshot(
+          initialStateSnapshot,
+          props
+        );
+      } catch (err) {
+        logWarning(err);
+        logWarning('Loading Cassette state from snapshot failed.');
+        logWarning(
+          `Failed snapshot:\n${JSON.stringify(initialStateSnapshot, null, 2)}`
+        );
+      }
+    }
     this.state = {
       ...defaultState,
       // index matching requested track (whether track has loaded or not)
@@ -154,9 +170,7 @@ export class PlayerContextProvider extends Component {
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
-      ...(props.initialStateSnapshot
-        ? restoreStateFromSnapshot(props.initialStateSnapshot, props)
-        : {})
+      ...restoredStateFromSnapshot
     };
 
     // volume at last time we were unmuted and not actively setting volume
@@ -1136,9 +1150,7 @@ PlayerContextProvider.propTypes = {
   ).isRequired,
   mediaSessionSeekLengthInSeconds: PropTypes.number.isRequired,
   mediaElementRef: PropTypes.func,
-  initialStateSnapshot: PropTypes.shape({
-    __unstable__: PropTypes.object.isRequired
-  }),
+  initialStateSnapshot: PropTypes.object,
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
   // A function called when the media element's currentTime attribute has changed
