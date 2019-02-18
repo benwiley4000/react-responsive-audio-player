@@ -107,7 +107,8 @@ function getGoToTrackState({
     loop: shouldLoadAsNew ? false : prevState.loop,
     shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
     awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
-    awaitingForceLoad: Boolean(shouldForceLoad)
+    awaitingForceLoad: Boolean(shouldForceLoad),
+    maxKnownTime: shouldLoadAsNew ? 0 : prevState.maxKnownTime
   };
 }
 
