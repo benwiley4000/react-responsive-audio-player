@@ -7,6 +7,7 @@ import {
 } from '@cassette/core';
 
 import ProgressBarDisplay from './ProgressBarDisplay';
+import observeProgressBarRect from './utils/observeProgressBarRect';
 
 const noselectStyles = `
 cursor: default;
@@ -25,7 +26,9 @@ export class ProgressBar extends PureComponent {
     super(props);
 
     this.state = {
-      adjusting: false
+      adjusting: false,
+      // used while adjusting
+      tempProgress: null
     };
 
     this.progressContainer = null;
@@ -45,6 +48,10 @@ export class ProgressBar extends PureComponent {
     window.addEventListener('mouseup', this.handleAdjustComplete);
     document.addEventListener('touchend', this.handleAdjustComplete);
 
+    this.unobserve = observeProgressBarRect(this.progressContainer, rect => {
+      this.cachedContainerRect = rect;
+    });
+
     setTimeout(() => {
       const style = document.createElement('style');
       const className = `noselect_${Math.random()
@@ -57,12 +64,21 @@ export class ProgressBar extends PureComponent {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { adjusting, tempProgress } = this.state;
+    if (adjusting && tempProgress !== prevState.tempProgress) {
+      this.props.onAdjustProgress(tempProgress);
+    }
+  }
+
   componentWillUnmount() {
     // remove event listeners bound outside the scope of our component
     window.removeEventListener('mousemove', this.handleAdjustProgress);
     document.removeEventListener('touchmove', this.handleAdjustProgress);
     window.removeEventListener('mouseup', this.handleAdjustComplete);
     document.removeEventListener('touchend', this.handleAdjustComplete);
+
+    this.unobserve();
 
     // remove noselect class in case a drag is in progress
     this.toggleNoselect(false);
@@ -84,36 +100,28 @@ export class ProgressBar extends PureComponent {
   }
 
   getProgressFromPageCoordinates(pageX, pageY) {
-    const {
-      left,
-      top,
-      width,
-      height
-    } = this.progressContainer.getBoundingClientRect();
-    const { scrollLeft, scrollTop } = document.body;
+    const { pageLeft, pageTop, width, height } = this.cachedContainerRect;
     switch (this.props.progressDirection) {
       case 'down':
-        return (pageY - top - scrollTop) / height;
+        return (pageY - pageTop) / height;
       case 'left':
-        return 1 - (pageX - left - scrollLeft) / width;
+        return 1 - (pageX - pageLeft) / width;
       case 'up':
-        return 1 - (pageY - top - scrollTop) / height;
+        return 1 - (pageY - pageTop) / height;
       case 'right':
       default:
-        return (pageX - left - scrollLeft) / width;
+        return (pageX - pageLeft) / width;
     }
   }
 
   handleAdjustProgress(event) {
-    const { readonly, onAdjustProgress } = this.props;
-    const { adjusting } = this.state;
-    if (readonly) {
+    if (this.props.readonly) {
       return;
     }
     // make sure we don't select stuff in the background
     if (event.type === 'mousedown' || event.type === 'touchstart') {
       this.toggleNoselect(true);
-    } else if (!adjusting) {
+    } else if (!this.state.adjusting) {
       return;
     }
     /* we don't want mouse handlers to receive the event
@@ -130,9 +138,9 @@ export class ProgressBar extends PureComponent {
       1
     );
     this.setState({
-      adjusting: true
+      adjusting: true,
+      tempProgress: progressInBounds
     });
-    onAdjustProgress(progressInBounds);
   }
 
   handleAdjustComplete(event) {
@@ -142,7 +150,7 @@ export class ProgressBar extends PureComponent {
      * to the document body, get rid of it.
      */
     this.toggleNoselect(false);
-    const { adjusting } = this.state;
+    const { adjusting, tempProgress } = this.state;
     if (!adjusting) {
       return;
     }
@@ -151,9 +159,10 @@ export class ProgressBar extends PureComponent {
      */
     event.preventDefault();
     this.setState({
-      adjusting: false
+      adjusting: false,
+      tempProgress: null
     });
-    onAdjustComplete();
+    onAdjustComplete(tempProgress);
   }
 
   render() {
@@ -165,6 +174,7 @@ export class ProgressBar extends PureComponent {
       handle,
       ...attributes
     } = this.props;
+    const { adjusting, tempProgress } = this.state;
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
@@ -174,7 +184,7 @@ export class ProgressBar extends PureComponent {
         ref={this.setProgressContainerRef}
         progressClassName={progressClassName}
         progressStyle={progressStyle}
-        progress={progress}
+        progress={adjusting ? tempProgress : progress}
         progressDirection={progressDirection}
         handle={handle}
         onMouseDown={this.handleAdjustProgress}
