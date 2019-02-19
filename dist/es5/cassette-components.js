@@ -137,6 +137,50 @@ var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_ty
 var external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_ = __webpack_require__(3);
 var external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_default = /*#__PURE__*/__webpack_require__.n(external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_);
 
+// CONCATENATED MODULE: ./packages/components/src/utils/requestAnimationFrameWhenPageVisible.js
+var hiddenKey;
+var visibilitychangeKey;
+
+if (typeof document !== 'undefined') {
+  if (typeof document.hidden !== 'undefined') {
+    hiddenKey = 'hidden';
+    visibilitychangeKey = 'visibilitychange';
+  } else if (typeof document.msHidden !== 'undefined') {
+    hiddenKey = 'msHidden';
+    visibilitychangeKey = 'msvisibilitychange';
+  } else if (typeof document.webkitHidden !== 'undefined') {
+    hiddenKey = 'webkitHidden';
+    visibilitychangeKey = 'webkitvisibilitychange';
+  }
+}
+
+function requestAnimationFrameWhenPageVisible(rafCallback) {
+  // if we have access to the Page Visibility API we should
+  // check if the page is hidden and if so defer our requestAnimationFrame
+  if (hiddenKey && document[hiddenKey]) {
+    var cancelled = false;
+    var id;
+    document.addEventListener(visibilitychangeKey, function () {
+      if (!cancelled) {
+        id = requestAnimationFrame(rafCallback);
+      }
+    }, {
+      once: true
+    });
+    return function () {
+      cancelled = true;
+      cancelAnimationFrame(id);
+    };
+  } else {
+    var _id = requestAnimationFrame(rafCallback);
+
+    return function () {
+      return cancelAnimationFrame(_id);
+    };
+  }
+}
+
+/* harmony default export */ var utils_requestAnimationFrameWhenPageVisible = (requestAnimationFrameWhenPageVisible);
 // CONCATENATED MODULE: ./packages/components/src/MaybeMarquee.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -149,6 +193,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 
 
 
@@ -191,7 +236,7 @@ function (_PureComponent) {
   var _proto = MaybeMarquee.prototype;
 
   _proto.componentDidMount = function componentDidMount() {
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
     this.marqueeContainerElementWidth = getComputedStyle(this.marqueeContainerElement).width;
     var contentStyle = getComputedStyle(this.movingContentContainerElement);
     this.movingContentContainerElementWidth = contentStyle.width;
@@ -205,8 +250,12 @@ function (_PureComponent) {
   };
 
   _proto.componentWillUnmount = function componentWillUnmount() {
-    cancelAnimationFrame(this.animationFrameRequest);
+    this.cancelRaf();
     this.resizeObserver.disconnect();
+  };
+
+  _proto.requestMoveMarqueeAnimationFrame = function requestMoveMarqueeAnimationFrame() {
+    this.cancelRaf = utils_requestAnimationFrameWhenPageVisible(this.moveMarquee);
   };
 
   _proto.moveMarquee = function moveMarquee() {
@@ -239,7 +288,7 @@ function (_PureComponent) {
       }
     }
 
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
   };
 
   _proto.handleResize = function handleResize(entries) {
@@ -471,6 +520,179 @@ ProgressBarDisplay_ProgressBarDisplay.propTypes = {
     progressBarRef: ref
   }));
 }));
+// CONCATENATED MODULE: ./packages/components/src/utils/observeProgressBarRect.js
+/*
+Adapted from resize-observer-polyfill which has this license:
+The MIT License (MIT)
+
+Copyright (c) 2016 Denis Rul
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+// Minimum delay before invoking the update of observers.
+var REFRESH_DELAY = 20; // A list of substrings of CSS properties used to find transition events that
+// might affect dimensions of observed elements.
+
+var transitionKeys = ['top', 'right', 'bottom', 'left', 'width', 'height', 'size', 'weight']; // Check if MutationObserver is available.
+
+var mutationObserverSupported = typeof MutationObserver !== 'undefined';
+var observedElements = new Set();
+var cachedRects = new Map();
+var elementCallbacks = new Map();
+var scrollTop;
+var scrollLeft;
+var isSetup = false;
+var mutationObserver;
+
+function setup() {
+  if (isSetup) {
+    return;
+  }
+
+  document.addEventListener('transitionend', onTransitionend);
+  window.addEventListener('resize', refresh);
+
+  if (mutationObserverSupported) {
+    mutationObserver = new MutationObserver(refresh); // we don't observe contents since the progress bar's contents
+    // are expected to conform to the shape of the container
+
+    mutationObserver.observe(document, {
+      attributes: true
+    });
+  } else {
+    document.addEventListener('DOMSubtreeModified', refresh);
+  }
+
+  document.addEventListener('scroll', updateScroll);
+  updateScroll();
+  isSetup = true;
+}
+
+function teardown() {
+  if (!isSetup) {
+    return;
+  }
+
+  document.removeEventListener('transitionend', onTransitionend);
+  window.removeEventListener('resize', refresh);
+
+  if (mutationObserverSupported) {
+    mutationObserver.disconnect();
+  } else {
+    document.removeEventListener('DOMSubtreeModified', refresh);
+  }
+
+  document.removeEventListener('scroll', updateScroll);
+  isSetup = false;
+}
+
+var refreshTimeout;
+
+function refresh() {
+  clearTimeout(refreshTimeout);
+  var updatedElements = [];
+
+  for (var _iterator = observedElements, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var element = _ref;
+    var newRect = getRectForElement(element);
+
+    if (rectsAreDifferent(cachedRects.get(element), newRect)) {
+      cachedRects.set(element, newRect);
+      updatedElements.push(element);
+    }
+  }
+
+  for (var _i2 = 0; _i2 < updatedElements.length; _i2++) {
+    var _element = updatedElements[_i2];
+    elementCallbacks.get(_element)(cachedRects.get(_element));
+  }
+
+  if (updatedElements.length) {
+    // check again in the future to make sure nothing wasn't about to change
+    refreshTimeout = setTimeout(refresh, REFRESH_DELAY);
+  }
+}
+
+function updateScroll() {
+  scrollTop = document.body.scrollTop;
+  scrollLeft = document.body.scrollLeft;
+}
+
+function onTransitionend(_ref2) {
+  var _ref2$propertyName = _ref2.propertyName,
+      propertyName = _ref2$propertyName === void 0 ? '' : _ref2$propertyName;
+  // Detect whether transition may affect dimensions of an element.
+  var isReflowProperty = transitionKeys.some(function (key) {
+    return propertyName.indexOf(key) !== -1;
+  });
+
+  if (isReflowProperty) {
+    refresh();
+  }
+}
+
+function getRectForElement(element) {
+  var domRect = element.getBoundingClientRect();
+  return {
+    pageTop: domRect.top + scrollTop,
+    pageLeft: domRect.left + scrollLeft,
+    width: domRect.width,
+    height: domRect.height
+  };
+}
+
+function rectsAreDifferent(a, b) {
+  return a.pageTop !== b.pageTop || a.pageLeft !== b.pageLeft || a.width !== b.width || a.height !== b.height;
+}
+
+function observeProgressBarRect(element, callback) {
+  if (!observedElements.size) {
+    setup();
+  }
+
+  observedElements.add(element);
+  cachedRects.set(element, getRectForElement(element));
+  elementCallbacks.set(element, callback);
+  callback(cachedRects.get(element));
+  return function () {
+    observedElements.delete(element);
+    cachedRects.delete(element);
+    elementCallbacks.delete(element);
+
+    if (!observedElements.size) {
+      teardown();
+    }
+  };
+}
+
+/* harmony default export */ var utils_observeProgressBarRect = (observeProgressBarRect);
 // CONCATENATED MODULE: ./packages/components/src/ProgressBar.js
 function ProgressBar_extends() { ProgressBar_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return ProgressBar_extends.apply(this, arguments); }
 
@@ -479,6 +701,7 @@ function ProgressBar_objectWithoutPropertiesLoose(source, excluded) { if (source
 function ProgressBar_inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 function ProgressBar_assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 
 
 
@@ -499,7 +722,9 @@ function (_PureComponent) {
 
     _this = _PureComponent.call(this, props) || this;
     _this.state = {
-      adjusting: false
+      adjusting: false,
+      // used while adjusting
+      tempProgress: null
     };
     _this.progressContainer = null; // bind methods fired on React events
 
@@ -520,6 +745,9 @@ function (_PureComponent) {
     document.addEventListener('touchmove', this.handleAdjustProgress);
     window.addEventListener('mouseup', this.handleAdjustComplete);
     document.addEventListener('touchend', this.handleAdjustComplete);
+    this.unobserve = utils_observeProgressBarRect(this.progressContainer, function (rect) {
+      _this2.cachedContainerRect = rect;
+    });
     setTimeout(function () {
       var style = document.createElement('style');
       var className = "noselect_" + Math.random().toString(16).slice(2, 7);
@@ -530,12 +758,23 @@ function (_PureComponent) {
     });
   };
 
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps, prevState) {
+    var _this$state = this.state,
+        adjusting = _this$state.adjusting,
+        tempProgress = _this$state.tempProgress;
+
+    if (adjusting && tempProgress !== prevState.tempProgress) {
+      this.props.onAdjustProgress(tempProgress);
+    }
+  };
+
   _proto.componentWillUnmount = function componentWillUnmount() {
     // remove event listeners bound outside the scope of our component
     window.removeEventListener('mousemove', this.handleAdjustProgress);
     document.removeEventListener('touchmove', this.handleAdjustProgress);
     window.removeEventListener('mouseup', this.handleAdjustComplete);
-    document.removeEventListener('touchend', this.handleAdjustComplete); // remove noselect class in case a drag is in progress
+    document.removeEventListener('touchend', this.handleAdjustComplete);
+    this.unobserve(); // remove noselect class in case a drag is in progress
 
     this.toggleNoselect(false); // noselectStyleElement might not exist if the component unmounts
     // before the timeout callback is called.
@@ -554,46 +793,37 @@ function (_PureComponent) {
   };
 
   _proto.getProgressFromPageCoordinates = function getProgressFromPageCoordinates(pageX, pageY) {
-    var _this$progressContain = this.progressContainer.getBoundingClientRect(),
-        left = _this$progressContain.left,
-        top = _this$progressContain.top,
-        width = _this$progressContain.width,
-        height = _this$progressContain.height;
-
-    var _document$body = document.body,
-        scrollLeft = _document$body.scrollLeft,
-        scrollTop = _document$body.scrollTop;
+    var _this$cachedContainer = this.cachedContainerRect,
+        pageLeft = _this$cachedContainer.pageLeft,
+        pageTop = _this$cachedContainer.pageTop,
+        width = _this$cachedContainer.width,
+        height = _this$cachedContainer.height;
 
     switch (this.props.progressDirection) {
       case 'down':
-        return (pageY - top - scrollTop) / height;
+        return (pageY - pageTop) / height;
 
       case 'left':
-        return 1 - (pageX - left - scrollLeft) / width;
+        return 1 - (pageX - pageLeft) / width;
 
       case 'up':
-        return 1 - (pageY - top - scrollTop) / height;
+        return 1 - (pageY - pageTop) / height;
 
       case 'right':
       default:
-        return (pageX - left - scrollLeft) / width;
+        return (pageX - pageLeft) / width;
     }
   };
 
   _proto.handleAdjustProgress = function handleAdjustProgress(event) {
-    var _this$props = this.props,
-        readonly = _this$props.readonly,
-        onAdjustProgress = _this$props.onAdjustProgress;
-    var adjusting = this.state.adjusting;
-
-    if (readonly) {
+    if (this.props.readonly) {
       return;
     } // make sure we don't select stuff in the background
 
 
     if (event.type === 'mousedown' || event.type === 'touchstart') {
       this.toggleNoselect(true);
-    } else if (!adjusting) {
+    } else if (!this.state.adjusting) {
       return;
     }
     /* we don't want mouse handlers to receive the event
@@ -608,9 +838,9 @@ function (_PureComponent) {
     var progress = this.getProgressFromPageCoordinates(pageX, pageY);
     var progressInBounds = Object(core_["convertToNumberWithinIntervalBounds"])(progress, 0, 1);
     this.setState({
-      adjusting: true
+      adjusting: true,
+      tempProgress: progressInBounds
     });
-    onAdjustProgress(progressInBounds);
   };
 
   _proto.handleAdjustComplete = function handleAdjustComplete(event) {
@@ -621,7 +851,9 @@ function (_PureComponent) {
      */
 
     this.toggleNoselect(false);
-    var adjusting = this.state.adjusting;
+    var _this$state2 = this.state,
+        adjusting = _this$state2.adjusting,
+        tempProgress = _this$state2.tempProgress;
 
     if (!adjusting) {
       return;
@@ -633,20 +865,24 @@ function (_PureComponent) {
 
     event.preventDefault();
     this.setState({
-      adjusting: false
+      adjusting: false,
+      tempProgress: null
     });
-    onAdjustComplete();
+    onAdjustComplete(tempProgress);
   };
 
   _proto.render = function render() {
-    var _this$props2 = this.props,
-        progressClassName = _this$props2.progressClassName,
-        progressStyle = _this$props2.progressStyle,
-        progress = _this$props2.progress,
-        progressDirection = _this$props2.progressDirection,
-        handle = _this$props2.handle,
-        attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
+    var _this$props = this.props,
+        progressClassName = _this$props.progressClassName,
+        progressStyle = _this$props.progressStyle,
+        progress = _this$props.progress,
+        progressDirection = _this$props.progressDirection,
+        handle = _this$props.handle,
+        attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
 
+    var _this$state3 = this.state,
+        adjusting = _this$state3.adjusting,
+        tempProgress = _this$state3.tempProgress;
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
@@ -654,7 +890,7 @@ function (_PureComponent) {
       ref: this.setProgressContainerRef,
       progressClassName: progressClassName,
       progressStyle: progressStyle,
-      progress: progress,
+      progress: adjusting ? tempProgress : progress,
       progressDirection: progressDirection,
       handle: handle,
       onMouseDown: this.handleAdjustProgress,
@@ -706,6 +942,7 @@ function (_PureComponent) {
     _this = _PureComponent.call(this, props) || this; // bind methods fired on React events
 
     _this.handleSeekPreview = _this.handleSeekPreview.bind(MediaProgressBar_assertThisInitialized(MediaProgressBar_assertThisInitialized(_this)));
+    _this.handleSeekComplete = _this.handleSeekComplete.bind(MediaProgressBar_assertThisInitialized(MediaProgressBar_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -715,6 +952,10 @@ function (_PureComponent) {
     this.props.onSeekPreview(progress * this.props.duration);
   };
 
+  _proto.handleSeekComplete = function handleSeekComplete(progress) {
+    this.props.onSeekComplete(progress * this.props.duration);
+  };
+
   _proto.render = function render() {
     var _this$props = this.props,
         playlist = _this$props.playlist,
@@ -722,17 +963,19 @@ function (_PureComponent) {
         seekPreviewTime = _this$props.seekPreviewTime,
         seekInProgress = _this$props.seekInProgress,
         duration = _this$props.duration,
-        onSeekComplete = _this$props.onSeekComplete,
-        attributes = MediaProgressBar_objectWithoutPropertiesLoose(_this$props, ["playlist", "currentTime", "seekPreviewTime", "seekInProgress", "duration", "onSeekComplete"]);
+        _this$props$durationO = _this$props.durationOverride,
+        durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO,
+        attributes = MediaProgressBar_objectWithoutPropertiesLoose(_this$props, ["playlist", "currentTime", "seekPreviewTime", "seekInProgress", "duration", "durationOverride"]);
 
     delete attributes.onSeekPreview;
+    delete attributes.onSeekComplete;
     var time = seekInProgress ? seekPreviewTime : currentTime;
-    var displayedProgress = duration ? time / duration : 0;
+    var displayedProgress = durationOverride ? time / durationOverride : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBar, MediaProgressBar_extends({}, attributes, {
       progress: displayedProgress,
       readonly: !Object(core_["isPlaylistValid"])(playlist),
       onAdjustProgress: this.handleSeekPreview,
-      onAdjustComplete: onSeekComplete
+      onAdjustComplete: this.handleSeekComplete
     }));
   };
 
@@ -745,7 +988,8 @@ MediaProgressBar_MediaProgressBar.propTypes = {
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
-  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBar = (Object(core_["playerContextFilter"])(MediaProgressBar_MediaProgressBar, ['playlist', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
 // CONCATENATED MODULE: ./packages/components/src/MediaProgressBarDisplay.js
@@ -778,9 +1022,11 @@ function (_PureComponent) {
     var _this$props = this.props,
         currentTime = _this$props.currentTime,
         duration = _this$props.duration,
-        attributes = MediaProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["currentTime", "duration"]);
+        _this$props$durationO = _this$props.durationOverride,
+        durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO,
+        attributes = MediaProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["currentTime", "duration", "durationOverride"]);
 
-    var progress = duration ? currentTime / duration : 0;
+    var progress = durationOverride ? currentTime / durationOverride : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, MediaProgressBarDisplay_extends({}, attributes, {
       progress: progress
     }));
@@ -790,7 +1036,8 @@ function (_PureComponent) {
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 MediaProgressBarDisplay_MediaProgressBarDisplay.propTypes = {
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBarDisplay = (Object(core_["playerContextFilter"])(MediaProgressBarDisplay_MediaProgressBarDisplay, ['currentTime', 'duration']));
 // CONCATENATED MODULE: ./packages/components/src/VideoDisplay.js

@@ -137,6 +137,47 @@ var external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_ty
 var external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_ = __webpack_require__(3);
 var external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_default = /*#__PURE__*/__webpack_require__.n(external_root_ResizeObserver_commonjs_resize_observer_polyfill_commonjs2_resize_observer_polyfill_amd_resize_observer_polyfill_);
 
+// CONCATENATED MODULE: ./src/utils/requestAnimationFrameWhenPageVisible.js
+let hiddenKey;
+let visibilitychangeKey;
+
+if (typeof document !== 'undefined') {
+  if (typeof document.hidden !== 'undefined') {
+    hiddenKey = 'hidden';
+    visibilitychangeKey = 'visibilitychange';
+  } else if (typeof document.msHidden !== 'undefined') {
+    hiddenKey = 'msHidden';
+    visibilitychangeKey = 'msvisibilitychange';
+  } else if (typeof document.webkitHidden !== 'undefined') {
+    hiddenKey = 'webkitHidden';
+    visibilitychangeKey = 'webkitvisibilitychange';
+  }
+}
+
+function requestAnimationFrameWhenPageVisible(rafCallback) {
+  // if we have access to the Page Visibility API we should
+  // check if the page is hidden and if so defer our requestAnimationFrame
+  if (hiddenKey && document[hiddenKey]) {
+    let cancelled = false;
+    let id;
+    document.addEventListener(visibilitychangeKey, () => {
+      if (!cancelled) {
+        id = requestAnimationFrame(rafCallback);
+      }
+    }, {
+      once: true
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(id);
+    };
+  } else {
+    const id = requestAnimationFrame(rafCallback);
+    return () => cancelAnimationFrame(id);
+  }
+}
+
+/* harmony default export */ var utils_requestAnimationFrameWhenPageVisible = (requestAnimationFrameWhenPageVisible);
 // CONCATENATED MODULE: ./src/MaybeMarquee.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -145,6 +186,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 
 
@@ -174,7 +216,7 @@ class MaybeMarquee_MaybeMarquee extends external_root_React_commonjs_react_commo
   }
 
   componentDidMount() {
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
     this.marqueeContainerElementWidth = getComputedStyle(this.marqueeContainerElement).width;
     const contentStyle = getComputedStyle(this.movingContentContainerElement);
     this.movingContentContainerElementWidth = contentStyle.width;
@@ -188,8 +230,12 @@ class MaybeMarquee_MaybeMarquee extends external_root_React_commonjs_react_commo
   }
 
   componentWillUnmount() {
-    cancelAnimationFrame(this.animationFrameRequest);
+    this.cancelRaf();
     this.resizeObserver.disconnect();
+  }
+
+  requestMoveMarqueeAnimationFrame() {
+    this.cancelRaf = utils_requestAnimationFrameWhenPageVisible(this.moveMarquee);
   }
 
   moveMarquee() {
@@ -222,7 +268,7 @@ class MaybeMarquee_MaybeMarquee extends external_root_React_commonjs_react_commo
       }
     }
 
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
   }
 
   handleResize(entries) {
@@ -421,10 +467,171 @@ ProgressBarDisplay_ProgressBarDisplay.propTypes = {
     progressBarRef: ref
   }));
 }));
+// CONCATENATED MODULE: ./src/utils/observeProgressBarRect.js
+/*
+Adapted from resize-observer-polyfill which has this license:
+The MIT License (MIT)
+
+Copyright (c) 2016 Denis Rul
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+// Minimum delay before invoking the update of observers.
+const REFRESH_DELAY = 20; // A list of substrings of CSS properties used to find transition events that
+// might affect dimensions of observed elements.
+
+const transitionKeys = ['top', 'right', 'bottom', 'left', 'width', 'height', 'size', 'weight']; // Check if MutationObserver is available.
+
+const mutationObserverSupported = typeof MutationObserver !== 'undefined';
+const observedElements = new Set();
+const cachedRects = new Map();
+const elementCallbacks = new Map();
+let scrollTop;
+let scrollLeft;
+let isSetup = false;
+let mutationObserver;
+
+function setup() {
+  if (isSetup) {
+    return;
+  }
+
+  document.addEventListener('transitionend', onTransitionend);
+  window.addEventListener('resize', refresh);
+
+  if (mutationObserverSupported) {
+    mutationObserver = new MutationObserver(refresh); // we don't observe contents since the progress bar's contents
+    // are expected to conform to the shape of the container
+
+    mutationObserver.observe(document, {
+      attributes: true
+    });
+  } else {
+    document.addEventListener('DOMSubtreeModified', refresh);
+  }
+
+  document.addEventListener('scroll', updateScroll);
+  updateScroll();
+  isSetup = true;
+}
+
+function teardown() {
+  if (!isSetup) {
+    return;
+  }
+
+  document.removeEventListener('transitionend', onTransitionend);
+  window.removeEventListener('resize', refresh);
+
+  if (mutationObserverSupported) {
+    mutationObserver.disconnect();
+  } else {
+    document.removeEventListener('DOMSubtreeModified', refresh);
+  }
+
+  document.removeEventListener('scroll', updateScroll);
+  isSetup = false;
+}
+
+let refreshTimeout;
+
+function refresh() {
+  clearTimeout(refreshTimeout);
+  const updatedElements = [];
+
+  for (const element of observedElements) {
+    const newRect = getRectForElement(element);
+
+    if (rectsAreDifferent(cachedRects.get(element), newRect)) {
+      cachedRects.set(element, newRect);
+      updatedElements.push(element);
+    }
+  }
+
+  for (const element of updatedElements) {
+    elementCallbacks.get(element)(cachedRects.get(element));
+  }
+
+  if (updatedElements.length) {
+    // check again in the future to make sure nothing wasn't about to change
+    refreshTimeout = setTimeout(refresh, REFRESH_DELAY);
+  }
+}
+
+function updateScroll() {
+  scrollTop = document.body.scrollTop;
+  scrollLeft = document.body.scrollLeft;
+}
+
+function onTransitionend(_ref) {
+  let _ref$propertyName = _ref.propertyName,
+      propertyName = _ref$propertyName === void 0 ? '' : _ref$propertyName;
+  // Detect whether transition may affect dimensions of an element.
+  const isReflowProperty = transitionKeys.some(key => {
+    return propertyName.indexOf(key) !== -1;
+  });
+
+  if (isReflowProperty) {
+    refresh();
+  }
+}
+
+function getRectForElement(element) {
+  const domRect = element.getBoundingClientRect();
+  return {
+    pageTop: domRect.top + scrollTop,
+    pageLeft: domRect.left + scrollLeft,
+    width: domRect.width,
+    height: domRect.height
+  };
+}
+
+function rectsAreDifferent(a, b) {
+  return a.pageTop !== b.pageTop || a.pageLeft !== b.pageLeft || a.width !== b.width || a.height !== b.height;
+}
+
+function observeProgressBarRect(element, callback) {
+  if (!observedElements.size) {
+    setup();
+  }
+
+  observedElements.add(element);
+  cachedRects.set(element, getRectForElement(element));
+  elementCallbacks.set(element, callback);
+  callback(cachedRects.get(element));
+  return () => {
+    observedElements.delete(element);
+    cachedRects.delete(element);
+    elementCallbacks.delete(element);
+
+    if (!observedElements.size) {
+      teardown();
+    }
+  };
+}
+
+/* harmony default export */ var utils_observeProgressBarRect = (observeProgressBarRect);
 // CONCATENATED MODULE: ./src/ProgressBar.js
 function ProgressBar_extends() { ProgressBar_extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return ProgressBar_extends.apply(this, arguments); }
 
 function ProgressBar_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
 
 
 
@@ -446,7 +653,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
   constructor(props) {
     super(props);
     this.state = {
-      adjusting: false
+      adjusting: false,
+      // used while adjusting
+      tempProgress: null
     };
     this.progressContainer = null; // bind methods fired on React events
 
@@ -462,6 +671,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     document.addEventListener('touchmove', this.handleAdjustProgress);
     window.addEventListener('mouseup', this.handleAdjustComplete);
     document.addEventListener('touchend', this.handleAdjustComplete);
+    this.unobserve = utils_observeProgressBarRect(this.progressContainer, rect => {
+      this.cachedContainerRect = rect;
+    });
     setTimeout(() => {
       const style = document.createElement('style');
       const className = `noselect_${Math.random().toString(16).slice(2, 7)}`;
@@ -472,12 +684,23 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const _this$state = this.state,
+          adjusting = _this$state.adjusting,
+          tempProgress = _this$state.tempProgress;
+
+    if (adjusting && tempProgress !== prevState.tempProgress) {
+      this.props.onAdjustProgress(tempProgress);
+    }
+  }
+
   componentWillUnmount() {
     // remove event listeners bound outside the scope of our component
     window.removeEventListener('mousemove', this.handleAdjustProgress);
     document.removeEventListener('touchmove', this.handleAdjustProgress);
     window.removeEventListener('mouseup', this.handleAdjustComplete);
-    document.removeEventListener('touchend', this.handleAdjustComplete); // remove noselect class in case a drag is in progress
+    document.removeEventListener('touchend', this.handleAdjustComplete);
+    this.unobserve(); // remove noselect class in case a drag is in progress
 
     this.toggleNoselect(false); // noselectStyleElement might not exist if the component unmounts
     // before the timeout callback is called.
@@ -496,46 +719,37 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
   }
 
   getProgressFromPageCoordinates(pageX, pageY) {
-    const _this$progressContain = this.progressContainer.getBoundingClientRect(),
-          left = _this$progressContain.left,
-          top = _this$progressContain.top,
-          width = _this$progressContain.width,
-          height = _this$progressContain.height;
-
-    const _document$body = document.body,
-          scrollLeft = _document$body.scrollLeft,
-          scrollTop = _document$body.scrollTop;
+    const _this$cachedContainer = this.cachedContainerRect,
+          pageLeft = _this$cachedContainer.pageLeft,
+          pageTop = _this$cachedContainer.pageTop,
+          width = _this$cachedContainer.width,
+          height = _this$cachedContainer.height;
 
     switch (this.props.progressDirection) {
       case 'down':
-        return (pageY - top - scrollTop) / height;
+        return (pageY - pageTop) / height;
 
       case 'left':
-        return 1 - (pageX - left - scrollLeft) / width;
+        return 1 - (pageX - pageLeft) / width;
 
       case 'up':
-        return 1 - (pageY - top - scrollTop) / height;
+        return 1 - (pageY - pageTop) / height;
 
       case 'right':
       default:
-        return (pageX - left - scrollLeft) / width;
+        return (pageX - pageLeft) / width;
     }
   }
 
   handleAdjustProgress(event) {
-    const _this$props = this.props,
-          readonly = _this$props.readonly,
-          onAdjustProgress = _this$props.onAdjustProgress;
-    const adjusting = this.state.adjusting;
-
-    if (readonly) {
+    if (this.props.readonly) {
       return;
     } // make sure we don't select stuff in the background
 
 
     if (event.type === 'mousedown' || event.type === 'touchstart') {
       this.toggleNoselect(true);
-    } else if (!adjusting) {
+    } else if (!this.state.adjusting) {
       return;
     }
     /* we don't want mouse handlers to receive the event
@@ -550,9 +764,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     const progress = this.getProgressFromPageCoordinates(pageX, pageY);
     const progressInBounds = Object(core_["convertToNumberWithinIntervalBounds"])(progress, 0, 1);
     this.setState({
-      adjusting: true
+      adjusting: true,
+      tempProgress: progressInBounds
     });
-    onAdjustProgress(progressInBounds);
   }
 
   handleAdjustComplete(event) {
@@ -563,7 +777,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
      */
 
     this.toggleNoselect(false);
-    const adjusting = this.state.adjusting;
+    const _this$state2 = this.state,
+          adjusting = _this$state2.adjusting,
+          tempProgress = _this$state2.tempProgress;
 
     if (!adjusting) {
       return;
@@ -575,20 +791,24 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
 
     event.preventDefault();
     this.setState({
-      adjusting: false
+      adjusting: false,
+      tempProgress: null
     });
-    onAdjustComplete();
+    onAdjustComplete(tempProgress);
   }
 
   render() {
-    const _this$props2 = this.props,
-          progressClassName = _this$props2.progressClassName,
-          progressStyle = _this$props2.progressStyle,
-          progress = _this$props2.progress,
-          progressDirection = _this$props2.progressDirection,
-          handle = _this$props2.handle,
-          attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props2, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
+    const _this$props = this.props,
+          progressClassName = _this$props.progressClassName,
+          progressStyle = _this$props.progressStyle,
+          progress = _this$props.progress,
+          progressDirection = _this$props.progressDirection,
+          handle = _this$props.handle,
+          attributes = ProgressBar_objectWithoutPropertiesLoose(_this$props, ["progressClassName", "progressStyle", "progress", "progressDirection", "handle"]);
 
+    const _this$state3 = this.state,
+          adjusting = _this$state3.adjusting,
+          tempProgress = _this$state3.tempProgress;
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
@@ -596,7 +816,7 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
       ref: this.setProgressContainerRef,
       progressClassName: progressClassName,
       progressStyle: progressStyle,
-      progress: progress,
+      progress: adjusting ? tempProgress : progress,
       progressDirection: progressDirection,
       handle: handle,
       onMouseDown: this.handleAdjustProgress,
@@ -637,10 +857,15 @@ class MediaProgressBar_MediaProgressBar extends external_root_React_commonjs_rea
     super(props); // bind methods fired on React events
 
     this.handleSeekPreview = this.handleSeekPreview.bind(this);
+    this.handleSeekComplete = this.handleSeekComplete.bind(this);
   }
 
   handleSeekPreview(progress) {
     this.props.onSeekPreview(progress * this.props.duration);
+  }
+
+  handleSeekComplete(progress) {
+    this.props.onSeekComplete(progress * this.props.duration);
   }
 
   render() {
@@ -650,17 +875,19 @@ class MediaProgressBar_MediaProgressBar extends external_root_React_commonjs_rea
           seekPreviewTime = _this$props.seekPreviewTime,
           seekInProgress = _this$props.seekInProgress,
           duration = _this$props.duration,
-          onSeekComplete = _this$props.onSeekComplete,
-          attributes = MediaProgressBar_objectWithoutPropertiesLoose(_this$props, ["playlist", "currentTime", "seekPreviewTime", "seekInProgress", "duration", "onSeekComplete"]);
+          _this$props$durationO = _this$props.durationOverride,
+          durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO,
+          attributes = MediaProgressBar_objectWithoutPropertiesLoose(_this$props, ["playlist", "currentTime", "seekPreviewTime", "seekInProgress", "duration", "durationOverride"]);
 
     delete attributes.onSeekPreview;
+    delete attributes.onSeekComplete;
     const time = seekInProgress ? seekPreviewTime : currentTime;
-    const displayedProgress = duration ? time / duration : 0;
+    const displayedProgress = durationOverride ? time / durationOverride : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBar, MediaProgressBar_extends({}, attributes, {
       progress: displayedProgress,
       readonly: !Object(core_["isPlaylistValid"])(playlist),
       onAdjustProgress: this.handleSeekPreview,
-      onAdjustComplete: onSeekComplete
+      onAdjustComplete: this.handleSeekComplete
     }));
   }
 
@@ -672,7 +899,8 @@ MediaProgressBar_MediaProgressBar.propTypes = {
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
-  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBar = (Object(core_["playerContextFilter"])(MediaProgressBar_MediaProgressBar, ['playlist', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
 // CONCATENATED MODULE: ./src/MediaProgressBarDisplay.js
@@ -693,9 +921,11 @@ class MediaProgressBarDisplay_MediaProgressBarDisplay extends external_root_Reac
     const _this$props = this.props,
           currentTime = _this$props.currentTime,
           duration = _this$props.duration,
-          attributes = MediaProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["currentTime", "duration"]);
+          _this$props$durationO = _this$props.durationOverride,
+          durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO,
+          attributes = MediaProgressBarDisplay_objectWithoutPropertiesLoose(_this$props, ["currentTime", "duration", "durationOverride"]);
 
-    const progress = duration ? currentTime / duration : 0;
+    const progress = durationOverride ? currentTime / durationOverride : 0;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, MediaProgressBarDisplay_extends({}, attributes, {
       progress: progress
     }));
@@ -704,7 +934,8 @@ class MediaProgressBarDisplay_MediaProgressBarDisplay extends external_root_Reac
 }
 MediaProgressBarDisplay_MediaProgressBarDisplay.propTypes = {
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBarDisplay = (Object(core_["playerContextFilter"])(MediaProgressBarDisplay_MediaProgressBarDisplay, ['currentTime', 'duration']));
 // CONCATENATED MODULE: ./src/VideoDisplay.js

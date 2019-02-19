@@ -289,7 +289,7 @@ module.exports = g;
 /* 6 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.25","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.28","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 7 */
@@ -396,6 +396,9 @@ var PlayerPropTypes_track = external_root_PropTypes_commonjs_prop_types_commonjs
   artist: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string,
   album: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string,
   artwork: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(mediaSessionArtwork.isRequired),
+  duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOfType([external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string, external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number]),
+  startingTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number,
+  isUnboundedStream: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
   meta: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object
 });
 var progressDirection = external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['left', 'right', 'up', 'down']);
@@ -663,10 +666,32 @@ function findTrackIndexByUrl(playlist, url) {
 
 /* harmony default export */ var utils_findTrackIndexByUrl = (findTrackIndexByUrl);
 // CONCATENATED MODULE: ./packages/core/src/utils/snapshot.js
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
 
 
+
+var veryLongKey = '__highly_unstable_snapshot_internals_which_will_break_your_app_if_you_use_them_directly__';
+var versionKey = '__cassette_snapshot_version__'; // IMPORTANT: new migrations *must* always be added to the end since
+// the tracked snapshot version is based on the migration index.
+// If there is a crash-inducing bug in an existing migration, it can be patched
+// in-place, but it should never be removed from the migrations array.
+
+var migrations = [function (oldSnapshot) {
+  var _objectSpread2;
+
+  var __unstable__ = oldSnapshot.__unstable__,
+      rest = _objectWithoutPropertiesLoose(oldSnapshot, ["__unstable__"]);
+
+  return _objectSpread({}, rest, (_objectSpread2 = {}, _objectSpread2[veryLongKey] = __unstable__, _objectSpread2));
+}];
 function getStateSnapshot(state) {
+  var _ref;
+
   var paused = state.paused,
       currentTime = state.currentTime,
       activeTrackIndex = state.activeTrackIndex,
@@ -676,34 +701,37 @@ function getStateSnapshot(state) {
       cycle = state.cycle,
       shuffle = state.shuffle,
       playbackRate = state.playbackRate,
+      duration = state.duration,
       __playlist__ = state.__playlist__;
-  return {
-    __unstable__: {
-      paused: paused,
-      currentTime: currentTime,
-      activeTrackIndex: activeTrackIndex,
-      volume: volume,
-      muted: muted,
-      loop: loop,
-      cycle: cycle,
-      shuffle: shuffle,
-      playbackRate: playbackRate,
-      activeTrackSrc: utils_isPlaylistValid(__playlist__) ? utils_getTrackSources(__playlist__, activeTrackIndex)[0].src : null
-    }
-  };
+  return _ref = {}, _ref[versionKey] = migrations.length, _ref[veryLongKey] = {
+    paused: paused,
+    // currentTime can't be restored for unbounded live streams
+    currentTime: duration === Infinity ? 0 : currentTime,
+    activeTrackIndex: activeTrackIndex,
+    volume: volume,
+    muted: muted,
+    loop: loop,
+    cycle: cycle,
+    shuffle: shuffle,
+    playbackRate: playbackRate,
+    activeTrackSrc: utils_isPlaylistValid(__playlist__) ? utils_getTrackSources(__playlist__, activeTrackIndex)[0].src : null
+  }, _ref;
 }
 function restoreStateFromSnapshot(snapshot, props) {
-  var _snapshot$__unstable_ = snapshot.__unstable__,
-      paused = _snapshot$__unstable_.paused,
-      currentTime = _snapshot$__unstable_.currentTime,
-      activeTrackIndex = _snapshot$__unstable_.activeTrackIndex,
-      volume = _snapshot$__unstable_.volume,
-      muted = _snapshot$__unstable_.muted,
-      loop = _snapshot$__unstable_.loop,
-      cycle = _snapshot$__unstable_.cycle,
-      shuffle = _snapshot$__unstable_.shuffle,
-      playbackRate = _snapshot$__unstable_.playbackRate,
-      activeTrackSrc = _snapshot$__unstable_.activeTrackSrc;
+  var migratedSnapshot = migrations.slice(snapshot[versionKey] || 0).reduce(function (oldSnapshot, migration) {
+    return migration(oldSnapshot);
+  }, snapshot);
+  var _migratedSnapshot$ver = migratedSnapshot[veryLongKey],
+      paused = _migratedSnapshot$ver.paused,
+      currentTime = _migratedSnapshot$ver.currentTime,
+      activeTrackIndex = _migratedSnapshot$ver.activeTrackIndex,
+      volume = _migratedSnapshot$ver.volume,
+      muted = _migratedSnapshot$ver.muted,
+      loop = _migratedSnapshot$ver.loop,
+      cycle = _migratedSnapshot$ver.cycle,
+      shuffle = _migratedSnapshot$ver.shuffle,
+      playbackRate = _migratedSnapshot$ver.playbackRate,
+      activeTrackSrc = _migratedSnapshot$ver.activeTrackSrc;
   var restoredStateValues = {};
 
   if (utils_isPlaylistValid(props.playlist) && typeof paused === 'boolean') {
@@ -830,18 +858,34 @@ function getDisplayText(track) {
 }
 
 /* harmony default export */ var utils_getDisplayText = (getDisplayText);
+// CONCATENATED MODULE: ./packages/core/src/utils/parseTimeString.js
+function parseTimeString(str) {
+  var seconds = 0;
+  var factor = 1;
+  var times = str.split(':').slice(-3);
+
+  while (times.length > 0) {
+    seconds += factor * parseInt(times.pop(), 10);
+    factor *= 60;
+  }
+
+  return seconds;
+}
+
+/* harmony default export */ var utils_parseTimeString = (parseTimeString);
 // CONCATENATED MODULE: ./packages/core/src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+function PlayerContextProvider_objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function PlayerContextProvider_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { PlayerContextProvider_defineProperty(target, key, source[key]); }); } return target; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function PlayerContextProvider_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 
 
 
@@ -912,26 +956,43 @@ var defaultState = {
   /* true if an error occurs while fetching the active track media data
    * or if its type is not a supported media format
    */
-  mediaCannotPlay: false
+  mediaCannotPlay: false,
+  // maximum currentTime since the current track has been playing
+  maxKnownTime: 0
 }; // assumes playlist is valid
 
 function getGoToTrackState(_ref) {
   var prevState = _ref.prevState,
       index = _ref.index,
+      track = _ref.track,
       _ref$shouldPlay = _ref.shouldPlay,
       shouldPlay = _ref$shouldPlay === void 0 ? true : _ref$shouldPlay,
       _ref$shouldForceLoad = _ref.shouldForceLoad,
       shouldForceLoad = _ref$shouldForceLoad === void 0 ? false : _ref$shouldForceLoad;
   var isNewTrack = prevState.activeTrackIndex !== index;
+  var shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
+  var currentTime = track.startingTime || 0;
+  var duration = 0;
+
+  if (track.duration) {
+    if (typeof track.duration === 'string') {
+      duration = utils_parseTimeString(track.duration);
+    } else {
+      duration = track.duration;
+    }
+  }
+
   return {
+    duration: duration,
     activeTrackIndex: index,
-    trackLoading: isNewTrack,
-    mediaCannotPlay: prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
-    currentTime: 0,
-    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
+    trackLoading: shouldLoadAsNew,
+    mediaCannotPlay: prevState.mediaCannotPlay && !shouldLoadAsNew,
+    currentTime: utils_convertToNumberWithinIntervalBounds(currentTime, 0),
+    loop: shouldLoadAsNew ? false : prevState.loop,
     shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
     awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
-    awaitingForceLoad: Boolean(shouldForceLoad)
+    awaitingForceLoad: Boolean(shouldForceLoad),
+    maxKnownTime: shouldLoadAsNew ? 0 : prevState.maxKnownTime
   };
 }
 /**
@@ -948,13 +1009,33 @@ function (_Component) {
     var _this;
 
     _this = _Component.call(this, props) || this;
-    _this.state = _objectSpread({}, defaultState, {
+    var currentTime = 0;
+    var activeTrackIndex = utils_convertToNumberWithinIntervalBounds(props.startingTrackIndex, 0);
+
+    if (utils_isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
+      currentTime = props.playlist[activeTrackIndex].startingTime || 0;
+    }
+
+    var initialStateSnapshot = props.initialStateSnapshot;
+    var restoredStateFromSnapshot = {};
+
+    if (initialStateSnapshot) {
+      try {
+        restoredStateFromSnapshot = restoreStateFromSnapshot(initialStateSnapshot, props);
+      } catch (err) {
+        Object(console["b" /* logWarning */])(err);
+        Object(console["b" /* logWarning */])('Loading Cassette state from snapshot failed.');
+        Object(console["b" /* logWarning */])("Failed snapshot:\n" + JSON.stringify(initialStateSnapshot, null, 2));
+      }
+    }
+
+    _this.state = PlayerContextProvider_objectSpread({}, defaultState, {
       // index matching requested track (whether track has loaded or not)
-      activeTrackIndex: utils_convertToNumberWithinIntervalBounds(props.startingTrackIndex, 0),
+      activeTrackIndex: activeTrackIndex,
       // whether we're waiting on loading metadata for the active track
       trackLoading: utils_isPlaylistValid(props.playlist),
       // the current timestamp on the active track in seconds
-      currentTime: utils_convertToNumberWithinIntervalBounds(props.startingTime, 0),
+      currentTime: utils_convertToNumberWithinIntervalBounds(currentTime, 0),
       // the latest volume of the media, between 0 and 1.
       volume: utils_convertToNumberWithinIntervalBounds(props.defaultVolume, 0, 1),
       // true if the media has been muted
@@ -974,7 +1055,7 @@ function (_Component) {
       awaitingForceLoad: false,
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist
-    }, props.initialStateSnapshot ? restoreStateFromSnapshot(props.initialStateSnapshot, props) : {}); // volume at last time we were unmuted and not actively setting volume
+    }, restoredStateFromSnapshot); // volume at last time we were unmuted and not actively setting volume
 
     _this.lastStableVolume = _this.state.volume; // used to keep track of play history when we are shuffling
 
@@ -1013,8 +1094,9 @@ function (_Component) {
     _this.handleMediaEmptied = _this.handleMediaEmptied.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaStalled = _this.handleMediaStalled.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaCanplaythrough = _this.handleMediaCanplaythrough.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaCanplay = _this.handleMediaCanplay.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaTimeupdate = _this.handleMediaTimeupdate.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleMediaLoadedmetadata = _this.handleMediaLoadedmetadata.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleMediaLoadeddata = _this.handleMediaLoadeddata.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaVolumechange = _this.handleMediaVolumechange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaDurationchange = _this.handleMediaDurationchange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMediaProgress = _this.handleMediaProgress.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -1045,12 +1127,16 @@ function (_Component) {
         loop = _this$state.loop,
         activeTrackIndex = _this$state.activeTrackIndex,
         shouldRequestPlayOnNextUpdate = _this$state.shouldRequestPlayOnNextUpdate; // initialize media properties
-    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // We used to set currentTime here.. now waiting for loadeddata.
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
 
     media.defaultPlaybackRate = defaultPlaybackRate;
-    media.crossOrigin = crossOrigin;
+
+    if (crossOrigin) {
+      media.crossOrigin = crossOrigin;
+    }
+
     media.volume = volume;
     media.muted = muted;
     media.playbackRate = playbackRate;
@@ -1066,9 +1152,10 @@ function (_Component) {
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('emptied', this.handleMediaEmptied);
+    media.addEventListener('canplay', this.handleMediaCanplay);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('loadeddata', this.handleMediaLoadeddata);
     media.addEventListener('volumechange', this.handleMediaVolumechange);
     media.addEventListener('durationchange', this.handleMediaDurationchange);
     media.addEventListener('progress', this.handleMediaProgress);
@@ -1113,7 +1200,7 @@ function (_Component) {
     }; // check if the new playlist is invalid
 
     if (!utils_isPlaylistValid(newPlaylist)) {
-      return _objectSpread({}, defaultState, baseNewState, {
+      return PlayerContextProvider_objectSpread({}, defaultState, baseNewState, {
         activeTrackIndex: 0,
         trackLoading: false
       });
@@ -1139,16 +1226,18 @@ function (_Component) {
     var newTrackIndex = utils_findTrackIndexByUrl(newPlaylist, prevSources[0].src);
 
     if (newTrackIndex !== -1) {
-      return _objectSpread({}, baseNewState, {
+      return PlayerContextProvider_objectSpread({}, baseNewState, {
         activeTrackIndex: newTrackIndex
       });
     } // if not, then load the first track in the new playlist, and pause.
 
 
-    return _objectSpread({}, baseNewState, getGoToTrackState({
+    return PlayerContextProvider_objectSpread({}, baseNewState, getGoToTrackState({
       prevState: prevState,
+      track: newPlaylist[0],
       index: 0,
-      shouldPlay: false
+      shouldPlay: false,
+      shouldForceLoad: true
     }), {
       mediaCannotPlay: false,
       awaitingPlayAfterTrackLoad: false
@@ -1228,8 +1317,9 @@ function (_Component) {
       media.removeEventListener('stalled', this.handleMediaStalled);
       media.removeEventListener('emptied', this.handleMediaEmptied);
       media.removeEventListener('canplaythrough', this.handleMediaCanplaythrough);
+      media.removeEventListener('canplay', this.handleMediaCanplay);
       media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-      media.removeEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+      media.removeEventListener('loadeddata', this.handleMediaLoadeddata);
       media.removeEventListener('volumechange', this.handleMediaVolumechange);
       media.removeEventListener('durationchange', this.handleMediaDurationchange);
       media.removeEventListener('progress', this.handleMediaProgress);
@@ -1495,6 +1585,7 @@ function (_Component) {
       if (loadFirstTrackOnPlaylistComplete) {
         this.goToTrack({
           index: 0,
+          track: playlist[0],
           shouldPlay: false,
           shouldForceLoad: true
         });
@@ -1522,6 +1613,14 @@ function (_Component) {
     });
   };
 
+  _proto.handleMediaCanplay = function handleMediaCanplay() {
+    this.setState(function (state) {
+      return state.trackLoading === false ? null : {
+        trackLoading: false
+      };
+    });
+  };
+
   _proto.handleMediaCanplaythrough = function handleMediaCanplaythrough() {
     this.setState(function (state) {
       return state.stalled === false ? null : {
@@ -1534,6 +1633,10 @@ function (_Component) {
     var _this$media = this.media,
         currentTime = _this$media.currentTime,
         played = _this$media.played;
+    var _this$props3 = this.props,
+        onTimeUpdate = _this$props3.onTimeUpdate,
+        playlist = _this$props3.playlist;
+    var activeTrackIndex = this.state.activeTrackIndex;
 
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
@@ -1541,22 +1644,23 @@ function (_Component) {
       return;
     }
 
-    this.setState({
-      currentTime: currentTime,
-      playedRanges: utils_getTimeRangesArray(played)
+    this.setState(function (state) {
+      return {
+        currentTime: currentTime,
+        playedRanges: utils_getTimeRangesArray(played),
+        maxKnownTime: Math.max(state.maxKnownTime, currentTime)
+      };
     });
+
+    if (onTimeUpdate) {
+      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+    }
   };
 
-  _proto.handleMediaLoadedmetadata = function handleMediaLoadedmetadata() {
+  _proto.handleMediaLoadeddata = function handleMediaLoadeddata() {
     if (this.media.currentTime !== this.state.currentTime) {
       this.media.currentTime = this.state.currentTime;
     }
-
-    this.setState(function (state) {
-      return state.trackLoading === false ? null : {
-        trackLoading: false
-      };
-    });
   };
 
   _proto.handleMediaVolumechange = function handleMediaVolumechange() {
@@ -1570,10 +1674,42 @@ function (_Component) {
   };
 
   _proto.handleMediaDurationchange = function handleMediaDurationchange() {
+    var _this6 = this;
+
     var duration = this.media.duration;
-    this.setState({
-      duration: duration
-    });
+    var activeTrack = this.props.playlist[this.state.activeTrackIndex];
+
+    if (duration === Infinity) {
+      // This *could* be because we're consuming an unbounded stream.
+      // It could also be because of a weird iOS bug that we want to
+      // try to prevent. See https://github.com/benwiley4000/cassette/issues/355
+      // If we still end up with Infinity duration multiple times for
+      // the same track, we'll assume it's correct.
+      if (activeTrack.isUnboundedStream || activeTrack === this.activeTrackAtLastDurationChange) {
+        this.setState({
+          duration: duration,
+          currentTime: 0
+        });
+        this.media.currentTime = 0;
+      } else {
+        var paused = this.state.paused;
+        this.media.load();
+
+        if (!paused) {
+          // media.currentSrc is updated asynchronously so we should
+          // play async to avoid weird intermediate state issues
+          setTimeout(function () {
+            _this6.togglePause(false);
+          });
+        }
+      }
+    } else {
+      this.setState({
+        duration: duration
+      });
+    }
+
+    this.activeTrackAtLastDurationChange = activeTrack;
   };
 
   _proto.handleMediaProgress = function handleMediaProgress() {
@@ -1636,7 +1772,7 @@ function (_Component) {
   _proto.goToTrack = function goToTrack(args) {
     clearTimeout(this.delayTimeout);
     this.setState(function (prevState) {
-      return getGoToTrackState(_objectSpread({
+      return getGoToTrackState(PlayerContextProvider_objectSpread({
         prevState: prevState
       }, args));
     });
@@ -1659,14 +1795,15 @@ function (_Component) {
     }
 
     this.goToTrack({
-      index: index
+      index: index,
+      track: playlist[index]
     });
   };
 
   _proto.backSkip = function backSkip() {
-    var _this$props3 = this.props,
-        playlist = _this$props3.playlist,
-        stayOnBackSkipThreshold = _this$props3.stayOnBackSkipThreshold;
+    var _this$props4 = this.props,
+        playlist = _this$props4.playlist,
+        stayOnBackSkipThreshold = _this$props4.stayOnBackSkipThreshold;
     var media = this.media;
     var _this$state3 = this.state,
         cycle = _this$state3.cycle,
@@ -1700,6 +1837,7 @@ function (_Component) {
 
     this.goToTrack({
       index: index,
+      track: playlist[index],
       shouldForceLoad: true
     });
   };
@@ -1729,6 +1867,7 @@ function (_Component) {
 
     this.goToTrack({
       index: index,
+      track: playlist[index],
       shouldForceLoad: true
     });
   };
@@ -1748,7 +1887,7 @@ function (_Component) {
         this.setState(function (_ref5) {
           var paused = _ref5.paused,
               awaitingResumeOnSeekComplete = _ref5.awaitingResumeOnSeekComplete;
-          return _objectSpread({}, baseStateUpdate, {
+          return PlayerContextProvider_objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
         });
@@ -1764,7 +1903,7 @@ function (_Component) {
         this.setState(function (_ref6) {
           var paused = _ref6.paused,
               awaitingResumeOnSeekComplete = _ref6.awaitingResumeOnSeekComplete;
-          return _objectSpread({}, baseStateUpdate, {
+          return PlayerContextProvider_objectSpread({}, baseStateUpdate, {
             awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
           });
         });
@@ -1799,7 +1938,7 @@ function (_Component) {
       return;
     }
 
-    this.setState(_objectSpread({}, baseStateUpdate, {
+    this.setState(PlayerContextProvider_objectSpread({}, baseStateUpdate, {
       /* we'll update currentTime on the media listener hook anyway,
        * but that might not happen for a bit... so the optimistic update
        * helps us avoid the progress bar jumping around and confusing the user.
@@ -1910,7 +2049,7 @@ function (_Component) {
       seekPreviewTime: state.seekPreviewTime,
       seekInProgress: state.seekInProgress,
       awaitingPlayResume: state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterTrackLoad,
-      duration: state.duration,
+      duration: state.duration === Infinity ? state.maxKnownTime : state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,
       seekableRanges: state.seekableRanges,
@@ -1960,12 +2099,12 @@ function (_Component) {
   };
 
   _proto.render = function render() {
-    var _this6 = this;
+    var _this7 = this;
 
     var playerContext = this.getControlProps();
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(external_root_React_commonjs_react_commonjs2_react_amd_react_["Fragment"], null, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       ref: function ref(elem) {
-        return _this6.mediaContainer = elem;
+        return _this7.mediaContainer = elem;
       },
       hidden: true
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContext.Provider, {
@@ -1987,7 +2126,6 @@ PlayerContextProvider_PlayerContextProvider.propTypes = {
   defaultRepeatStrategy: PlayerPropTypes_repeatStrategy.isRequired,
   defaultShuffle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
   defaultPlaybackRate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  startingTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   startingTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   loadFirstTrackOnPlaylistComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
   seekMode: seekMode.isRequired,
@@ -1997,11 +2135,11 @@ PlayerContextProvider_PlayerContextProvider.propTypes = {
   supportedMediaSessionActions: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(mediaSessionAction.isRequired).isRequired,
   mediaSessionSeekLengthInSeconds: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   mediaElementRef: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
-  initialStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.shape({
-    __unstable__: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object.isRequired
-  }),
+  initialStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object,
   onStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
   onActiveTrackUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+  // A function called when the media element's currentTime attribute has changed
+  onTimeUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
   onTrackPlaybackFailure: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
   getPosterImageForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   getMediaTitleAttributeForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
@@ -2019,7 +2157,6 @@ PlayerContextProvider_PlayerContextProvider.defaultProps = {
   defaultRepeatStrategy: 'playlist',
   defaultShuffle: false,
   defaultPlaybackRate: 1,
-  startingTime: 0,
   startingTrackIndex: 0,
   loadFirstTrackOnPlaylistComplete: true,
   seekMode: 'immediate',
@@ -2057,14 +2194,14 @@ function (_Component2) {
   };
 
   _proto2.render = function render() {
-    var _this7 = this;
+    var _this8 = this;
 
-    var _this$props4 = this.props,
-        groupContext = _this$props4.groupContext,
-        props = _this$props4.props;
+    var _this$props5 = this.props,
+        groupContext = _this$props5.groupContext,
+        props = _this$props5.props;
 
     var _mediaElementRef = props.mediaElementRef,
-        rest = _objectWithoutPropertiesLoose(props, ["mediaElementRef"]);
+        rest = PlayerContextProvider_objectWithoutPropertiesLoose(props, ["mediaElementRef"]);
 
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(PlayerContextProvider_PlayerContextProvider, _extends({}, groupContext.groupProps, rest, {
       mediaElementRef: function mediaElementRef(ref) {
@@ -2072,7 +2209,7 @@ function (_Component2) {
           _mediaElementRef(ref);
         }
 
-        _this7.mediaElement = ref;
+        _this8.mediaElement = ref;
       }
     }));
   };

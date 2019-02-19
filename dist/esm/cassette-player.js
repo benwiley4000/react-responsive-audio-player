@@ -937,7 +937,9 @@ class MediaProgress_MediaProgress extends external_root_React_commonjs_react_com
           seekPreviewTime = _this$props.seekPreviewTime,
           seekInProgress = _this$props.seekInProgress,
           duration = _this$props.duration,
-          getDisplayText = _this$props.getDisplayText;
+          getDisplayText = _this$props.getDisplayText,
+          _this$props$durationO = _this$props.durationOverride,
+          durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO;
     const time = seekInProgress ? seekPreviewTime : currentTime;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
@@ -948,7 +950,7 @@ class MediaProgress_MediaProgress extends external_root_React_commonjs_react_com
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
       style: mediaStatusBarStyle,
       displayText: getDisplayText(playlist[activeTrackIndex]) || '',
-      displayTime: `${utils_convertToTime(time)} / ${utils_convertToTime(duration)}`
+      displayTime: `${utils_convertToTime(time)} / ${utils_convertToTime(durationOverride)}`
     }));
   }
 
@@ -960,7 +962,8 @@ MediaProgress_MediaProgress.propTypes = {
   seekPreviewTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 MediaProgress_MediaProgress.defaultProps = {
   getDisplayText: core_["getDisplayText"]
@@ -984,7 +987,9 @@ class MediaProgressDisplay_MediaProgressDisplay extends external_root_React_comm
           activeTrackIndex = _this$props.activeTrackIndex,
           currentTime = _this$props.currentTime,
           duration = _this$props.duration,
-          getDisplayText = _this$props.getDisplayText;
+          getDisplayText = _this$props.getDisplayText,
+          _this$props$durationO = _this$props.durationOverride,
+          durationOverride = _this$props$durationO === void 0 ? duration : _this$props$durationO;
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
       className: "cassette__media_progress_container"
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["MediaProgressBarDisplay"], {
@@ -993,7 +998,7 @@ class MediaProgressDisplay_MediaProgressDisplay extends external_root_React_comm
       progressDirection: "right"
     }), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_MediaStatusBar, {
       displayText: getDisplayText(playlist[activeTrackIndex]) || '',
-      displayTime: `${utils_convertToTime(currentTime)} / ${utils_convertToTime(duration)}`
+      displayTime: `${utils_convertToTime(currentTime)} / ${utils_convertToTime(durationOverride)}`
     }));
   }
 
@@ -1003,7 +1008,8 @@ MediaProgressDisplay_MediaProgressDisplay.propTypes = {
   activeTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
+  getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+  durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 MediaProgressDisplay_MediaProgressDisplay.defaultProps = {
   getDisplayText: core_["getDisplayText"]
