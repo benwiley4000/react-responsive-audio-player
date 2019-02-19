@@ -15,5 +15,10 @@ module.exports = [
     packageName: '@cassette/player',
     hasStyles: true,
     entrySrc: './packages/player/src/index.js'
+  }),
+  ...getPackageWebpackConfig({
+    packageName: '@cassette/hooks',
+    hasStyles: false,
+    entrySrc: './packages/hooks/src/index.js'
   })
 ];

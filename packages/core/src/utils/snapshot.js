@@ -2,6 +2,24 @@ import isPlaylistValid from './isPlaylistValid';
 import getTrackSources from './getTrackSources';
 import findTrackIndexByUrl from './findTrackIndexByUrl';
 
+const veryLongKey =
+  '__highly_unstable_snapshot_internals_which_will_break_your_app_if_you_use_them_directly__';
+const versionKey = '__cassette_snapshot_version__';
+
+// IMPORTANT: new migrations *must* always be added to the end since
+// the tracked snapshot version is based on the migration index.
+// If there is a crash-inducing bug in an existing migration, it can be patched
+// in-place, but it should never be removed from the migrations array.
+const migrations = [
+  oldSnapshot => {
+    const { __unstable__, ...rest } = oldSnapshot;
+    return {
+      ...rest,
+      [veryLongKey]: __unstable__
+    };
+  }
+];
+
 export function getStateSnapshot(state) {
   const {
     paused,
@@ -13,12 +31,15 @@ export function getStateSnapshot(state) {
     cycle,
     shuffle,
     playbackRate,
+    duration,
     __playlist__
   } = state;
   return {
-    __unstable__: {
+    [versionKey]: migrations.length,
+    [veryLongKey]: {
       paused,
-      currentTime,
+      // currentTime can't be restored for unbounded live streams
+      currentTime: duration === Infinity ? 0 : currentTime,
       activeTrackIndex,
       volume,
       muted,
@@ -34,6 +55,9 @@ export function getStateSnapshot(state) {
 }
 
 export function restoreStateFromSnapshot(snapshot, props) {
+  const migratedSnapshot = migrations
+    .slice(snapshot[versionKey] || 0)
+    .reduce((oldSnapshot, migration) => migration(oldSnapshot), snapshot);
   const {
     paused,
     currentTime,
@@ -45,7 +69,7 @@ export function restoreStateFromSnapshot(snapshot, props) {
     shuffle,
     playbackRate,
     activeTrackSrc
-  } = snapshot.__unstable__;
+  } = migratedSnapshot[veryLongKey];
   const restoredStateValues = {};
   if (isPlaylistValid(props.playlist) && typeof paused === 'boolean') {
     // using awaitingPlay instead of paused triggers an animation

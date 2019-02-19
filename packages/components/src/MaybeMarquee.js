@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
 
+import requestAnimationFrameWhenPageVisible from './utils/requestAnimationFrameWhenPageVisible';
+
 const getNow =
   typeof performance !== 'undefined' && performance.now
     ? () => performance.now()
@@ -31,7 +33,7 @@ export class MaybeMarquee extends PureComponent {
   }
 
   componentDidMount() {
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
 
     this.marqueeContainerElementWidth = getComputedStyle(
       this.marqueeContainerElement
@@ -50,8 +52,12 @@ export class MaybeMarquee extends PureComponent {
   }
 
   componentWillUnmount() {
-    cancelAnimationFrame(this.animationFrameRequest);
+    this.cancelRaf();
     this.resizeObserver.disconnect();
+  }
+
+  requestMoveMarqueeAnimationFrame() {
+    this.cancelRaf = requestAnimationFrameWhenPageVisible(this.moveMarquee);
   }
 
   moveMarquee() {
@@ -92,7 +98,7 @@ export class MaybeMarquee extends PureComponent {
       }
     }
 
-    this.animationFrameRequest = requestAnimationFrame(this.moveMarquee);
+    this.requestMoveMarqueeAnimationFrame();
   }
 
   handleResize(entries) {

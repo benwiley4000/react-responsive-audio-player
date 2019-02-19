@@ -17,6 +17,7 @@ import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
 import getDisplayText from './utils/getDisplayText';
+import parseTimeString from './utils/parseTimeString';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -73,27 +74,41 @@ const defaultState = {
   /* true if an error occurs while fetching the active track media data
    * or if its type is not a supported media format
    */
-  mediaCannotPlay: false
+  mediaCannotPlay: false,
+  // maximum currentTime since the current track has been playing
+  maxKnownTime: 0
 };
 
 // assumes playlist is valid
 function getGoToTrackState({
   prevState,
   index,
+  track,
   shouldPlay = true,
   shouldForceLoad = false
 }) {
   const isNewTrack = prevState.activeTrackIndex !== index;
+  const shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
+  const currentTime = track.startingTime || 0;
+  let duration = 0;
+  if (track.duration) {
+    if (typeof track.duration === 'string') {
+      duration = parseTimeString(track.duration);
+    } else {
+      duration = track.duration;
+    }
+  }
   return {
+    duration,
     activeTrackIndex: index,
-    trackLoading: isNewTrack,
-    mediaCannotPlay:
-      prevState.mediaCannotPlay && !shouldForceLoad && !isNewTrack,
-    currentTime: 0,
-    loop: isNewTrack || shouldForceLoad ? false : prevState.loop,
+    trackLoading: shouldLoadAsNew,
+    mediaCannotPlay: prevState.mediaCannotPlay && !shouldLoadAsNew,
+    currentTime: convertToNumberWithinIntervalBounds(currentTime, 0),
+    loop: shouldLoadAsNew ? false : prevState.loop,
     shouldRequestPlayOnNextUpdate: Boolean(shouldPlay),
     awaitingPlayAfterTrackLoad: Boolean(shouldPlay),
-    awaitingForceLoad: Boolean(shouldForceLoad)
+    awaitingForceLoad: Boolean(shouldForceLoad),
+    maxKnownTime: shouldLoadAsNew ? 0 : prevState.maxKnownTime
   };
 }
 
@@ -103,18 +118,38 @@ function getGoToTrackState({
 export class PlayerContextProvider extends Component {
   constructor(props) {
     super(props);
-
+    let currentTime = 0;
+    const activeTrackIndex = convertToNumberWithinIntervalBounds(
+      props.startingTrackIndex,
+      0
+    );
+    if (isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
+      currentTime = props.playlist[activeTrackIndex].startingTime || 0;
+    }
+    const { initialStateSnapshot } = props;
+    let restoredStateFromSnapshot = {};
+    if (initialStateSnapshot) {
+      try {
+        restoredStateFromSnapshot = restoreStateFromSnapshot(
+          initialStateSnapshot,
+          props
+        );
+      } catch (err) {
+        logWarning(err);
+        logWarning('Loading Cassette state from snapshot failed.');
+        logWarning(
+          `Failed snapshot:\n${JSON.stringify(initialStateSnapshot, null, 2)}`
+        );
+      }
+    }
     this.state = {
       ...defaultState,
       // index matching requested track (whether track has loaded or not)
-      activeTrackIndex: convertToNumberWithinIntervalBounds(
-        props.startingTrackIndex,
-        0
-      ),
+      activeTrackIndex,
       // whether we're waiting on loading metadata for the active track
       trackLoading: isPlaylistValid(props.playlist),
       // the current timestamp on the active track in seconds
-      currentTime: convertToNumberWithinIntervalBounds(props.startingTime, 0),
+      currentTime: convertToNumberWithinIntervalBounds(currentTime, 0),
       // the latest volume of the media, between 0 and 1.
       volume: convertToNumberWithinIntervalBounds(props.defaultVolume, 0, 1),
       // true if the media has been muted
@@ -136,9 +171,7 @@ export class PlayerContextProvider extends Component {
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
-      ...(props.initialStateSnapshot
-        ? restoreStateFromSnapshot(props.initialStateSnapshot, props)
-        : {})
+      ...restoredStateFromSnapshot
     };
 
     // volume at last time we were unmuted and not actively setting volume
@@ -189,8 +222,9 @@ export class PlayerContextProvider extends Component {
     this.handleMediaEmptied = this.handleMediaEmptied.bind(this);
     this.handleMediaStalled = this.handleMediaStalled.bind(this);
     this.handleMediaCanplaythrough = this.handleMediaCanplaythrough.bind(this);
+    this.handleMediaCanplay = this.handleMediaCanplay.bind(this);
     this.handleMediaTimeupdate = this.handleMediaTimeupdate.bind(this);
-    this.handleMediaLoadedmetadata = this.handleMediaLoadedmetadata.bind(this);
+    this.handleMediaLoadeddata = this.handleMediaLoadeddata.bind(this);
     this.handleMediaVolumechange = this.handleMediaVolumechange.bind(this);
     this.handleMediaDurationchange = this.handleMediaDurationchange.bind(this);
     this.handleMediaProgress = this.handleMediaProgress.bind(this);
@@ -223,11 +257,13 @@ export class PlayerContextProvider extends Component {
     } = this.state;
 
     // initialize media properties
-    // We used to set currentTime here.. now waiting for loadedmetadata.
+    // We used to set currentTime here.. now waiting for loadeddata.
     // This avoids an issue where some browsers ignore or delay currentTime
     // updates when in the HAVE_NOTHING state.
     media.defaultPlaybackRate = defaultPlaybackRate;
-    media.crossOrigin = crossOrigin;
+    if (crossOrigin) {
+      media.crossOrigin = crossOrigin;
+    }
     media.volume = volume;
     media.muted = muted;
     media.playbackRate = playbackRate;
@@ -249,9 +285,10 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('ended', this.handleMediaEnded);
     media.addEventListener('stalled', this.handleMediaStalled);
     media.addEventListener('emptied', this.handleMediaEmptied);
+    media.addEventListener('canplay', this.handleMediaCanplay);
     media.addEventListener('canplaythrough', this.handleMediaCanplaythrough);
     media.addEventListener('timeupdate', this.handleMediaTimeupdate);
-    media.addEventListener('loadedmetadata', this.handleMediaLoadedmetadata);
+    media.addEventListener('loadeddata', this.handleMediaLoadeddata);
     media.addEventListener('volumechange', this.handleMediaVolumechange);
     media.addEventListener('durationchange', this.handleMediaDurationchange);
     media.addEventListener('progress', this.handleMediaProgress);
@@ -340,7 +377,13 @@ export class PlayerContextProvider extends Component {
     // if not, then load the first track in the new playlist, and pause.
     return {
       ...baseNewState,
-      ...getGoToTrackState({ prevState, index: 0, shouldPlay: false }),
+      ...getGoToTrackState({
+        prevState,
+        track: newPlaylist[0],
+        index: 0,
+        shouldPlay: false,
+        shouldForceLoad: true
+      }),
       mediaCannotPlay: false,
       awaitingPlayAfterTrackLoad: false
     };
@@ -435,11 +478,9 @@ export class PlayerContextProvider extends Component {
         'canplaythrough',
         this.handleMediaCanplaythrough
       );
+      media.removeEventListener('canplay', this.handleMediaCanplay);
       media.removeEventListener('timeupdate', this.handleMediaTimeupdate);
-      media.removeEventListener(
-        'loadedmetadata',
-        this.handleMediaLoadedmetadata
-      );
+      media.removeEventListener('loadeddata', this.handleMediaLoadeddata);
       media.removeEventListener('volumechange', this.handleMediaVolumechange);
       media.removeEventListener(
         'durationchange',
@@ -646,7 +687,12 @@ export class PlayerContextProvider extends Component {
     const { cycle, activeTrackIndex } = this.state;
     if (!cycle && activeTrackIndex + 1 >= playlist.length) {
       if (loadFirstTrackOnPlaylistComplete) {
-        this.goToTrack({ index: 0, shouldPlay: false, shouldForceLoad: true });
+        this.goToTrack({
+          index: 0,
+          track: playlist[0],
+          shouldPlay: false,
+          shouldForceLoad: true
+        });
       }
       return;
     }
@@ -664,6 +710,12 @@ export class PlayerContextProvider extends Component {
     this.setState(state => (state.paused === true ? null : { paused: true }));
   }
 
+  handleMediaCanplay() {
+    this.setState(
+      state => (state.trackLoading === false ? null : { trackLoading: false })
+    );
+  }
+
   handleMediaCanplaythrough() {
     this.setState(
       state => (state.stalled === false ? null : { stalled: false })
@@ -672,24 +724,27 @@ export class PlayerContextProvider extends Component {
 
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
+    const { onTimeUpdate, playlist } = this.props;
+    const { activeTrackIndex } = this.state;
     if (this.state.trackLoading) {
       // correct currentTime to preset, if applicable, during load
       this.media.currentTime = this.state.currentTime;
       return;
     }
-    this.setState({
+    this.setState(state => ({
       currentTime,
-      playedRanges: getTimeRangesArray(played)
-    });
+      playedRanges: getTimeRangesArray(played),
+      maxKnownTime: Math.max(state.maxKnownTime, currentTime)
+    }));
+    if (onTimeUpdate) {
+      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+    }
   }
 
-  handleMediaLoadedmetadata() {
+  handleMediaLoadeddata() {
     if (this.media.currentTime !== this.state.currentTime) {
       this.media.currentTime = this.state.currentTime;
     }
-    this.setState(
-      state => (state.trackLoading === false ? null : { trackLoading: false })
-    );
   }
 
   handleMediaVolumechange() {
@@ -699,7 +754,38 @@ export class PlayerContextProvider extends Component {
 
   handleMediaDurationchange() {
     const { duration } = this.media;
-    this.setState({ duration });
+    const activeTrack = this.props.playlist[this.state.activeTrackIndex];
+    if (duration === Infinity) {
+      // This *could* be because we're consuming an unbounded stream.
+      // It could also be because of a weird iOS bug that we want to
+      // try to prevent. See https://github.com/benwiley4000/cassette/issues/355
+
+      // If we still end up with Infinity duration multiple times for
+      // the same track, we'll assume it's correct.
+      if (
+        activeTrack.isUnboundedStream ||
+        activeTrack === this.activeTrackAtLastDurationChange
+      ) {
+        this.setState({
+          duration,
+          currentTime: 0
+        });
+        this.media.currentTime = 0;
+      } else {
+        const { paused } = this.state;
+        this.media.load();
+        if (!paused) {
+          // media.currentSrc is updated asynchronously so we should
+          // play async to avoid weird intermediate state issues
+          setTimeout(() => {
+            this.togglePause(false);
+          });
+        }
+      }
+    } else {
+      this.setState({ duration });
+    }
+    this.activeTrackAtLastDurationChange = activeTrack;
   }
 
   handleMediaProgress() {
@@ -768,7 +854,7 @@ export class PlayerContextProvider extends Component {
     if (this.state.shuffle) {
       this.shuffler.pickNextItem(index, this.state.activeTrackIndex);
     }
-    this.goToTrack({ index });
+    this.goToTrack({ index, track: playlist[index] });
   }
 
   backSkip() {
@@ -798,7 +884,7 @@ export class PlayerContextProvider extends Component {
         index = playlist.length - 1;
       }
     }
-    this.goToTrack({ index, shouldForceLoad: true });
+    this.goToTrack({ index, track: playlist[index], shouldForceLoad: true });
   }
 
   forwardSkip() {
@@ -822,7 +908,7 @@ export class PlayerContextProvider extends Component {
         index = 0;
       }
     }
-    this.goToTrack({ index, shouldForceLoad: true });
+    this.goToTrack({ index, track: playlist[index], shouldForceLoad: true });
   }
 
   seekPreview(targetTime) {
@@ -983,7 +1069,8 @@ export class PlayerContextProvider extends Component {
       seekInProgress: state.seekInProgress,
       awaitingPlayResume:
         state.awaitingResumeOnSeekComplete || state.awaitingPlayAfterTrackLoad,
-      duration: state.duration,
+      duration:
+        state.duration === Infinity ? state.maxKnownTime : state.duration,
       bufferedRanges: state.bufferedRanges,
       playedRanges: state.playedRanges,
       seekableRanges: state.seekableRanges,
@@ -1053,7 +1140,6 @@ PlayerContextProvider.propTypes = {
   defaultRepeatStrategy: PlayerPropTypes.repeatStrategy.isRequired,
   defaultShuffle: PropTypes.bool,
   defaultPlaybackRate: PropTypes.number.isRequired,
-  startingTime: PropTypes.number.isRequired,
   startingTrackIndex: PropTypes.number.isRequired,
   loadFirstTrackOnPlaylistComplete: PropTypes.bool,
   seekMode: PlayerPropTypes.seekMode.isRequired,
@@ -1065,11 +1151,11 @@ PlayerContextProvider.propTypes = {
   ).isRequired,
   mediaSessionSeekLengthInSeconds: PropTypes.number.isRequired,
   mediaElementRef: PropTypes.func,
-  initialStateSnapshot: PropTypes.shape({
-    __unstable__: PropTypes.object.isRequired
-  }),
+  initialStateSnapshot: PropTypes.object,
   onStateSnapshot: PropTypes.func,
   onActiveTrackUpdate: PropTypes.func,
+  // A function called when the media element's currentTime attribute has changed
+  onTimeUpdate: PropTypes.func,
   onTrackPlaybackFailure: PropTypes.func,
   getPosterImageForTrack: PropTypes.func.isRequired,
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
@@ -1086,7 +1172,6 @@ PlayerContextProvider.defaultProps = {
   defaultRepeatStrategy: 'playlist',
   defaultShuffle: false,
   defaultPlaybackRate: 1,
-  startingTime: 0,
   startingTrackIndex: 0,
   loadFirstTrackOnPlaylistComplete: true,
   seekMode: 'immediate',
