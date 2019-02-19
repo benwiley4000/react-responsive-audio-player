@@ -7,6 +7,7 @@ import {
 } from '@cassette/core';
 
 import ProgressBarDisplay from './ProgressBarDisplay';
+import observeProgressBarRect from './utils/observeProgressBarRect';
 
 const noselectStyles = `
 cursor: default;
@@ -45,6 +46,10 @@ export class ProgressBar extends PureComponent {
     window.addEventListener('mouseup', this.handleAdjustComplete);
     document.addEventListener('touchend', this.handleAdjustComplete);
 
+    this.unobserve = observeProgressBarRect(this.progressContainer, rect => {
+      this.cachedContainerRect = rect;
+    });
+
     setTimeout(() => {
       const style = document.createElement('style');
       const className = `noselect_${Math.random()
@@ -63,6 +68,8 @@ export class ProgressBar extends PureComponent {
     document.removeEventListener('touchmove', this.handleAdjustProgress);
     window.removeEventListener('mouseup', this.handleAdjustComplete);
     document.removeEventListener('touchend', this.handleAdjustComplete);
+
+    this.unobserve();
 
     // remove noselect class in case a drag is in progress
     this.toggleNoselect(false);
@@ -84,23 +91,17 @@ export class ProgressBar extends PureComponent {
   }
 
   getProgressFromPageCoordinates(pageX, pageY) {
-    const {
-      left,
-      top,
-      width,
-      height
-    } = this.progressContainer.getBoundingClientRect();
-    const { scrollLeft, scrollTop } = document.body;
+    const { pageLeft, pageTop, width, height } = this.cachedContainerRect;
     switch (this.props.progressDirection) {
       case 'down':
-        return (pageY - top - scrollTop) / height;
+        return (pageY - pageTop) / height;
       case 'left':
-        return 1 - (pageX - left - scrollLeft) / width;
+        return 1 - (pageX - pageLeft) / width;
       case 'up':
-        return 1 - (pageY - top - scrollTop) / height;
+        return 1 - (pageY - pageTop) / height;
       case 'right':
       default:
-        return (pageX - left - scrollLeft) / width;
+        return (pageX - pageLeft) / width;
     }
   }
 
