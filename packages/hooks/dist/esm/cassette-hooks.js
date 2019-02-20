@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define(["@cassette/core", "react"], factory);
 	else if(typeof exports === 'object')
-		exports["cassetteCore"] = factory(require("@cassette/core"), require("react"));
+		exports["cassetteHooks"] = factory(require("@cassette/core"), require("react"));
 	else
-		root["cassetteCore"] = factory(root["cassetteCore"], root["React"]);
+		root["cassetteHooks"] = factory(root["cassetteCore"], root["React"]);
 })((typeof self !== "undefined" ? self : this), function(__WEBPACK_EXTERNAL_MODULE__0__, __WEBPACK_EXTERNAL_MODULE__1__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -110,7 +110,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__1__;
 /* 2 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/hooks","version":"2.0.0-alpha.28","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-hooks.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.8.0"},"devDependencies":{"rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"@cassette/core":"^2.0.0-alpha.28","prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/hooks","version":"2.0.0-alpha.29","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-hooks.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.8.0"},"devDependencies":{"rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"@cassette/core":"^2.0.0-alpha.29","prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 3 */
@@ -139,20 +139,25 @@ function useFullscreenContext() {
 
 
 
-var packageVersion = __webpack_require__(2).version; // TODO: hopefully in the future we'll have a more stable API
+const packageVersion = __webpack_require__(2).version; // TODO: hopefully in the future we'll have a more stable API
 // for observedBits/similar that doesn't require trial and error.
 
 
-var warningLogged = false;
+let warningLogged = false;
 
 function logObservedBitsWarning() {
   if (!warningLogged) {
-    Object(core_["logWarning"])("\n      Unable to optimize playerContext subscription with @cassette/hooks\n      v" + packageVersion + " and react v" + external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.version + ".\n      Please email therealbenwiley@gmail.com to get this fixed!\n      Meanwhile you can try an earlier version of React (v16.8.0 or later).\n    ");
+    Object(core_["logWarning"])(`
+      Unable to optimize playerContext subscription with @cassette/hooks
+      v${packageVersion} and react v${external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.version}.
+      Please email therealbenwiley@gmail.com to get this fixed!
+      Meanwhile you can try an earlier version of React (v16.8.0 or later).
+    `);
     warningLogged = true;
   }
 }
 
-var Dispatcher;
+let Dispatcher;
 
 try {
   Dispatcher = external_root_React_commonjs_react_commonjs2_react_amd_react_["__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED"].ReactCurrentDispatcher;
@@ -162,17 +167,25 @@ try {
 
 function usePlayerContext(filterList) {
   if (!filterList) {
-    Object(core_["logWarning"])("\n      Please pass list of context items to usePlayerContext in order\n      to avoid unnecessarily frequent re-renders, e.g.\n\n      const { paused, onTogglePause } = usePlayerContext([\n        'paused',\n        'onTogglePause'\n      ]);\n    ");
+    Object(core_["logWarning"])(`
+      Please pass list of context items to usePlayerContext in order
+      to avoid unnecessarily frequent re-renders, e.g.
+
+      const { paused, onTogglePause } = usePlayerContext([
+        'paused',
+        'onTogglePause'
+      ]);
+    `);
     return Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["useContext"])(core_["donotuse_PlayerContext"]);
   }
 
-  var _ref = Dispatcher && Dispatcher.current || {},
-      readContext = _ref.readContext;
+  const _ref = Dispatcher && Dispatcher.current || {},
+        readContext = _ref.readContext;
 
-  var playerContext;
+  let playerContext;
 
   if (readContext) {
-    var flags = core_["donotuse_PlayerContext"].__cassetteGetObservedBits(filterList);
+    const flags = core_["donotuse_PlayerContext"].__cassetteGetObservedBits(filterList);
 
     playerContext = readContext(core_["donotuse_PlayerContext"], flags);
   } else {
@@ -183,22 +196,9 @@ function usePlayerContext(filterList) {
     playerContext = Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["useContext"])(core_["donotuse_PlayerContext"]);
   }
 
-  var usedContext = {};
+  const usedContext = {};
 
-  for (var _iterator = filterList, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-    var _ref2;
-
-    if (_isArray) {
-      if (_i >= _iterator.length) break;
-      _ref2 = _iterator[_i++];
-    } else {
-      _i = _iterator.next();
-      if (_i.done) break;
-      _ref2 = _i.value;
-    }
-
-    var name = _ref2;
-
+  for (const name of filterList) {
     if (playerContext.hasOwnProperty(name)) {
       usedContext[name] = playerContext[name];
     }
@@ -217,4 +217,4 @@ function usePlayerContext(filterList) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=cassette-core.js.map
+//# sourceMappingURL=cassette-hooks.js.map
