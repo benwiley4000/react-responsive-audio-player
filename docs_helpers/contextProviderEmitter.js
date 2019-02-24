@@ -37,7 +37,7 @@ function contextProviderEmitter(namespace, Provider, Consumer) {
 
   ContextProviderEmitter.propTypes = {
     context: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
   };
 
   // eslint-disable-next-line no-class-assign
