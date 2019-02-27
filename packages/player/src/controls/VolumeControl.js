@@ -14,13 +14,22 @@ const volumeControlStyle = {
   touchAction: 'none'
 };
 
+const volumeBarContainerHiddenStyle = {
+  opacity: 0
+};
+
 /**
  * A [`MuteButton`](#mutebutton) which, when hovered (with a mouse) or initially tapped (on touch screens), displays a bar for adjusting media volume
  */
 export class VolumeControl extends PureComponent {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { hover, volumeBarPosition } = prevState;
-    if (volumeBarPosition && !hover && !nextProps.setVolumeInProgress) {
+  static getDerivedStateFromProps(props, state) {
+    const { hover, volumeBarFocused, volumeBarPosition } = state;
+    if (
+      volumeBarPosition &&
+      !hover &&
+      !volumeBarFocused &&
+      !props.setVolumeInProgress
+    ) {
       return {
         volumeBarPosition: null
       };
@@ -33,6 +42,7 @@ export class VolumeControl extends PureComponent {
 
     this.state = {
       hover: false,
+      volumeBarFocused: false,
       // null | 'hiddenup' | 'hiddenright' | 'upabove' | 'rightabove' | 'rightbelow'
       volumeBarPosition: null
     };
@@ -47,6 +57,8 @@ export class VolumeControl extends PureComponent {
     this.setVolumeBarContainerRef = this.setVolumeBarContainerRef.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleVolumeBarFocus = this.handleVolumeBarFocus.bind(this);
+    this.handleVolumeBarBlur = this.handleVolumeBarBlur.bind(this);
 
     // bind listeners to add on mount and remove on unmount
     this.handleMuteToggleTouchStart = this.handleMuteToggleTouchStart.bind(
@@ -131,23 +143,41 @@ export class VolumeControl extends PureComponent {
   }
 
   handleMouseEnter() {
-    this.setState({
+    this.setState(state => ({
       hover: true,
-      volumeBarPosition: this.state.volumeBarPosition || 'hiddenup'
-    });
+      volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+    }));
   }
 
   handleMouseLeave() {
-    this.setState({
+    this.setState(state => ({
       hover: false,
-      volumeBarPosition: this.props.setVolumeInProgress
-        ? this.state.volumeBarPosition
-        : null
-    });
+      volumeBarPosition:
+        state.volumeBarFocused || this.props.setVolumeInProgress
+          ? state.volumeBarPosition
+          : null
+    }));
+  }
+
+  handleVolumeBarFocus() {
+    this.setState(state => ({
+      volumeBarFocused: true,
+      volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+    }));
+  }
+
+  handleVolumeBarBlur() {
+    this.setState(state => ({
+      volumeBarFocused: false,
+      volumeBarPosition:
+        state.hover || this.props.setVolumeInProgress
+          ? state.volumeBarPosition
+          : null
+    }));
   }
 
   handleMuteToggleTouchStart(e) {
-    if (!this.state.hover) {
+    if (!this.state.hover && !this.state.volumeBarFocused) {
       e.preventDefault();
       this.handleMouseEnter();
     }
@@ -173,7 +203,7 @@ export class VolumeControl extends PureComponent {
       onSetVolumeComplete,
       onToggleMuted
     } = this.props;
-    const { hover, volumeBarPosition } = this.state;
+    const { hover, volumeBarFocused, volumeBarPosition } = this.state;
     const VolumeIcon = getVolumeIconComponent(volume, muted);
     return (
       <ButtonWrapper
@@ -190,7 +220,7 @@ export class VolumeControl extends PureComponent {
           className={classNames(
             'cassette__material_toggle cassette__media_button cassette__mute_btn',
             {
-              highlight: hover,
+              highlight: hover || volumeBarFocused,
               on: !muted
             }
           )}
@@ -201,12 +231,14 @@ export class VolumeControl extends PureComponent {
           </div>
         </button>
         <div
-          hidden={!volumeBarPosition}
+          style={volumeBarPosition ? undefined : volumeBarContainerHiddenStyle}
           ref={this.setVolumeBarContainerRef}
           className={classNames(
             'cassette__volume_control__volume_bar_container',
             volumeBarPosition
           )}
+          onFocus={this.handleVolumeBarFocus}
+          onBlur={this.handleVolumeBarBlur}
         >
           <ProgressBar
             className={classNames(
