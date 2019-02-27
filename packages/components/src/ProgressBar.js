@@ -221,29 +221,7 @@ export class ProgressBar extends PureComponent {
         handle={handle}
         onMouseDown={this.handleAdjustProgress}
         onTouchStart={this.handleAdjustProgress}
-        onKeyDown={e => {
-          const { progress, onAdjustComplete } = this.props;
-          const arrowLeft = 37;
-          const arrowRight = 39;
-          const arrowUp = 38;
-          const arrowDown = 40;
-          switch (e.keyCode) {
-            case arrowLeft:
-            case arrowDown:
-              e.preventDefault();
-              e.stopPropagation();
-              e.nativeEvent.stopImmediatePropagation();
-              onAdjustComplete(progress - 0.01);
-              break;
-            case arrowUp:
-            case arrowRight:
-              e.preventDefault();
-              e.stopPropagation();
-              e.nativeEvent.stopImmediatePropagation();
-              onAdjustComplete(progress + 0.01);
-              break;
-          }
-        }}
+        onKeyDown={this.handleKeyDown}
         onKeyUp={this.handleAdjustComplete}
         onBlur={this.handleAdjustComplete}
       />
