@@ -12,9 +12,9 @@
     right: 0;
   }
   &__media_info_marquee {
-    /* to make room for __media_time_progress */
-    width: $cassette_marquee_width;
+    flex-grow: 1;
     margin-left: $cassette_marquee_margin;
+    margin-right: $cassette_marquee_margin;
     font-size: $cassette_info_font_size;
     color: $cassette_base_text_color;
     display: flex;
