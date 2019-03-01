@@ -78,6 +78,23 @@ export const track = PropTypes.shape({
   album: PropTypes.string,
   artwork: PropTypes.arrayOf(mediaSessionArtwork.isRequired),
   duration: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  textTracks: PropTypes.arrayOf(
+    PropTypes.shape({
+      src: PropTypes.string.isRequired,
+      srclang: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      // we will default to 'subtitles' to avoid forcing the
+      // user to spend time up-front learning the difference
+      // between captions and subtitles
+      kind: PropTypes.oneOf([
+        'subtitles',
+        'captions',
+        'descriptions',
+        'chapters',
+        'metadata'
+      ])
+    }).isRequired
+  ),
   startingTime: PropTypes.number,
   isUnboundedStream: PropTypes.bool,
   meta: PropTypes.object

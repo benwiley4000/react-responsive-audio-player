@@ -293,8 +293,8 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
     media.addEventListener('loopchange', this.handleMediaLoopchange);
 
-    // set source elements for current track
-    this.setMediaElementSources();
+    // set source elements and text tracks for current track
+    this.setMediaElementSourcesAndTextTracks();
 
     // initially mount media element in the hidden container (this may change)
     this.mediaContainer.appendChild(media);
@@ -408,7 +408,7 @@ export class PlayerContextProvider extends Component {
       this.state.awaitingForceLoad ||
       prevSources[0].src !== newSources[0].src
     ) {
-      this.setMediaElementSources();
+      this.setMediaElementSourcesAndTextTracks();
       this.media.setAttribute(
         'poster',
         this.props.getPosterImageForTrack(newTrack)
@@ -539,16 +539,16 @@ export class PlayerContextProvider extends Component {
       });
   }
 
-  setMediaElementSources() {
-    // remove current sources
+  setMediaElementSourcesAndTextTracks() {
+    // remove current sources and text tracks
     const { playlist } = this.props;
     let firstChild;
     while ((firstChild = this.media.firstChild)) {
       this.media.removeChild(firstChild);
     }
     if (isPlaylistValid(playlist)) {
-      const sources = getTrackSources(playlist, this.state.activeTrackIndex);
       // add new sources
+      const sources = getTrackSources(playlist, this.state.activeTrackIndex);
       for (const source of sources) {
         const sourceElement = document.createElement('source');
         sourceElement.src = source.src;
@@ -558,8 +558,19 @@ export class PlayerContextProvider extends Component {
         sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
         this.media.appendChild(sourceElement);
       }
+      // add new text tracks
+      const { textTracks = [] } = playlist[this.state.activeTrackIndex];
+      for (const { kind, label, srclang, src } of textTracks) {
+        const trackElement = document.createElement('track');
+        trackElement.kind = kind;
+        trackElement.label = label;
+        trackElement.srclang = srclang;
+        trackElement.src = src;
+        // TODO: we need a way to *change* which text track is displayed
+        this.media.appendChild(trackElement);
+      }
     }
-    // cancel playback and re-scan new sources
+    // cancel playback and re-scan new sources and text tracks
     this.media.load();
   }
 
