@@ -588,12 +588,9 @@ export class PlayerContextProvider extends Component {
         this.textTrackElements.push(trackElement);
       }
       if (autoloadCaptionsOrSubtitles) {
-        let index = textTracks.findIndex(({ isPrioritized }) => {
-          return isPrioritized;
+        let index = textTracks.findIndex(({ kind = 'subtitles' }) => {
+          return kind === 'subtitles' || kind === 'captions';
         });
-        if (index === -1) {
-          index = 0;
-        }
         if (this.textTrackElements[index]) {
           this.textTrackElements[index].default = true;
         }
