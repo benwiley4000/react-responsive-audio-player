@@ -563,11 +563,11 @@ export class PlayerContextProvider extends Component {
       // add new text tracks
       const { textTracks = [] } = playlist[this.state.activeTrackIndex];
       this.textTrackElements = [];
-      for (const { kind, label, srclang, src } of textTracks) {
+      for (const { kind, label, language, src } of textTracks) {
         const trackElement = document.createElement('track');
         trackElement.kind = kind;
         trackElement.label = label;
-        trackElement.srclang = srclang;
+        trackElement.srclang = language;
         trackElement.src = src;
         // TODO: we need a way to *change* which text track is displayed
         this.media.appendChild(trackElement);

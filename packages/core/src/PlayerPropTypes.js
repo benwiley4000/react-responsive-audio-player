@@ -81,7 +81,7 @@ export const track = PropTypes.shape({
   textTracks: PropTypes.arrayOf(
     PropTypes.shape({
       src: PropTypes.string.isRequired,
-      srclang: PropTypes.string.isRequired,
+      language: PropTypes.string.isRequired,
       label: PropTypes.string.isRequired,
       // we will default to 'subtitles' to avoid forcing the
       // user to spend time up-front learning the difference
