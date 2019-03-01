@@ -205,6 +205,9 @@ export class PlayerContextProvider extends Component {
     this.toggleShuffle = this.toggleShuffle.bind(this);
     this.setRepeatStrategy = this.setRepeatStrategy.bind(this);
     this.setPlaybackRate = this.setPlaybackRate.bind(this);
+    this.selectCaptionsOrSubtitlesSrc = this.selectCaptionsOrSubtitlesSrc.bind(
+      this
+    );
     this.registerVideoHostElement = this.registerVideoHostElement.bind(this);
     this.renderVideoIntoHostElement = this.renderVideoIntoHostElement.bind(
       this
@@ -583,6 +586,8 @@ export class PlayerContextProvider extends Component {
         trackElement.label = label;
         trackElement.srclang = language;
         trackElement.src = src;
+        // this one won't change value
+        trackElement.__specifiedSrc__ = src;
         // TODO: we need a way to *change* which text track is displayed
         this.media.appendChild(trackElement);
         this.textTrackElements.push(trackElement);
@@ -857,24 +862,22 @@ export class PlayerContextProvider extends Component {
   }
 
   handleTextTracksChange() {
-    const { playlist } = this.props;
-    const { activeTrackIndex } = this.state;
-    const { textTracks = [] } = playlist[activeTrackIndex] || {};
     this.setState({
-      activeTextTracks: textTracks
-        .map((textTrack, index) => ({
-          src: textTrack.src,
-          track: this.textTrackElements[index].track
-        }))
+      activeTextTracks: this.textTrackElements
         .filter(({ track }) => track.mode !== 'disabled')
-        .map(({ src, track: { label, language, kind, cues, activeCues } }) => ({
-          src,
-          label,
-          language,
-          kind,
-          cues,
-          activeCues
-        }))
+        .map(
+          ({
+            __specifiedSrc__,
+            track: { label, language, kind, cues, activeCues }
+          }) => ({
+            src: __specifiedSrc__,
+            label,
+            language,
+            kind,
+            cues,
+            activeCues
+          })
+        )
     });
   }
 
@@ -1140,6 +1143,24 @@ export class PlayerContextProvider extends Component {
     this.media.playbackRate = rate;
   }
 
+  selectCaptionsOrSubtitlesSrc(src) {
+    for (const trackElement of this.textTrackElements) {
+      const { mode, kind } = trackElement.track;
+      if (kind !== 'subtitles' && kind !== 'captions') {
+        continue;
+      }
+      if (trackElement.__specifiedSrc__ === src) {
+        if (mode === 'disabled') {
+          trackElement.mode = 'showing';
+        }
+      } else {
+        if (mode !== 'disabled') {
+          trackElement.mode = 'disabled';
+        }
+      }
+    }
+  }
+
   getControlProps() {
     const { props, state } = this;
     const playerContext = {
@@ -1180,7 +1201,8 @@ export class PlayerContextProvider extends Component {
       onToggleMuted: this.toggleMuted,
       onToggleShuffle: this.toggleShuffle,
       onSetRepeatStrategy: this.setRepeatStrategy,
-      onSetPlaybackRate: this.setPlaybackRate
+      onSetPlaybackRate: this.setPlaybackRate,
+      onSelectCaptionsOrSubtitlesSrc: this.selectCaptionsOrSubtitlesSrc
     };
     if (this.playerContext) {
       // only update this.playerContext if something has changed
