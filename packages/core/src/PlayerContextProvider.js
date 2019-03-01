@@ -587,13 +587,27 @@ export class PlayerContextProvider extends Component {
         this.media.appendChild(trackElement);
         this.textTrackElements.push(trackElement);
       }
+      // we want to show one captions or subtitles at a time
       if (autoloadCaptionsOrSubtitles) {
         let index = textTracks.findIndex(({ kind = 'subtitles' }) => {
           return kind === 'subtitles' || kind === 'captions';
         });
         if (this.textTrackElements[index]) {
-          this.textTrackElements[index].default = true;
+          this.textTrackElements[index].track.mode = 'showing';
         }
+      }
+      // one descriptions at a time, one chapters at a time
+      for (const kind of ['descriptions', 'chapters']) {
+        let index = textTracks.findIndex(({ k }) => k === kind);
+        if (this.textTrackElements[index]) {
+          this.textTrackElements[index].track.mode = 'showing';
+        }
+      }
+      // we'll show all metadata
+      for (const trackElement of this.textTrackElements.filter(
+        element => element.kind === 'metadata'
+      )) {
+        trackElement.track.mode = 'showing';
       }
     }
     // cancel playback and re-scan new sources and text tracks
