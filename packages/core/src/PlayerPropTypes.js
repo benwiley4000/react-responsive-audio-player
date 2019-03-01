@@ -92,7 +92,8 @@ export const track = PropTypes.shape({
         'descriptions',
         'chapters',
         'metadata'
-      ])
+      ]),
+      isPrioritized: PropTypes.bool
     }).isRequired
   ),
   startingTime: PropTypes.number,

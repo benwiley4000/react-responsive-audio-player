@@ -185,6 +185,8 @@ export class PlayerContextProvider extends Component {
     this.videoHostOccupiedCallbacks = new Map();
     this.videoHostVacatedCallbacks = new Map();
 
+    this.textTrackElements = [];
+
     // bind internal methods
     this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
 
@@ -541,7 +543,7 @@ export class PlayerContextProvider extends Component {
 
   setMediaElementSourcesAndTextTracks() {
     // remove current sources and text tracks
-    const { playlist } = this.props;
+    const { playlist, autoloadCaptions } = this.props;
     let firstChild;
     while ((firstChild = this.media.firstChild)) {
       this.media.removeChild(firstChild);
@@ -560,6 +562,7 @@ export class PlayerContextProvider extends Component {
       }
       // add new text tracks
       const { textTracks = [] } = playlist[this.state.activeTrackIndex];
+      this.textTrackElements = [];
       for (const { kind, label, srclang, src } of textTracks) {
         const trackElement = document.createElement('track');
         trackElement.kind = kind;
@@ -568,6 +571,18 @@ export class PlayerContextProvider extends Component {
         trackElement.src = src;
         // TODO: we need a way to *change* which text track is displayed
         this.media.appendChild(trackElement);
+        this.textTrackElements.push(trackElement);
+      }
+      if (autoloadCaptions) {
+        let index = textTracks.findIndex(({ isPrioritized }) => {
+          return isPrioritized;
+        });
+        if (index === -1) {
+          index = 0;
+        }
+        if (this.textTrackElements[index]) {
+          this.textTrackElements[index].default = true;
+        }
       }
     }
     // cancel playback and re-scan new sources and text tracks
@@ -1152,6 +1167,7 @@ export class PlayerContextProvider extends Component {
 PlayerContextProvider.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   autoplay: PropTypes.bool.isRequired,
+  autoloadCaptions: PropTypes.bool.isRequired,
   createMediaElement: PropTypes.func.isRequired,
   autoplayDelayInSeconds: PropTypes.number.isRequired,
   gapLengthInSeconds: PropTypes.number.isRequired,
@@ -1185,6 +1201,7 @@ PlayerContextProvider.propTypes = {
 
 PlayerContextProvider.defaultProps = {
   autoplay: false,
+  autoloadCaptions: false,
   autoplayDelayInSeconds: 0,
   createMediaElement: () => document.createElement('video'),
   gapLengthInSeconds: 0,
