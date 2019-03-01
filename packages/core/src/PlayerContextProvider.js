@@ -76,7 +76,9 @@ const defaultState = {
    */
   mediaCannotPlay: false,
   // maximum currentTime since the current track has been playing
-  maxKnownTime: 0
+  maxKnownTime: 0,
+  // data about media textTracks that are not currently disabled
+  activeTextTracks: []
 };
 
 // assumes playlist is valid
@@ -228,6 +230,9 @@ export class PlayerContextProvider extends Component {
     this.handleMediaProgress = this.handleMediaProgress.bind(this);
     this.handleMediaLoopchange = this.handleMediaLoopchange.bind(this);
     this.handleMediaRatechange = this.handleMediaRatechange.bind(this);
+
+    // bind other event handlers
+    this.handleTextTracksChange = this.handleTextTracksChange.bind(this);
   }
 
   componentDidMount() {
@@ -294,6 +299,9 @@ export class PlayerContextProvider extends Component {
     // add listeners for special events
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
     media.addEventListener('loopchange', this.handleMediaLoopchange);
+
+    // add listeners for other events
+    media.textTracks.addEventListener('change', this.handleTextTracksChange);
 
     // set source elements and text tracks for current track
     this.setMediaElementSourcesAndTextTracks();
@@ -489,6 +497,12 @@ export class PlayerContextProvider extends Component {
       // remove special event listeners on the media element
       media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
       media.removeEventListener('loopchange', this.handleMediaLoopchange);
+
+      // remove listeners for other events
+      media.textTracks.removeEventListener(
+        'change',
+        this.handleTextTracksChange
+      );
 
       const sourceElements = media.querySelectorAll('source');
       for (const sourceElement of sourceElements) {
@@ -831,6 +845,28 @@ export class PlayerContextProvider extends Component {
     );
   }
 
+  handleTextTracksChange() {
+    const { playlist } = this.props;
+    const { activeTrackIndex } = this.state;
+    const { textTracks = [] } = playlist[activeTrackIndex] || {};
+    this.setState({
+      activeTextTracks: textTracks
+        .map((textTrack, index) => ({
+          src: textTrack.src,
+          track: this.textTrackElements[index].track
+        }))
+        .filter(({ track }) => track.mode !== 'disabled')
+        .map(({ src, track: { label, language, kind, cues, activeCues } }) => ({
+          src,
+          label,
+          language,
+          kind,
+          cues,
+          activeCues
+        }))
+    });
+  }
+
   togglePause(value) {
     clearTimeout(this.delayTimeout);
     const pause = typeof value === 'boolean' ? value : !this.state.paused;
@@ -1118,6 +1154,7 @@ export class PlayerContextProvider extends Component {
       mediaCannotPlay: state.mediaCannotPlay,
       setVolumeInProgress: state.setVolumeInProgress,
       repeatStrategy: getRepeatStrategy(state.loop, state.cycle),
+      activeTextTracks: state.activeTextTracks,
       registerVideoHostElement: this.registerVideoHostElement,
       renderVideoIntoHostElement: this.renderVideoIntoHostElement,
       unregisterVideoHostElement: this.unregisterVideoHostElement,
