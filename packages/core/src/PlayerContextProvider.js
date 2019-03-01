@@ -557,7 +557,7 @@ export class PlayerContextProvider extends Component {
 
   setMediaElementSourcesAndTextTracks() {
     // remove current sources and text tracks
-    const { playlist, autoloadCaptions } = this.props;
+    const { playlist, autoloadCaptionsOrSubtitles } = this.props;
     let firstChild;
     while ((firstChild = this.media.firstChild)) {
       this.media.removeChild(firstChild);
@@ -587,7 +587,7 @@ export class PlayerContextProvider extends Component {
         this.media.appendChild(trackElement);
         this.textTrackElements.push(trackElement);
       }
-      if (autoloadCaptions) {
+      if (autoloadCaptionsOrSubtitles) {
         let index = textTracks.findIndex(({ isPrioritized }) => {
           return isPrioritized;
         });
@@ -1204,7 +1204,7 @@ export class PlayerContextProvider extends Component {
 PlayerContextProvider.propTypes = {
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
   autoplay: PropTypes.bool.isRequired,
-  autoloadCaptions: PropTypes.bool.isRequired,
+  autoloadCaptionsOrSubtitles: PropTypes.bool.isRequired,
   createMediaElement: PropTypes.func.isRequired,
   autoplayDelayInSeconds: PropTypes.number.isRequired,
   gapLengthInSeconds: PropTypes.number.isRequired,
@@ -1238,7 +1238,7 @@ PlayerContextProvider.propTypes = {
 
 PlayerContextProvider.defaultProps = {
   autoplay: false,
-  autoloadCaptions: false,
+  autoloadCaptionsOrSubtitles: false,
   autoplayDelayInSeconds: 0,
   createMediaElement: () => document.createElement('video'),
   gapLengthInSeconds: 0,
