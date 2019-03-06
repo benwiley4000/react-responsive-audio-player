@@ -2,6 +2,9 @@ $cassette_base_height: 50px !default;
 $cassette_base_bg_color: #333 !default;
 $cassette_base_text_color: #fff !default;
 
+$cassette_secondary_bg_color: rgba(127, 127, 127, 0.295) !default;
+$cassette_box_shadow: 1px 1px 6px 2px rgba(#242424, 0.8) !default;
+
 $cassette_btn_bg_color: #fff !default;
 $cassette_btn_height: $cassette_base_height !default;
 $cassette_btn_margin: 4px !default;
@@ -27,7 +30,7 @@ $cassette_play_btn_transition_timing_function: ease !default;
 
 $cassette_skip_btn_color: $cassette_btn_bg_color !default;
 
-$cassette_progress_bg_color: rgba(127, 127, 127, 0.295) !default;
+$cassette_progress_bg_color: $cassette_secondary_bg_color !default;
 
 $cassette_volume_control_height: $cassette_base_height !default;
 
@@ -52,3 +55,5 @@ $cassette_material_toggle_btn_off_color: rgba(
   $cassette_material_toggle_btn_on_color,
   0.5
 ) !default;
+
+$cassette_captions_selector_margin: 5px !default;

@@ -32,6 +32,7 @@ export const controlKeyword = PropTypes.oneOf([
   'mute',
   'repeat',
   'shuffle',
+  'captions',
   'progress',
   'progressdisplay',
   'fullscreen',

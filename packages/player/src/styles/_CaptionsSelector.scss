@@ -1,0 +1,61 @@
+@import 'variables';
+
+.cassette {
+  &__captions_selector {
+    position: relative;
+
+    &__menu {
+      $menu_offset: $cassette_base_height + $cassette_captions_selector_margin;
+
+      display: flex;
+      flex-direction: column;
+      background-color: $cassette_base_bg_color;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+      bottom: $menu_offset;
+      box-shadow: $cassette_box_shadow;
+
+      &.hidden {
+        visibility: hidden;
+      }
+
+      &.below {
+        bottom: initial;
+        top: $menu_offset;
+      }
+    }
+
+    &__menu_item_container {
+      cursor: pointer;
+      padding: 0.5rem;
+      margin-top: 0.125rem;
+      margin-bottom: 0.125rem;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: $cassette_secondary_bg_color;
+      }
+    }
+
+    &__menu_item {
+      // undo button styles
+      color: $cassette_base_text_color;
+      background: none;
+      border: none;
+      font: inherit;
+      cursor: pointer;
+
+      &::before {
+        content: '✓';
+        visibility: hidden;
+        padding-right: 0.25rem;
+      }
+
+      &.active::before {
+        visibility: initial;
+      }
+    }
+  }
+}

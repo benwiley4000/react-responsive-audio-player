@@ -7,6 +7,7 @@ import VolumeControl from '../controls/VolumeControl';
 import MuteButton from '../controls/MuteButton';
 import RepeatButton from '../controls/RepeatButton';
 import ShuffleButton from '../controls/ShuffleButton';
+import CaptionsSelector from '../controls/CaptionsSelector';
 import MediaProgress from '../controls/MediaProgress';
 import MediaProgressDisplay from '../controls/MediaProgressDisplay';
 import FullscreenButton from '../controls/FullscreenButton';
@@ -20,6 +21,7 @@ const controlComponents = {
   mute: MuteButton,
   repeat: RepeatButton,
   shuffle: ShuffleButton,
+  captions: CaptionsSelector,
   progress: MediaProgress,
   progressdisplay: MediaProgressDisplay,
   fullscreen: FullscreenButton,
