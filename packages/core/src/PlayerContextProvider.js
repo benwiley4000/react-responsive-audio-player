@@ -594,20 +594,14 @@ export class PlayerContextProvider extends Component {
       }
       // we want to show one captions or subtitles at a time
       if (autoloadCaptionsOrSubtitles) {
-        const captionsAndSubtitles = this.textTrackElements
-          .filter(({ kind = 'subtitles' }) => {
+        const captionsAndSubtitles = this.textTrackElements.filter(
+          ({ kind = 'subtitles' }) => {
             return kind === 'subtitles' || kind === 'captions';
-          })
-          .map(trackElement => trackElement.track);
-        captionsAndSubtitles.forEach((textTrack, i) => {
-          if (i === 0) {
-            textTrack.mode = 'showing';
-          } else {
-            // because of a chrome bug we need to explicitly disable
-            // tracks to avoid dual display
-            textTrack.mode = 'disabled';
           }
-        });
+        );
+        if (captionsAndSubtitles[0]) {
+          captionsAndSubtitles[0].default = true;
+        }
       }
       // one descriptions at a time, one chapters at a time
       for (const k of ['descriptions', 'chapters']) {
@@ -617,8 +611,6 @@ export class PlayerContextProvider extends Component {
         tracks.forEach((textTrack, i) => {
           if (i === 0) {
             textTrack.mode = 'showing';
-          } else {
-            textTrack.mode = 'disabled';
           }
         });
       }
