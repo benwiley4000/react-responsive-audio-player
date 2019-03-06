@@ -594,19 +594,33 @@ export class PlayerContextProvider extends Component {
       }
       // we want to show one captions or subtitles at a time
       if (autoloadCaptionsOrSubtitles) {
-        let index = textTracks.findIndex(({ kind = 'subtitles' }) => {
-          return kind === 'subtitles' || kind === 'captions';
+        const captionsAndSubtitles = this.textTrackElements
+          .filter(({ kind = 'subtitles' }) => {
+            return kind === 'subtitles' || kind === 'captions';
+          })
+          .map(trackElement => trackElement.track);
+        captionsAndSubtitles.forEach((textTrack, i) => {
+          if (i === 0) {
+            textTrack.mode = 'showing';
+          } else {
+            // because of a chrome bug we need to explicitly disable
+            // tracks to avoid dual display
+            textTrack.mode = 'disabled';
+          }
         });
-        if (this.textTrackElements[index]) {
-          this.textTrackElements[index].track.mode = 'showing';
-        }
       }
       // one descriptions at a time, one chapters at a time
-      for (const kind of ['descriptions', 'chapters']) {
-        let index = textTracks.findIndex(({ k }) => k === kind);
-        if (this.textTrackElements[index]) {
-          this.textTrackElements[index].track.mode = 'showing';
-        }
+      for (const k of ['descriptions', 'chapters']) {
+        const tracks = this.textTrackElements
+          .filter(({ kind }) => kind === k)
+          .map(trackElement => trackElement.track);
+        tracks.forEach((textTrack, i) => {
+          if (i === 0) {
+            textTrack.mode = 'showing';
+          } else {
+            textTrack.mode = 'disabled';
+          }
+        });
       }
       // we'll show all metadata
       for (const trackElement of this.textTrackElements.filter(
@@ -1151,11 +1165,11 @@ export class PlayerContextProvider extends Component {
       }
       if (trackElement.__specifiedSrc__ === src) {
         if (mode === 'disabled') {
-          trackElement.mode = 'showing';
+          trackElement.track.mode = 'showing';
         }
       } else {
         if (mode !== 'disabled') {
-          trackElement.mode = 'disabled';
+          trackElement.track.mode = 'disabled';
         }
       }
     }
