@@ -317,7 +317,9 @@ export class PlayerContextProvider extends Component {
     if (onActiveTrackUpdate) {
       onActiveTrackUpdate({
         track: playlist[activeTrackIndex],
-        trackIndex: activeTrackIndex
+        trackIndex: activeTrackIndex,
+        previousTrack: null,
+        previousTrackIndex: null
       });
     }
   }
@@ -437,7 +439,9 @@ export class PlayerContextProvider extends Component {
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
       this.props.onActiveTrackUpdate({
         track: newTrack,
-        trackIndex: this.state.activeTrackIndex
+        trackIndex: this.state.activeTrackIndex,
+        previousTrack: prevTrack,
+        previousTrackIndex: prevState.activeTrackIndex
       });
     }
 
