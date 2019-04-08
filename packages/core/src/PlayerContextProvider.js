@@ -313,7 +313,10 @@ export class PlayerContextProvider extends Component {
     }
 
     if (onActiveTrackUpdate) {
-      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
+      onActiveTrackUpdate({
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex
+      });
     }
   }
 
@@ -430,7 +433,10 @@ export class PlayerContextProvider extends Component {
     }
 
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
-      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
+      this.props.onActiveTrackUpdate({
+        track: newTrack,
+        trackIndex: this.state.activeTrackIndex
+      });
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -568,11 +574,11 @@ export class PlayerContextProvider extends Component {
       mediaCannotPlay: true
     });
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(
-        this.props.playlist[this.state.activeTrackIndex],
-        this.state.activeTrackIndex,
+      this.props.onTrackPlaybackFailure({
+        track: this.props.playlist[this.state.activeTrackIndex],
+        trackIndex: this.state.activeTrackIndex,
         event
-      );
+      });
     }
   }
 
@@ -735,7 +741,11 @@ export class PlayerContextProvider extends Component {
       maxKnownTime: Math.max(state.maxKnownTime, currentTime)
     }));
     if (onTimeUpdate) {
-      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+      onTimeUpdate({
+        currentTime,
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex
+      });
     }
   }
 
