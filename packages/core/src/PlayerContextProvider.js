@@ -186,7 +186,9 @@ export class PlayerContextProvider extends Component {
     this.videoHostVacatedCallbacks = new Map();
 
     // bind internal methods
-    this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
+    this.handleTrackPlaybackFailure = this.handleTrackPlaybackFailure.bind(
+      this
+    );
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -313,7 +315,12 @@ export class PlayerContextProvider extends Component {
     }
 
     if (onActiveTrackUpdate) {
-      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
+      onActiveTrackUpdate({
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex,
+        previousTrack: null,
+        previousTrackIndex: null
+      });
     }
   }
 
@@ -430,7 +437,12 @@ export class PlayerContextProvider extends Component {
     }
 
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
-      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
+      this.props.onActiveTrackUpdate({
+        track: newTrack,
+        trackIndex: this.state.activeTrackIndex,
+        previousTrack: prevTrack,
+        previousTrackIndex: prevState.activeTrackIndex
+      });
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -490,7 +502,10 @@ export class PlayerContextProvider extends Component {
 
       const sourceElements = media.querySelectorAll('source');
       for (const sourceElement of sourceElements) {
-        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.removeEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
       }
     }
     clearTimeout(this.gapLengthTimeout);
@@ -555,7 +570,10 @@ export class PlayerContextProvider extends Component {
         if (source.type) {
           sourceElement.type = source.type;
         }
-        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.addEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
         this.media.appendChild(sourceElement);
       }
     }
@@ -563,16 +581,16 @@ export class PlayerContextProvider extends Component {
     this.media.load();
   }
 
-  onTrackPlaybackFailure(event) {
+  handleTrackPlaybackFailure(event) {
     this.setState({
       mediaCannotPlay: true
     });
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(
-        this.props.playlist[this.state.activeTrackIndex],
-        this.state.activeTrackIndex,
+      this.props.onTrackPlaybackFailure({
+        track: this.props.playlist[this.state.activeTrackIndex],
+        trackIndex: this.state.activeTrackIndex,
         event
-      );
+      });
     }
   }
 
@@ -735,7 +753,11 @@ export class PlayerContextProvider extends Component {
       maxKnownTime: Math.max(state.maxKnownTime, currentTime)
     }));
     if (onTimeUpdate) {
-      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+      onTimeUpdate({
+        currentTime,
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex
+      });
     }
   }
 
