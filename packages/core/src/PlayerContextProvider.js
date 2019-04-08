@@ -186,7 +186,9 @@ export class PlayerContextProvider extends Component {
     this.videoHostVacatedCallbacks = new Map();
 
     // bind internal methods
-    this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
+    this.handleTrackPlaybackFailure = this.handleTrackPlaybackFailure.bind(
+      this
+    );
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -496,7 +498,10 @@ export class PlayerContextProvider extends Component {
 
       const sourceElements = media.querySelectorAll('source');
       for (const sourceElement of sourceElements) {
-        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.removeEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
       }
     }
     clearTimeout(this.gapLengthTimeout);
@@ -561,7 +566,10 @@ export class PlayerContextProvider extends Component {
         if (source.type) {
           sourceElement.type = source.type;
         }
-        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.addEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
         this.media.appendChild(sourceElement);
       }
     }
@@ -569,7 +577,7 @@ export class PlayerContextProvider extends Component {
     this.media.load();
   }
 
-  onTrackPlaybackFailure(event) {
+  handleTrackPlaybackFailure(event) {
     this.setState({
       mediaCannotPlay: true
     });
