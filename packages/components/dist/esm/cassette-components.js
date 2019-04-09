@@ -520,7 +520,8 @@ function setup() {
     // are expected to conform to the shape of the container
 
     mutationObserver.observe(document, {
-      attributes: true
+      attributes: true,
+      subtree: true
     });
   } else {
     document.addEventListener('DOMSubtreeModified', refresh);
@@ -645,6 +646,10 @@ cursor: default;
           user-select: none;
   -webkit-touch-callout: none;
 `;
+const arrowLeft = 37;
+const arrowRight = 39;
+const arrowUp = 38;
+const arrowDown = 40;
 /**
  * A vertical or horizontal progress bar element which can be manipulated by mouse or touch
  */
@@ -660,9 +665,9 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     this.progressContainer = null; // bind methods fired on React events
 
     this.setProgressContainerRef = this.setProgressContainerRef.bind(this);
-    this.handleAdjustProgress = this.handleAdjustProgress.bind(this); // bind listeners to add on mount and remove on unmount
-
+    this.handleAdjustProgress = this.handleAdjustProgress.bind(this);
     this.handleAdjustComplete = this.handleAdjustComplete.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
@@ -797,6 +802,37 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     onAdjustComplete(tempProgress);
   }
 
+  handleKeyDown(event) {
+    if (this.props.readonly) {
+      return;
+    }
+
+    let newProgress = this.props.progress;
+
+    switch (event.keyCode) {
+      case arrowLeft:
+      case arrowDown:
+        newProgress -= 0.01;
+        break;
+
+      case arrowUp:
+      case arrowRight:
+        newProgress += 0.01;
+        break;
+
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    this.setState({
+      adjusting: true,
+      tempProgress: Object(core_["convertToNumberWithinIntervalBounds"])(newProgress, 0, 1)
+    });
+  }
+
   render() {
     const _this$props = this.props,
           progressClassName = _this$props.progressClassName,
@@ -812,7 +848,10 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, ProgressBar_extends({}, attributes, {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, ProgressBar_extends({
+      tabIndex: 0
+    }, attributes, {
+      role: "slider",
       ref: this.setProgressContainerRef,
       progressClassName: progressClassName,
       progressStyle: progressStyle,
@@ -820,7 +859,10 @@ class ProgressBar_ProgressBar extends external_root_React_commonjs_react_commonj
       progressDirection: progressDirection,
       handle: handle,
       onMouseDown: this.handleAdjustProgress,
-      onTouchStart: this.handleAdjustProgress
+      onTouchStart: this.handleAdjustProgress,
+      onKeyDown: this.handleKeyDown,
+      onKeyUp: this.handleAdjustComplete,
+      onBlur: this.handleAdjustComplete
     }));
   }
 

@@ -598,6 +598,9 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 var volumeControlStyle = {
   touchAction: 'none'
 };
+var volumeBarContainerHiddenStyle = {
+  opacity: 0
+};
 /**
  * A [`MuteButton`](#mutebutton) which, when hovered (with a mouse) or initially tapped (on touch screens), displays a bar for adjusting media volume
  */
@@ -607,11 +610,12 @@ var VolumeControl_VolumeControl =
 function (_PureComponent) {
   VolumeControl_inheritsLoose(VolumeControl, _PureComponent);
 
-  VolumeControl.getDerivedStateFromProps = function getDerivedStateFromProps(nextProps, prevState) {
-    var hover = prevState.hover,
-        volumeBarPosition = prevState.volumeBarPosition;
+  VolumeControl.getDerivedStateFromProps = function getDerivedStateFromProps(props, state) {
+    var hover = state.hover,
+        volumeBarFocused = state.volumeBarFocused,
+        volumeBarPosition = state.volumeBarPosition;
 
-    if (volumeBarPosition && !hover && !nextProps.setVolumeInProgress) {
+    if (volumeBarPosition && !hover && !volumeBarFocused && !props.setVolumeInProgress) {
       return {
         volumeBarPosition: null
       };
@@ -626,6 +630,7 @@ function (_PureComponent) {
     _this = _PureComponent.call(this, props) || this;
     _this.state = {
       hover: false,
+      volumeBarFocused: false,
       // null | 'hiddenup' | 'hiddenright' | 'upabove' | 'rightabove' | 'rightbelow'
       volumeBarPosition: null
     };
@@ -637,7 +642,9 @@ function (_PureComponent) {
     _this.setMuteToggleRef = _this.setMuteToggleRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.setVolumeBarContainerRef = _this.setVolumeBarContainerRef.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleMouseEnter = _this.handleMouseEnter.bind(_assertThisInitialized(_assertThisInitialized(_this)));
-    _this.handleMouseLeave = _this.handleMouseLeave.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind listeners to add on mount and remove on unmount
+    _this.handleMouseLeave = _this.handleMouseLeave.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleVolumeBarFocus = _this.handleVolumeBarFocus.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.handleVolumeBarBlur = _this.handleVolumeBarBlur.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind listeners to add on mount and remove on unmount
 
     _this.handleMuteToggleTouchStart = _this.handleMuteToggleTouchStart.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
@@ -715,21 +722,47 @@ function (_PureComponent) {
   };
 
   _proto.handleMouseEnter = function handleMouseEnter() {
-    this.setState({
-      hover: true,
-      volumeBarPosition: this.state.volumeBarPosition || 'hiddenup'
+    this.setState(function (state) {
+      return {
+        hover: true,
+        volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+      };
     });
   };
 
   _proto.handleMouseLeave = function handleMouseLeave() {
-    this.setState({
-      hover: false,
-      volumeBarPosition: this.props.setVolumeInProgress ? this.state.volumeBarPosition : null
+    var _this2 = this;
+
+    this.setState(function (state) {
+      return {
+        hover: false,
+        volumeBarPosition: state.volumeBarFocused || _this2.props.setVolumeInProgress ? state.volumeBarPosition : null
+      };
+    });
+  };
+
+  _proto.handleVolumeBarFocus = function handleVolumeBarFocus() {
+    this.setState(function (state) {
+      return {
+        volumeBarFocused: true,
+        volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+      };
+    });
+  };
+
+  _proto.handleVolumeBarBlur = function handleVolumeBarBlur() {
+    var _this3 = this;
+
+    this.setState(function (state) {
+      return {
+        volumeBarFocused: false,
+        volumeBarPosition: state.hover || _this3.props.setVolumeInProgress ? state.volumeBarPosition : null
+      };
     });
   };
 
   _proto.handleMuteToggleTouchStart = function handleMuteToggleTouchStart(e) {
-    if (!this.state.hover) {
+    if (!this.state.hover && !this.state.volumeBarFocused) {
       e.preventDefault();
       this.handleMouseEnter();
     }
@@ -752,6 +785,7 @@ function (_PureComponent) {
         onToggleMuted = _this$props.onToggleMuted;
     var _this$state = this.state,
         hover = _this$state.hover,
+        volumeBarFocused = _this$state.volumeBarFocused,
         volumeBarPosition = _this$state.volumeBarPosition;
     var VolumeIcon = utils_getVolumeIconComponent(volume, muted);
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, {
@@ -765,7 +799,7 @@ function (_PureComponent) {
       ref: this.setMuteToggleRef,
       type: "button",
       className: utils_classNames('cassette__material_toggle cassette__media_button cassette__mute_btn', {
-        highlight: hover,
+        highlight: hover || volumeBarFocused,
         on: !muted
       }),
       onClick: onToggleMuted
@@ -775,9 +809,11 @@ function (_PureComponent) {
       width: "100%",
       height: "100%"
     }))), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
-      hidden: !volumeBarPosition,
+      style: volumeBarPosition ? undefined : volumeBarContainerHiddenStyle,
       ref: this.setVolumeBarContainerRef,
-      className: utils_classNames('cassette__volume_control__volume_bar_container', volumeBarPosition)
+      className: utils_classNames('cassette__volume_control__volume_bar_container', volumeBarPosition),
+      onFocus: this.handleVolumeBarFocus,
+      onBlur: this.handleVolumeBarBlur
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBar"], {
       className: utils_classNames('cassette__volume_control__volume_bar', volumeBarPosition),
       progressClassName: "volume",
@@ -1031,9 +1067,13 @@ MediaStatusBar_MediaStatusBar.propTypes = {
  * http://goo.gl/kEvnKn
  */
 function convertToTime(number) {
-  var mins = Math.floor(number / 60);
+  var hours = Math.floor(number / (60 * 60));
+  var mins = Math.floor(number / 60) - hours * 60;
   var secs = (number % 60).toFixed();
-  return "" + (mins < 10 ? '0' : '') + mins + ":" + (secs < 10 ? '0' : '') + secs;
+  var time = hours > 0 ? hours + ":" : '';
+  time += "" + (mins < 10 && hours > 0 ? '0' : '') + mins + ":";
+  time += "" + (secs < 10 ? '0' : '') + secs;
+  return time;
 }
 
 /* harmony default export */ var utils_convertToTime = (convertToTime);

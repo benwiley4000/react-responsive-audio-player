@@ -538,16 +538,20 @@ function stopPropagation(e) {
 const volumeControlStyle = {
   touchAction: 'none'
 };
+const volumeBarContainerHiddenStyle = {
+  opacity: 0
+};
 /**
  * A [`MuteButton`](#mutebutton) which, when hovered (with a mouse) or initially tapped (on touch screens), displays a bar for adjusting media volume
  */
 
 class VolumeControl_VolumeControl extends external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"] {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const hover = prevState.hover,
-          volumeBarPosition = prevState.volumeBarPosition;
+  static getDerivedStateFromProps(props, state) {
+    const hover = state.hover,
+          volumeBarFocused = state.volumeBarFocused,
+          volumeBarPosition = state.volumeBarPosition;
 
-    if (volumeBarPosition && !hover && !nextProps.setVolumeInProgress) {
+    if (volumeBarPosition && !hover && !volumeBarFocused && !props.setVolumeInProgress) {
       return {
         volumeBarPosition: null
       };
@@ -560,6 +564,7 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
     super(props);
     this.state = {
       hover: false,
+      volumeBarFocused: false,
       // null | 'hiddenup' | 'hiddenright' | 'upabove' | 'rightabove' | 'rightbelow'
       volumeBarPosition: null
     };
@@ -571,7 +576,9 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
     this.setMuteToggleRef = this.setMuteToggleRef.bind(this);
     this.setVolumeBarContainerRef = this.setVolumeBarContainerRef.bind(this);
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this); // bind listeners to add on mount and remove on unmount
+    this.handleMouseLeave = this.handleMouseLeave.bind(this);
+    this.handleVolumeBarFocus = this.handleVolumeBarFocus.bind(this);
+    this.handleVolumeBarBlur = this.handleVolumeBarBlur.bind(this); // bind listeners to add on mount and remove on unmount
 
     this.handleMuteToggleTouchStart = this.handleMuteToggleTouchStart.bind(this);
   }
@@ -646,21 +653,35 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
   }
 
   handleMouseEnter() {
-    this.setState({
+    this.setState(state => ({
       hover: true,
-      volumeBarPosition: this.state.volumeBarPosition || 'hiddenup'
-    });
+      volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+    }));
   }
 
   handleMouseLeave() {
-    this.setState({
+    this.setState(state => ({
       hover: false,
-      volumeBarPosition: this.props.setVolumeInProgress ? this.state.volumeBarPosition : null
-    });
+      volumeBarPosition: state.volumeBarFocused || this.props.setVolumeInProgress ? state.volumeBarPosition : null
+    }));
+  }
+
+  handleVolumeBarFocus() {
+    this.setState(state => ({
+      volumeBarFocused: true,
+      volumeBarPosition: state.volumeBarPosition || 'hiddenup'
+    }));
+  }
+
+  handleVolumeBarBlur() {
+    this.setState(state => ({
+      volumeBarFocused: false,
+      volumeBarPosition: state.hover || this.props.setVolumeInProgress ? state.volumeBarPosition : null
+    }));
   }
 
   handleMuteToggleTouchStart(e) {
-    if (!this.state.hover) {
+    if (!this.state.hover && !this.state.volumeBarFocused) {
       e.preventDefault();
       this.handleMouseEnter();
     }
@@ -683,6 +704,7 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
           onToggleMuted = _this$props.onToggleMuted;
     const _this$state = this.state,
           hover = _this$state.hover,
+          volumeBarFocused = _this$state.volumeBarFocused,
           volumeBarPosition = _this$state.volumeBarPosition;
     const VolumeIcon = utils_getVolumeIconComponent(volume, muted);
     return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(common_ButtonWrapper, {
@@ -696,7 +718,7 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
       ref: this.setMuteToggleRef,
       type: "button",
       className: utils_classNames('cassette__material_toggle cassette__media_button cassette__mute_btn', {
-        highlight: hover,
+        highlight: hover || volumeBarFocused,
         on: !muted
       }),
       onClick: onToggleMuted
@@ -706,9 +728,11 @@ class VolumeControl_VolumeControl extends external_root_React_commonjs_react_com
       width: "100%",
       height: "100%"
     }))), external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement("div", {
-      hidden: !volumeBarPosition,
+      style: volumeBarPosition ? undefined : volumeBarContainerHiddenStyle,
       ref: this.setVolumeBarContainerRef,
-      className: utils_classNames('cassette__volume_control__volume_bar_container', volumeBarPosition)
+      className: utils_classNames('cassette__volume_control__volume_bar_container', volumeBarPosition),
+      onFocus: this.handleVolumeBarFocus,
+      onBlur: this.handleVolumeBarBlur
     }, external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(components_["ProgressBar"], {
       className: utils_classNames('cassette__volume_control__volume_bar', volumeBarPosition),
       progressClassName: "volume",
@@ -908,9 +932,13 @@ MediaStatusBar_MediaStatusBar.propTypes = {
  * http://goo.gl/kEvnKn
  */
 function convertToTime(number) {
-  const mins = Math.floor(number / 60);
+  const hours = Math.floor(number / (60 * 60));
+  const mins = Math.floor(number / 60) - hours * 60;
   const secs = (number % 60).toFixed();
-  return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  let time = hours > 0 ? `${hours}:` : '';
+  time += `${mins < 10 && hours > 0 ? '0' : ''}${mins}:`;
+  time += `${secs < 10 ? '0' : ''}${secs}`;
+  return time;
 }
 
 /* harmony default export */ var utils_convertToTime = (convertToTime);

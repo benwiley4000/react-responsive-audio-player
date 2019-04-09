@@ -70,9 +70,10 @@
   right: 0; }
 
 .cassette__media_info_marquee {
-  /* to make room for __media_time_progress */
-  width: calc(100% - 180px);
+  -webkit-box-flex: 1;
+          flex-grow: 1;
   margin-left: 10px;
+  margin-right: 10px;
   font-size: 19.2px;
   color: #fff;
   display: -webkit-box;

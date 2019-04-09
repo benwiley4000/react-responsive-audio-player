@@ -573,7 +573,8 @@ function setup() {
     // are expected to conform to the shape of the container
 
     mutationObserver.observe(document, {
-      attributes: true
+      attributes: true,
+      subtree: true
     });
   } else {
     document.addEventListener('DOMSubtreeModified', refresh);
@@ -708,6 +709,10 @@ function ProgressBar_assertThisInitialized(self) { if (self === void 0) { throw 
 
 
 var noselectStyles = "\ncursor: default;\n  -webkit-user-select: none;\n     -moz-user-select: none;\n      -ms-user-select: none;\n          user-select: none;\n  -webkit-touch-callout: none;\n";
+var arrowLeft = 37;
+var arrowRight = 39;
+var arrowUp = 38;
+var arrowDown = 40;
 /**
  * A vertical or horizontal progress bar element which can be manipulated by mouse or touch
  */
@@ -729,9 +734,9 @@ function (_PureComponent) {
     _this.progressContainer = null; // bind methods fired on React events
 
     _this.setProgressContainerRef = _this.setProgressContainerRef.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
-    _this.handleAdjustProgress = _this.handleAdjustProgress.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this))); // bind listeners to add on mount and remove on unmount
-
+    _this.handleAdjustProgress = _this.handleAdjustProgress.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
     _this.handleAdjustComplete = _this.handleAdjustComplete.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
+    _this.handleKeyDown = _this.handleKeyDown.bind(ProgressBar_assertThisInitialized(ProgressBar_assertThisInitialized(_this)));
     return _this;
   }
 
@@ -871,6 +876,37 @@ function (_PureComponent) {
     onAdjustComplete(tempProgress);
   };
 
+  _proto.handleKeyDown = function handleKeyDown(event) {
+    if (this.props.readonly) {
+      return;
+    }
+
+    var newProgress = this.props.progress;
+
+    switch (event.keyCode) {
+      case arrowLeft:
+      case arrowDown:
+        newProgress -= 0.01;
+        break;
+
+      case arrowUp:
+      case arrowRight:
+        newProgress += 0.01;
+        break;
+
+      default:
+        return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    this.setState({
+      adjusting: true,
+      tempProgress: Object(core_["convertToNumberWithinIntervalBounds"])(newProgress, 0, 1)
+    });
+  };
+
   _proto.render = function render() {
     var _this$props = this.props,
         progressClassName = _this$props.progressClassName,
@@ -886,7 +922,10 @@ function (_PureComponent) {
     delete attributes.readonly;
     delete attributes.onAdjustProgress;
     delete attributes.onAdjustComplete;
-    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, ProgressBar_extends({}, attributes, {
+    return external_root_React_commonjs_react_commonjs2_react_amd_react_default.a.createElement(src_ProgressBarDisplay, ProgressBar_extends({
+      tabIndex: 0
+    }, attributes, {
+      role: "slider",
       ref: this.setProgressContainerRef,
       progressClassName: progressClassName,
       progressStyle: progressStyle,
@@ -894,7 +933,10 @@ function (_PureComponent) {
       progressDirection: progressDirection,
       handle: handle,
       onMouseDown: this.handleAdjustProgress,
-      onTouchStart: this.handleAdjustProgress
+      onTouchStart: this.handleAdjustProgress,
+      onKeyDown: this.handleKeyDown,
+      onKeyUp: this.handleAdjustComplete,
+      onBlur: this.handleAdjustComplete
     }));
   };
 

@@ -289,7 +289,7 @@ module.exports = g;
 /* 6 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.29","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.33","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 7 */
@@ -873,6 +873,24 @@ function parseTimeString(str) {
 }
 
 /* harmony default export */ var utils_parseTimeString = (parseTimeString);
+// CONCATENATED MODULE: ./src/utils/getInitialDuration.js
+
+
+function getInitialDuration(track) {
+  var duration = 0;
+
+  if (track.duration) {
+    if (typeof track.duration === 'string') {
+      duration = utils_parseTimeString(track.duration);
+    } else {
+      duration = track.duration;
+    }
+  }
+
+  return duration;
+}
+
+/* harmony default export */ var utils_getInitialDuration = (getInitialDuration);
 // CONCATENATED MODULE: ./src/PlayerContextProvider.js
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -972,18 +990,8 @@ function getGoToTrackState(_ref) {
   var isNewTrack = prevState.activeTrackIndex !== index;
   var shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
   var currentTime = track.startingTime || 0;
-  var duration = 0;
-
-  if (track.duration) {
-    if (typeof track.duration === 'string') {
-      duration = utils_parseTimeString(track.duration);
-    } else {
-      duration = track.duration;
-    }
-  }
-
   return {
-    duration: duration,
+    duration: utils_getInitialDuration(track),
     activeTrackIndex: index,
     trackLoading: shouldLoadAsNew,
     mediaCannotPlay: prevState.mediaCannotPlay && !shouldLoadAsNew,
@@ -1011,8 +1019,9 @@ function (_Component) {
     _this = _Component.call(this, props) || this;
     var currentTime = 0;
     var activeTrackIndex = utils_convertToNumberWithinIntervalBounds(props.startingTrackIndex, 0);
+    var playlistIsValid = utils_isPlaylistValid(props.playlist);
 
-    if (utils_isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
+    if (playlistIsValid && props.playlist[activeTrackIndex]) {
       currentTime = props.playlist[activeTrackIndex].startingTime || 0;
     }
 
@@ -1051,8 +1060,10 @@ function (_Component) {
       // true if user is currently dragging mouse to change the volume
       setVolumeInProgress: false,
       // initialize shouldRequestPlayOnNextUpdate from autoplay prop
-      shouldRequestPlayOnNextUpdate: props.autoplay && utils_isPlaylistValid(props.playlist),
+      shouldRequestPlayOnNextUpdate: props.autoplay && playlistIsValid,
       awaitingForceLoad: false,
+      // duration might be set on track object
+      duration: utils_getInitialDuration(playlistIsValid && props.playlist[activeTrackIndex]),
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist
     }, restoredStateFromSnapshot); // volume at last time we were unmuted and not actively setting volume
@@ -1068,7 +1079,7 @@ function (_Component) {
     _this.videoHostOccupiedCallbacks = new Map();
     _this.videoHostVacatedCallbacks = new Map(); // bind internal methods
 
-    _this.onTrackPlaybackFailure = _this.onTrackPlaybackFailure.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind callback methods to pass to descendant elements
+    _this.handleTrackPlaybackFailure = _this.handleTrackPlaybackFailure.bind(_assertThisInitialized(_assertThisInitialized(_this))); // bind callback methods to pass to descendant elements
 
     _this.togglePause = _this.togglePause.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.selectTrackIndex = _this.selectTrackIndex.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -1182,7 +1193,12 @@ function (_Component) {
     }
 
     if (onActiveTrackUpdate) {
-      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
+      onActiveTrackUpdate({
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex,
+        previousTrack: null,
+        previousTrackIndex: null
+      });
     }
   };
 
@@ -1276,7 +1292,12 @@ function (_Component) {
     }
 
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
-      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
+      this.props.onActiveTrackUpdate({
+        track: newTrack,
+        trackIndex: this.state.activeTrackIndex,
+        previousTrack: prevTrack,
+        previousTrackIndex: prevState.activeTrackIndex
+      });
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -1342,7 +1363,7 @@ function (_Component) {
         }
 
         var sourceElement = _ref2;
-        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.removeEventListener('error', this.handleTrackPlaybackFailure);
       }
     }
 
@@ -1430,7 +1451,7 @@ function (_Component) {
           sourceElement.type = source.type;
         }
 
-        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.addEventListener('error', this.handleTrackPlaybackFailure);
         this.media.appendChild(sourceElement);
       }
     } // cancel playback and re-scan new sources
@@ -1439,13 +1460,17 @@ function (_Component) {
     this.media.load();
   };
 
-  _proto.onTrackPlaybackFailure = function onTrackPlaybackFailure(event) {
+  _proto.handleTrackPlaybackFailure = function handleTrackPlaybackFailure(event) {
     this.setState({
       mediaCannotPlay: true
     });
 
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(this.props.playlist[this.state.activeTrackIndex], this.state.activeTrackIndex, event);
+      this.props.onTrackPlaybackFailure({
+        track: this.props.playlist[this.state.activeTrackIndex],
+        trackIndex: this.state.activeTrackIndex,
+        event: event
+      });
     }
   };
 
@@ -1636,11 +1661,15 @@ function (_Component) {
     var _this$props3 = this.props,
         onTimeUpdate = _this$props3.onTimeUpdate,
         playlist = _this$props3.playlist;
-    var activeTrackIndex = this.state.activeTrackIndex;
+    var _this$state3 = this.state,
+        activeTrackIndex = _this$state3.activeTrackIndex,
+        trackLoading = _this$state3.trackLoading;
 
-    if (this.state.trackLoading) {
-      // correct currentTime to preset, if applicable, during load
-      this.media.currentTime = this.state.currentTime;
+    if (trackLoading) {
+      // we'll get another time update when the track loads
+      // but for now this helps us avoid unnecessarily
+      // jumping back to currentTime: 0 in the UI while
+      // the track is loading.
       return;
     }
 
@@ -1653,7 +1682,11 @@ function (_Component) {
     });
 
     if (onTimeUpdate) {
-      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+      onTimeUpdate({
+        currentTime: currentTime,
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex
+      });
     }
   };
 
@@ -1805,10 +1838,10 @@ function (_Component) {
         playlist = _this$props4.playlist,
         stayOnBackSkipThreshold = _this$props4.stayOnBackSkipThreshold;
     var media = this.media;
-    var _this$state3 = this.state,
-        cycle = _this$state3.cycle,
-        activeTrackIndex = _this$state3.activeTrackIndex,
-        shuffle = _this$state3.shuffle;
+    var _this$state4 = this.state,
+        cycle = _this$state4.cycle,
+        activeTrackIndex = _this$state4.activeTrackIndex,
+        shuffle = _this$state4.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || media.currentTime >= stayOnBackSkipThreshold || !cycle && activeTrackIndex < 1) {
       media.currentTime = 0;
@@ -1844,10 +1877,10 @@ function (_Component) {
 
   _proto.forwardSkip = function forwardSkip() {
     var playlist = this.props.playlist;
-    var _this$state4 = this.state,
-        cycle = _this$state4.cycle,
-        activeTrackIndex = _this$state4.activeTrackIndex,
-        shuffle = _this$state4.shuffle;
+    var _this$state5 = this.state,
+        cycle = _this$state5.cycle,
+        activeTrackIndex = _this$state5.activeTrackIndex,
+        shuffle = _this$state5.shuffle;
 
     if (!utils_isPlaylistValid(playlist) || !cycle && activeTrackIndex + 1 >= playlist.length) {
       return;
@@ -1888,10 +1921,14 @@ function (_Component) {
           var paused = _ref5.paused,
               awaitingResumeOnSeekComplete = _ref5.awaitingResumeOnSeekComplete;
           return PlayerContextProvider_objectSpread({}, baseStateUpdate, {
-            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
+            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true,
+            currentTime: targetTime
           });
         });
-        this.media.currentTime = targetTime;
+
+        if (!this.state.trackLoading) {
+          this.media.currentTime = targetTime;
+        }
 
         if (!this.state.paused) {
           this.togglePause(true);
@@ -1904,10 +1941,14 @@ function (_Component) {
           var paused = _ref6.paused,
               awaitingResumeOnSeekComplete = _ref6.awaitingResumeOnSeekComplete;
           return PlayerContextProvider_objectSpread({}, baseStateUpdate, {
-            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true
+            awaitingResumeOnSeekComplete: paused ? awaitingResumeOnSeekComplete : true,
+            currentTime: targetTime
           });
         });
-        this.media.currentTime = targetTime;
+
+        if (!this.state.trackLoading) {
+          this.media.currentTime = targetTime;
+        }
 
         if (this.state.awaitingResumeOnSeekComplete && !this.media.ended) {
           // if we earlier encountered an 'ended' state,
@@ -1924,9 +1965,10 @@ function (_Component) {
   };
 
   _proto.seekComplete = function seekComplete(targetTime) {
-    var _this$state5 = this.state,
-        seekPreviewTime = _this$state5.seekPreviewTime,
-        awaitingResumeOnSeekComplete = _this$state5.awaitingResumeOnSeekComplete;
+    var _this$state6 = this.state,
+        seekPreviewTime = _this$state6.seekPreviewTime,
+        awaitingResumeOnSeekComplete = _this$state6.awaitingResumeOnSeekComplete,
+        trackLoading = _this$state6.trackLoading;
     var baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
@@ -1946,7 +1988,10 @@ function (_Component) {
        */
       currentTime: currentTime
     }));
-    this.media.currentTime = currentTime;
+
+    if (!trackLoading) {
+      this.media.currentTime = currentTime;
+    }
 
     if (awaitingResumeOnSeekComplete) {
       if (this.media.ended) {
@@ -2244,6 +2289,10 @@ function getReactParentNameStack(componentInstance) {
   var fiber = componentInstance._reactInternalFiber;
   var parentStack = [];
   var owner = fiber;
+
+  if (!owner) {
+    return parentStack;
+  }
 
   while (owner = owner._debugOwner) {
     if (owner.type.name) {
