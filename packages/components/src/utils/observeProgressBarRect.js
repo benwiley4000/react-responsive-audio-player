@@ -61,7 +61,7 @@ function setup() {
     mutationObserver = new MutationObserver(refresh);
     // we don't observe contents since the progress bar's contents
     // are expected to conform to the shape of the container
-    mutationObserver.observe(document, { attributes: true });
+    mutationObserver.observe(document, { attributes: true, subtree: true });
   } else {
     document.addEventListener('DOMSubtreeModified', refresh);
   }
