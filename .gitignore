@@ -1,5 +1,6 @@
 node_modules
 dist
-styleguide
+styleguide/*
+!styleguide/vtt
 .DS_Store
 lerna-debug.log

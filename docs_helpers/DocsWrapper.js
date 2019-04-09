@@ -122,6 +122,7 @@ class DocsWrapper extends Component {
                         'playpause',
                         'forwardskip',
                         'volume',
+                        'captions',
                         'spacer',
                         'progress',
                         'fullscreen'
