@@ -51,7 +51,8 @@ module.exports = {
       sections: [
         {
           name: 'Provider Components',
-          components: 'packages/core/src/[A-Z]*.js'
+          components: 'packages/core/src/[A-Z]*.js',
+          ignore: 'packages/core/src/PlayerContextConsumer.js'
         },
         {
           name: 'Consuming Context',
@@ -68,7 +69,7 @@ module.exports = {
               name: 'PlayerContextConsumer',
               description:
                 'Used to read and update the state of the surrounding [`playerContext`](#playercontext)',
-              content: 'packages/core/docs/PlayerContextConsumer.md'
+              components: 'packages/core/src/PlayerContextConsumer.js'
             },
             {
               name: 'playerContextFilter',
