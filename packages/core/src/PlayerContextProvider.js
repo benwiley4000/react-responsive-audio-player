@@ -17,7 +17,7 @@ import getRepeatStrategy from './utils/getRepeatStrategy';
 import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIntervalBounds';
 import { logError, logWarning } from './utils/console';
 import getDisplayText from './utils/getDisplayText';
-import parseTimeString from './utils/parseTimeString';
+import getInitialDuration from './utils/getInitialDuration';
 import { repeatStrategyOptions } from './constants';
 
 function playErrorHandler(err) {
@@ -90,16 +90,8 @@ function getGoToTrackState({
   const isNewTrack = prevState.activeTrackIndex !== index;
   const shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
   const currentTime = track.startingTime || 0;
-  let duration = 0;
-  if (track.duration) {
-    if (typeof track.duration === 'string') {
-      duration = parseTimeString(track.duration);
-    } else {
-      duration = track.duration;
-    }
-  }
   return {
-    duration,
+    duration: getInitialDuration(track),
     activeTrackIndex: index,
     trackLoading: shouldLoadAsNew,
     mediaCannotPlay: prevState.mediaCannotPlay && !shouldLoadAsNew,
@@ -123,7 +115,8 @@ export class PlayerContextProvider extends Component {
       props.startingTrackIndex,
       0
     );
-    if (isPlaylistValid(props.playlist) && props.playlist[activeTrackIndex]) {
+    const playlistIsValid = isPlaylistValid(props.playlist);
+    if (playlistIsValid && props.playlist[activeTrackIndex]) {
       currentTime = props.playlist[activeTrackIndex].startingTime || 0;
     }
     const { initialStateSnapshot } = props;
@@ -165,9 +158,12 @@ export class PlayerContextProvider extends Component {
       // true if user is currently dragging mouse to change the volume
       setVolumeInProgress: false,
       // initialize shouldRequestPlayOnNextUpdate from autoplay prop
-      shouldRequestPlayOnNextUpdate:
-        props.autoplay && isPlaylistValid(props.playlist),
+      shouldRequestPlayOnNextUpdate: props.autoplay && playlistIsValid,
       awaitingForceLoad: false,
+      // duration might be set on track object
+      duration: getInitialDuration(
+        playlistIsValid && props.playlist[activeTrackIndex]
+      ),
       // playlist prop copied to state (for getDerivedStateFromProps)
       __playlist__: props.playlist,
       // load overrides from previously-captured state snapshot
@@ -190,7 +186,9 @@ export class PlayerContextProvider extends Component {
     this.videoHostVacatedCallbacks = new Map();
 
     // bind internal methods
-    this.onTrackPlaybackFailure = this.onTrackPlaybackFailure.bind(this);
+    this.handleTrackPlaybackFailure = this.handleTrackPlaybackFailure.bind(
+      this
+    );
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -317,7 +315,12 @@ export class PlayerContextProvider extends Component {
     }
 
     if (onActiveTrackUpdate) {
-      onActiveTrackUpdate(playlist[activeTrackIndex], activeTrackIndex);
+      onActiveTrackUpdate({
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex,
+        previousTrack: null,
+        previousTrackIndex: null
+      });
     }
   }
 
@@ -434,7 +437,12 @@ export class PlayerContextProvider extends Component {
     }
 
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
-      this.props.onActiveTrackUpdate(newTrack, this.state.activeTrackIndex);
+      this.props.onActiveTrackUpdate({
+        track: newTrack,
+        trackIndex: this.state.activeTrackIndex,
+        previousTrack: prevTrack,
+        previousTrackIndex: prevState.activeTrackIndex
+      });
     }
 
     if (prevProps !== this.props && !this.media.paused) {
@@ -494,7 +502,10 @@ export class PlayerContextProvider extends Component {
 
       const sourceElements = media.querySelectorAll('source');
       for (const sourceElement of sourceElements) {
-        sourceElement.removeEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.removeEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
       }
     }
     clearTimeout(this.gapLengthTimeout);
@@ -559,7 +570,10 @@ export class PlayerContextProvider extends Component {
         if (source.type) {
           sourceElement.type = source.type;
         }
-        sourceElement.addEventListener('error', this.onTrackPlaybackFailure);
+        sourceElement.addEventListener(
+          'error',
+          this.handleTrackPlaybackFailure
+        );
         this.media.appendChild(sourceElement);
       }
     }
@@ -567,16 +581,16 @@ export class PlayerContextProvider extends Component {
     this.media.load();
   }
 
-  onTrackPlaybackFailure(event) {
+  handleTrackPlaybackFailure(event) {
     this.setState({
       mediaCannotPlay: true
     });
     if (this.props.onTrackPlaybackFailure) {
-      this.props.onTrackPlaybackFailure(
-        this.props.playlist[this.state.activeTrackIndex],
-        this.state.activeTrackIndex,
+      this.props.onTrackPlaybackFailure({
+        track: this.props.playlist[this.state.activeTrackIndex],
+        trackIndex: this.state.activeTrackIndex,
         event
-      );
+      });
     }
   }
 
@@ -725,10 +739,12 @@ export class PlayerContextProvider extends Component {
   handleMediaTimeupdate() {
     const { currentTime, played } = this.media;
     const { onTimeUpdate, playlist } = this.props;
-    const { activeTrackIndex } = this.state;
-    if (this.state.trackLoading) {
-      // correct currentTime to preset, if applicable, during load
-      this.media.currentTime = this.state.currentTime;
+    const { activeTrackIndex, trackLoading } = this.state;
+    if (trackLoading) {
+      // we'll get another time update when the track loads
+      // but for now this helps us avoid unnecessarily
+      // jumping back to currentTime: 0 in the UI while
+      // the track is loading.
       return;
     }
     this.setState(state => ({
@@ -737,7 +753,11 @@ export class PlayerContextProvider extends Component {
       maxKnownTime: Math.max(state.maxKnownTime, currentTime)
     }));
     if (onTimeUpdate) {
-      onTimeUpdate(currentTime, playlist[activeTrackIndex], activeTrackIndex);
+      onTimeUpdate({
+        currentTime,
+        track: playlist[activeTrackIndex],
+        trackIndex: activeTrackIndex
+      });
     }
   }
 
@@ -925,9 +945,12 @@ export class PlayerContextProvider extends Component {
           ...baseStateUpdate,
           awaitingResumeOnSeekComplete: paused
             ? awaitingResumeOnSeekComplete
-            : true
+            : true,
+          currentTime: targetTime
         }));
-        this.media.currentTime = targetTime;
+        if (!this.state.trackLoading) {
+          this.media.currentTime = targetTime;
+        }
         if (!this.state.paused) {
           this.togglePause(true);
         }
@@ -937,9 +960,12 @@ export class PlayerContextProvider extends Component {
           ...baseStateUpdate,
           awaitingResumeOnSeekComplete: paused
             ? awaitingResumeOnSeekComplete
-            : true
+            : true,
+          currentTime: targetTime
         }));
-        this.media.currentTime = targetTime;
+        if (!this.state.trackLoading) {
+          this.media.currentTime = targetTime;
+        }
         if (this.state.awaitingResumeOnSeekComplete && !this.media.ended) {
           // if we earlier encountered an 'ended' state,
           // un-pausing becomes necessary to resume playback
@@ -953,7 +979,11 @@ export class PlayerContextProvider extends Component {
   }
 
   seekComplete(targetTime) {
-    const { seekPreviewTime, awaitingResumeOnSeekComplete } = this.state;
+    const {
+      seekPreviewTime,
+      awaitingResumeOnSeekComplete,
+      trackLoading
+    } = this.state;
     const baseStateUpdate = {
       seekInProgress: false,
       awaitingResumeOnSeekComplete: false
@@ -974,7 +1004,9 @@ export class PlayerContextProvider extends Component {
        */
       currentTime
     });
-    this.media.currentTime = currentTime;
+    if (!trackLoading) {
+      this.media.currentTime = currentTime;
+    }
     if (awaitingResumeOnSeekComplete) {
       if (this.media.ended) {
         this.forwardSkip();

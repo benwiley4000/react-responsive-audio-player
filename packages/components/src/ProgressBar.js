@@ -18,6 +18,11 @@ cursor: default;
   -webkit-touch-callout: none;
 `;
 
+const arrowLeft = 37;
+const arrowRight = 39;
+const arrowUp = 38;
+const arrowDown = 40;
+
 /**
  * A vertical or horizontal progress bar element which can be manipulated by mouse or touch
  */
@@ -36,9 +41,8 @@ export class ProgressBar extends PureComponent {
     // bind methods fired on React events
     this.setProgressContainerRef = this.setProgressContainerRef.bind(this);
     this.handleAdjustProgress = this.handleAdjustProgress.bind(this);
-
-    // bind listeners to add on mount and remove on unmount
     this.handleAdjustComplete = this.handleAdjustComplete.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
@@ -165,6 +169,32 @@ export class ProgressBar extends PureComponent {
     onAdjustComplete(tempProgress);
   }
 
+  handleKeyDown(event) {
+    if (this.props.readonly) {
+      return;
+    }
+    let newProgress = this.props.progress;
+    switch (event.keyCode) {
+      case arrowLeft:
+      case arrowDown:
+        newProgress -= 0.01;
+        break;
+      case arrowUp:
+      case arrowRight:
+        newProgress += 0.01;
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    this.setState({
+      adjusting: true,
+      tempProgress: convertToNumberWithinIntervalBounds(newProgress, 0, 1)
+    });
+  }
+
   render() {
     const {
       progressClassName,
@@ -180,7 +210,9 @@ export class ProgressBar extends PureComponent {
     delete attributes.onAdjustComplete;
     return (
       <ProgressBarDisplay
+        tabIndex={0}
         {...attributes}
+        role="slider"
         ref={this.setProgressContainerRef}
         progressClassName={progressClassName}
         progressStyle={progressStyle}
@@ -189,6 +221,9 @@ export class ProgressBar extends PureComponent {
         handle={handle}
         onMouseDown={this.handleAdjustProgress}
         onTouchStart={this.handleAdjustProgress}
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleAdjustComplete}
+        onBlur={this.handleAdjustComplete}
       />
     );
   }
