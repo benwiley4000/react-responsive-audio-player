@@ -15,9 +15,7 @@ See version 1 (also known as `react-responsive-audio-player`) [here](https://git
 - [`@cassette/player`](/packages/player) provides a responsive, zero-config-needed React media player component, implemented with `@cassette/core`
 - [`@cassette/hooks`](/packages/hooks) provides optional [React Hooks](https://reactjs.org/docs/hooks-intro.html) for consuming media player state
 
-### [See a live demo here](https://benwiley4000.github.io/cassette/)
-
-### [See full documentation here](https://benwiley4000.github.io/cassette/styleguide)
+### [See full documentation (with integrated live demos) here](https://benwiley4000.github.io/cassette/styleguide)
 
 #### ⚠️ Note on installation
 
