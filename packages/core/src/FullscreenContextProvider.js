@@ -132,7 +132,12 @@ export class FullscreenContextProvider extends PureComponent {
 }
 
 FullscreenContextProvider.propTypes = {
+  /** If set `false`, disables fullscreen for the wrapped area */
   fullscreenEnabled: PropTypes.bool.isRequired,
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`FullscreenContextConsumer`](#fullscreencontextconsumer)
+   */
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 

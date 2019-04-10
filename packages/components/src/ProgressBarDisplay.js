@@ -49,10 +49,15 @@ export class ProgressBarDisplay extends PureComponent {
 }
 
 ProgressBarDisplay.propTypes = {
+  /** A CSS classname for the inner div representing elapsed progress */
   progressClassName: PropTypes.string,
+  /** A style object applied to the inner div representing elapsed progress */
   progressStyle: PropTypes.object,
+  /** A number from 0 to 1 */
   progress: PropTypes.number.isRequired,
+  /** Which direction does the progress bar move as it fills up? */
   progressDirection: PlayerPropTypes.progressDirection.isRequired,
+  /** A React element to accentuate the progress mark */
   handle: PropTypes.element
 };
 

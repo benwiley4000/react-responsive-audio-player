@@ -230,13 +230,32 @@ export class ProgressBar extends PureComponent {
 }
 
 ProgressBar.propTypes = {
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressClassName: PropTypes.string,
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressStyle: PropTypes.object,
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progress: PropTypes.number.isRequired,
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressDirection: PlayerPropTypes.progressDirection.isRequired,
+  /**
+   * The same as the [`ProgressBarDisplay`](#progressbardisplay) prop
+   * (although in this case the handle can be dragged by the user to
+   * readjust the progress value)
+   */
   handle: PropTypes.element,
+  /** If set to true, the progress bar is non-interactive */
   readonly: PropTypes.bool.isRequired,
+  /**
+   * This function, called repeatedly white a bar drag is in-progress, receives
+   * an updated 0-1 progress value and is expected to appropriately update the
+   * value sent to the `progress` prop
+   */
   onAdjustProgress: PropTypes.func.isRequired,
+  /**
+   * This function, called when a bar drag has completed, receives the final
+   * updated 0-1 progress value
+   */
   onAdjustComplete: PropTypes.func.isRequired
 };
 

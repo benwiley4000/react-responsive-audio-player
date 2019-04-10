@@ -47,7 +47,17 @@ MediaProgressDisplay.propTypes = {
   activeTrackIndex: PropTypes.number.isRequired,
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: PropTypes.func.isRequired,
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for progress displays. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: PropTypes.number
 };
 

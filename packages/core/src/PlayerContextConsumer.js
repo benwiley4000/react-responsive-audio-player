@@ -50,7 +50,20 @@ class PlayerContextConsumer extends PureComponent {
 }
 
 PlayerContextConsumer.propTypes = {
+  /**
+   * A [render prop](https://reactjs.org/docs/render-props.html) function
+   * which receives as its argument an object with the latest values of the
+   * keys specified in the `filterList` prop (if you forget `filterList`, you
+   * will get all the `playerContext` values and a warning in the console)
+   */
   children: PropTypes.func.isRequired,
+  /**
+   * A full list of `playerContext` values which will need to be consumed.
+   * Similar to the prop name array passed to
+   * [`playerContextFilter`](#playercontextfilter), but only made up of values
+   * found in [`playerContext`](#playercontext).
+   *
+   */
   filterList: PropTypes.arrayOf(PropTypes.string.isRequired)
 };
 

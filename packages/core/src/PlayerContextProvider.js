@@ -1161,36 +1161,150 @@ export class PlayerContextProvider extends Component {
 }
 
 PlayerContextProvider.propTypes = {
+  /**
+   * An array of [`track`](#track) objects to play in order (except when
+   * shuffle mode is turned on)
+   **/
   playlist: PropTypes.arrayOf(PlayerPropTypes.track.isRequired).isRequired,
+  /** Set to `true` to play media on player load. Think before doing this. It is
+   * often a bad idea, although it can make sense if your app is expressly made
+   * for media playback and you're resuming playback from the last session.
+   * Note that some platforms will disallow this from happening under many
+   * scenarios, and in these cases, `autoplay` will simply fail gracefully.
+   */
   autoplay: PropTypes.bool.isRequired,
+  /**
+   * If your app uses a custom implementation of the `HTMLMediaElement`, you
+   * can supply your own factory function to return it. This is an advanced
+   * edge case.
+   */
   createMediaElement: PropTypes.func.isRequired,
+  /** If you're using `autoplay` but want to wait a few seconds before the
+   * media playback kicks in, you can specify that timeout in second here.
+   */
   autoplayDelayInSeconds: PropTypes.number.isRequired,
+  /**
+   * Similar to `autoplayDelayInSeconds` but for the pause between tracks
+   * (if you want to evoke the feeling of listening to one of those old CDs with
+   * a negative countdown before it starts, which you never asked for).
+   */
   gapLengthInSeconds: PropTypes.number.isRequired,
+  /** A [`crossOriginAttribute`](#crossoriginattribute) value */
   crossOrigin: PlayerPropTypes.crossOriginAttribute,
+  /** The starting volume (0-1) */
   defaultVolume: PropTypes.number.isRequired,
+  /** The starting `muted` value (`true` or `false`) */
   defaultMuted: PropTypes.bool,
+  /** The starting [`repeatStrategy`](#repeatstrategy) */
   defaultRepeatStrategy: PlayerPropTypes.repeatStrategy.isRequired,
+  /** Will shuffle mode be active by default? */
   defaultShuffle: PropTypes.bool,
+  /** The starting playback rate (1 is normal, 0.5 is half, 2 is double) */
   defaultPlaybackRate: PropTypes.number.isRequired,
+  /**
+   * The starting track index (an advanced use case.. normally you should put
+   * the track you want to hear first at the start of the playlist, unless
+   * you are loading an `initialStateSnapshot` which will override this value
+   * anyway
+   */
   startingTrackIndex: PropTypes.number.isRequired,
+  /**
+   * Set this `false` if the player should rest of the final track when
+   * the playlist has completed. Ignored unless the
+   * current [`repeatStrategy`](#repeatstrategy) is `none`
+   */
   loadFirstTrackOnPlaylistComplete: PropTypes.bool,
+  /** Use this to set the player's [`seekMode`](#seekmode) */
   seekMode: PlayerPropTypes.seekMode.isRequired,
+  /**
+   * The default media element behavior is to reset the `playbackRate` to 1
+   * whenever a new source is loaded. Set this prop to `true` to maintain the
+   * same irregular playback rate across multiple tracks.
+   */
   maintainPlaybackRate: PropTypes.bool.isRequired,
+  /**
+   * By default, activating a back skip in shuffle mode will select the previous
+   * track in the shuffled list, but if the current track was the first selected
+   * track, back skip will be disabled. Setting this prop to `true` will
+   * select new arbitrary tracks in the "past" if back skip is used beyond
+   * the buffered history.
+   */
   allowBackShuffle: PropTypes.bool,
+  /**
+   * The number of seconds before pressing back skip becomes "back to
+   * beginning of current track" rather than "go to the previous track"
+   */
   stayOnBackSkipThreshold: PropTypes.number.isRequired,
+  /**
+   * An array of [`mediaSessionAction`](#mediasessionaction) types to display
+   * in the end users's system UI, when applicable
+   */
   supportedMediaSessionActions: PropTypes.arrayOf(
     PlayerPropTypes.mediaSessionAction.isRequired
   ).isRequired,
+  /** The number of seconds to seek back or forward when the Media Session API
+   * backseek/forwardseek buttons are activated in the end user's system UI
+   */
   mediaSessionSeekLengthInSeconds: PropTypes.number.isRequired,
+  /**
+   * A function called on component mount and component unmount with a reference
+   * to the underlying media element. Generally not recommended for use, but
+   * can be used as an escape hatch for features that aren't well-supported by
+   * Cassette (if you find yourself needing this, you may want to
+   * [open a new issue](https://github.com/benwiley4000/cassette/issues/new)
+   * to talk about adding first-class support for your use case).
+   */
   mediaElementRef: PropTypes.func,
+  /**
+   * If you're using `onStateSnapshot` to save snapshots of the media player
+   * state as a serializable object, you should pass that restored object here
+   * to preserve the user's state from the previous session
+   */
   initialStateSnapshot: PropTypes.object,
+  /**
+   * Called whenever a new state snapshot is generated. The internals of this
+   * snapshot are not documented and may change in a non-major release, so it's
+   * not safe to rely on them directly. Instead, the state snapshot should
+   * be serialized to JSON with `JSON.stringify` and restored later with
+   * `JSON.parse` to be passed as the `initialStateSnapshot` prop
+   */
   onStateSnapshot: PropTypes.func,
+  /**
+   * A function called whenever the active track is set or updated. Passed an
+   * object with the properties `track`, `trackIndex`, `previousTrack` and
+   * `previousTrackIndex` (these may be `null` or `undefined`)
+   */
   onActiveTrackUpdate: PropTypes.func,
-  // A function called when the media element's currentTime attribute has changed
+  /**
+   * A function called when the media element's `currentTime` attribute has
+   * changed. Passed an object with the properties `currentTime`, `track` and
+   * `trackIndex`
+   */
   onTimeUpdate: PropTypes.func,
+  /**
+   * A function called when playback of the current track has failed for some
+   * reason. Passed an object with the properties `event`,
+   * `track` and `trackIndex`
+   */
   onTrackPlaybackFailure: PropTypes.func,
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns a url pointing to a poster image representing the current
+   * track which should be used in a [`VideoDisplay`](#videodisplay) when the
+   * media content hasn't yet loaded
+   */
   getPosterImageForTrack: PropTypes.func.isRequired,
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns the value for the media element's `title` attribute, which
+   * may be used in iOS to display information about the current track in the
+   * system UI
+   */
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`PlayerContextConsumer`](#playercontextconsumer)
+   */
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]).isRequired
 };
 
