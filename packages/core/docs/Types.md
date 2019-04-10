@@ -39,7 +39,7 @@ One of the media element's possible [`crossOrigin`](https://developer.mozilla.or
 
 #### `mediaSessionAction`
 
-One of the [UI actions supported by the Media Session API](https://developer.mozilla.org/en-US/docs/Web/API/MediaSession/setActionHandler#Syntax) - `play`, `pause`, `seekbackward`, `seekforward`, `previoustrack` or `nexttrack`
+One of the [UI actions supported by the Media Session API](https://wicg.github.io/mediasession/#actions-model) - `play`, `pause`, `seekbackward`, `seekforward`, `previoustrack` or `nexttrack`
 
 #### `repeatStrategy`
 

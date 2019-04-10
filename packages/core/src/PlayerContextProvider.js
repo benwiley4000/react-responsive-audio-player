@@ -1237,7 +1237,8 @@ PlayerContextProvider.propTypes = {
   stayOnBackSkipThreshold: PropTypes.number.isRequired,
   /**
    * An array of [`mediaSessionAction`](#mediasessionaction) types to display
-   * in the end users's system UI, when applicable
+   * in the end users's system UI, when applicable.
+   * It is *not* the same as the `controls` array.
    */
   supportedMediaSessionActions: PropTypes.arrayOf(
     PlayerPropTypes.mediaSessionAction.isRequired
