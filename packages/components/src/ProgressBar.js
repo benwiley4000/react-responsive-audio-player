@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-import {
-  PlayerPropTypes,
-  convertToNumberWithinIntervalBounds
-} from '@cassette/core';
+import { convertToNumberWithinIntervalBounds } from '@cassette/core';
 
 import ProgressBarDisplay from './ProgressBarDisplay';
 import observeProgressBarRect from './utils/observeProgressBarRect';
@@ -237,7 +234,8 @@ ProgressBar.propTypes = {
   /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progress: PropTypes.number.isRequired,
   /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
-  progressDirection: PlayerPropTypes.progressDirection.isRequired,
+  progressDirection: PropTypes.oneOf(['left', 'right', 'up', 'down'])
+    .isRequired,
   /**
    * The same as the [`ProgressBarDisplay`](#progressbardisplay) prop
    * (although in this case the handle can be dragged by the user to

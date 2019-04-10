@@ -1,8 +1,6 @@
 import React, { PureComponent, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { PlayerPropTypes } from '@cassette/core';
-
 import getProgressStyle from './utils/getProgressStyle';
 import getHandleStyle from './utils/getHandleStyle';
 
@@ -56,7 +54,8 @@ ProgressBarDisplay.propTypes = {
   /** A number from 0 to 1 */
   progress: PropTypes.number.isRequired,
   /** Which direction does the progress bar move as it fills up? */
-  progressDirection: PlayerPropTypes.progressDirection.isRequired,
+  progressDirection: PropTypes.oneOf(['left', 'right', 'up', 'down'])
+    .isRequired,
   /** A React element to accentuate the progress mark */
   handle: PropTypes.element
 };
