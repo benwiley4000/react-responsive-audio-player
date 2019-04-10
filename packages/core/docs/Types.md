@@ -73,6 +73,16 @@ Each track object can contain the following properties:
 - `album`: The album the track belongs to - corresponds to the [`MediaMetadata.album` property](https://wicg.github.io/mediasession/#examples)
 - `artwork`: The artwork for the track - corresponds to the [`MediaMetadata.artwork` property](https://wicg.github.io/mediasession/#examples)
   _NOTE_: Network speed may affect how quickly album artwork shows up in system MediaSession notifications. You can try [these strategies for implementing caching](https://developers.google.com/web/updates/2017/02/media-session#make_it_play_nice_offline).
+- `duration`: This can be specified to hint to the UI how long a track will be
+  before its metadata has actually loaded
+- `startingTime`: An advanced use case feature for forcing a track to start at
+  a time other than 0. Normally this can be accomplished sufficiently by restoring
+  a state snapshot, so usage of `startingTime` should be avoided if possible -
+  but if you need to restore the `currentTime` for a piece of media that was
+  consumed long ago in the past, this might be needed.
+- `isUnboundedStream`: set this to `true` when the media is an unbounded stream
+  to avoid taking twice as long to begin playback (this is due to an iOS bug;
+  more information [here](https://github.com/benwiley4000/cassette/issues/355).)
 - `meta`: An object containing any other track-specific information you want to store
 
 **NOTE**: Re-rendering the `PlayerContextProvider` with a mutated `playlist` prop or a mutated `track` member will likely not work as expected. Please make a copy of the playlist instead. For more information, [see here](#dont-mutate-playlists).
