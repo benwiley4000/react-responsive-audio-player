@@ -100,9 +100,19 @@ export class MediaPlayerControls extends Component {
 }
 
 MediaPlayerControls.propTypes = {
+  /** An array of [`control`](#control) values (keyword or render prop) */
   controls: PropTypes.arrayOf(PlayerPropTypes.control.isRequired).isRequired,
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: PropTypes.func.isRequired,
+  /** A boolean which must be set `true` to display video */
   showVideo: PropTypes.bool.isRequired,
+  /**
+   * A function which returns a React element containing the
+   * [`VideoDisplay`](#videodisplay) instance
+   */
   renderVideoDisplay: PropTypes.func.isRequired
 };
 

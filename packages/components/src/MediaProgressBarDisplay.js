@@ -24,6 +24,12 @@ export class MediaProgressBarDisplay extends PureComponent {
 MediaProgressBarDisplay.propTypes = {
   currentTime: PropTypes.number.isRequired,
   duration: PropTypes.number.isRequired,
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for a progress bar. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: PropTypes.number
 };
 

@@ -57,7 +57,15 @@ MediaProgress.propTypes = {
   seekPreviewTime: PropTypes.number.isRequired,
   seekInProgress: PropTypes.bool.isRequired,
   duration: PropTypes.number.isRequired,
+  /**
+   * The same as the `getDisplayText` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   getDisplayText: PropTypes.func.isRequired,
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   durationOverride: PropTypes.number
 };
 

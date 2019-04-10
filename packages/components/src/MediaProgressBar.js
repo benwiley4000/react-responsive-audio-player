@@ -63,6 +63,10 @@ MediaProgressBar.propTypes = {
   duration: PropTypes.number.isRequired,
   onSeekPreview: PropTypes.func.isRequired,
   onSeekComplete: PropTypes.func.isRequired,
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressBarDisplay`](#mediaprogressbardisplay)
+   */
   durationOverride: PropTypes.number
 };
 

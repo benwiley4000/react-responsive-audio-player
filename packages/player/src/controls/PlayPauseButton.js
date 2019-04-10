@@ -50,6 +50,12 @@ PlayPauseButton.propTypes = {
   activeTrackIndex: PropTypes.number.isRequired,
   onTogglePause: PropTypes.func.isRequired,
   onSelectTrackIndex: PropTypes.func.isRequired,
+  /**
+   * By default the button controls playback of whichever track is active,
+   * but this prop can be specified to make the button control playback of
+   * a specific track (for example in a playlist track selection view where
+   * each track as a play/pause button next to it)
+   */
   trackIndex: PropTypes.number
 };
 

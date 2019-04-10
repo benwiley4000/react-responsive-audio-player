@@ -1,12 +1,10 @@
-## `playlist`
-
 The `playlist` prop is considered immutable. This means that if you modify the playlist array directly (for example, using the `push` Array method) and then re-render using the same `playlist` prop, you might run into problems, as no change will be detected and the player controls won't update until something else in the player context is changed.
 
 The reason we deal with `playlist` this way is to avoid a ton of unnecessary re-renders throughout your component tree each time a playlist changes. If we can easily determine whether the contents of a playlist have changed or not, then we can implement our control components with the `PureComponent` React class, which only re-renders if one of its prop values is different.
 
 The catch is that you might not be used to manipulating by creating a new Array instead of modifying the existing array. So here's a cheat sheet that can help you out ([shout-out to this guide for helping with ideas](http://vincent.billey.me/pure-javascript-immutable-array/)):
 
-```js
+```js static
 // we can use array methods like concat, slice, map and filter,
 // which make a copy of the array instead of mutating it
 

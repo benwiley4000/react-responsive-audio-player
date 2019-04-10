@@ -142,8 +142,11 @@ export class MaybeMarquee extends PureComponent {
 }
 
 MaybeMarquee.propTypes = {
+  /** The child content to scroll in the marquee */
   content: PropTypes.node.isRequired,
+  /** The distance in pixels the marquee should move each second */
   pixelsPerSecond: PropTypes.number.isRequired,
+  /** The direction text should scroll in the marquee */
   scrollDirection: PropTypes.oneOf(['left', 'right']).isRequired
 };
 

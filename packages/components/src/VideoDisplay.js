@@ -2,11 +2,7 @@ import React, { PureComponent, Component } from 'react';
 import PropTypes from 'prop-types';
 import ResizeObserver from 'resize-observer-polyfill';
 
-import {
-  playerContextFilter,
-  PlayerPropTypes,
-  logWarning
-} from '@cassette/core';
+import { playerContextFilter, logWarning } from '@cassette/core';
 
 // 'x:y' -> x / y
 function extractAspectRatio(aspectRatio) {
@@ -170,13 +166,45 @@ export class VideoDisplay extends PureComponent {
   }
 }
 
+function aspectRatioString(props, propName) {
+  const prop = props[propName];
+  if (prop === undefined) {
+    return;
+  }
+  if (
+    typeof prop !== 'string' ||
+    prop.split(':').length !== 2 ||
+    prop.split(':').some(isNaN)
+  ) {
+    return new Error(
+      `The ${propName} prop should be a string of the form 'x:y'. Example: 16:9`
+    );
+  }
+}
+
 VideoDisplay.propTypes = {
   registerVideoHostElement: PropTypes.func.isRequired,
   renderVideoIntoHostElement: PropTypes.func.isRequired,
   unregisterVideoHostElement: PropTypes.func.isRequired,
   fullscreen: PropTypes.bool,
-  aspectRatio: PlayerPropTypes.aspectRatio,
+  /** A string representation of the display's fixed aspect ratio */
+  aspectRatio: aspectRatioString,
+  /**
+   * In fullscreen we normally want to use the aspect ratio of the device
+   * display, but if you don't like this behavior, you can override it.
+   */
   maintainAspectRatioInFullscreen: PropTypes.bool.isRequired,
+  /**
+   * A function which should return a React element to display as a placeholder
+   * when the display is unused (i.e. a different `VideoDisplay` elsewhere on
+   * the screen currently is displaying the video content). This function is
+   * passed a `params` object with three properties: `containerWidth` (a
+   * number), `containerHeight` (a number) and `renderLastShownFrame` (a
+   * function which will returning a React element showing a canvas snapshot
+   * of the last frame that was shown before the video was moved out of this
+   * display - platforms like Facebook render frames like this. only works for
+   * actual video content, not audio poster images.)
+   */
   renderPlaceholderContent: PropTypes.func.isRequired
 };
 
