@@ -351,8 +351,13 @@ function (_PureComponent) {
   return MaybeMarquee;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 MaybeMarquee_MaybeMarquee.propTypes = {
+  /** The child content to scroll in the marquee */
   content: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.node.isRequired,
+
+  /** The distance in pixels the marquee should move each second */
   pixelsPerSecond: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /** The direction text should scroll in the marquee */
   scrollDirection: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['left', 'right']).isRequired
 };
 MaybeMarquee_MaybeMarquee.defaultProps = {
@@ -463,7 +468,6 @@ function ProgressBarDisplay_inheritsLoose(subClass, superClass) { subClass.proto
 
 
 
-
 /**
  * A non-interactive version of [`ProgressBar`](#progressbar)
  */
@@ -509,10 +513,19 @@ function (_PureComponent) {
   return ProgressBarDisplay;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 ProgressBarDisplay_ProgressBarDisplay.propTypes = {
+  /** A CSS classname for the inner div representing elapsed progress */
   progressClassName: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string,
+
+  /** A style object applied to the inner div representing elapsed progress */
   progressStyle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object,
+
+  /** A number from 0 to 1 */
   progress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  progressDirection: core_["PlayerPropTypes"].progressDirection.isRequired,
+
+  /** Which direction does the progress bar move as it fills up? */
+  progressDirection: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['left', 'right', 'up', 'down']).isRequired,
+
+  /** A React element to accentuate the progress mark */
   handle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.element
 };
 /* harmony default export */ var src_ProgressBarDisplay = (Object(external_root_React_commonjs_react_commonjs2_react_amd_react_["forwardRef"])(function (props, ref) {
@@ -943,13 +956,39 @@ function (_PureComponent) {
   return ProgressBar;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 ProgressBar_ProgressBar.propTypes = {
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressClassName: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressStyle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
-  progressDirection: core_["PlayerPropTypes"].progressDirection.isRequired,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
+  progressDirection: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['left', 'right', 'up', 'down']).isRequired,
+
+  /**
+   * The same as the [`ProgressBarDisplay`](#progressbardisplay) prop
+   * (although in this case the handle can be dragged by the user to
+   * readjust the progress value)
+   */
   handle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.element,
+
+  /** If set to true, the progress bar is non-interactive */
   readonly: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * This function, called repeatedly white a bar drag is in-progress, receives
+   * an updated 0-1 progress value and is expected to appropriately update the
+   * value sent to the `progress` prop
+   */
   onAdjustProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * This function, called when a bar drag has completed, receives the final
+   * updated 0-1 progress value
+   */
   onAdjustComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 ProgressBar_ProgressBar.defaultProps = {
@@ -1031,6 +1070,11 @@ MediaProgressBar_MediaProgressBar.propTypes = {
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   onSeekPreview: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   onSeekComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressBarDisplay`](#mediaprogressbardisplay)
+   */
   durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBar = (Object(core_["playerContextFilter"])(MediaProgressBar_MediaProgressBar, ['playlist', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
@@ -1079,6 +1123,13 @@ function (_PureComponent) {
 MediaProgressBarDisplay_MediaProgressBarDisplay.propTypes = {
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for a progress bar. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var src_MediaProgressBarDisplay = (Object(core_["playerContextFilter"])(MediaProgressBarDisplay_MediaProgressBarDisplay, ['currentTime', 'duration']));
@@ -1273,13 +1324,45 @@ function (_PureComponent) {
 
   return VideoDisplay;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
+
+function aspectRatioString(props, propName) {
+  var prop = props[propName];
+
+  if (prop === undefined) {
+    return;
+  }
+
+  if (typeof prop !== 'string' || prop.split(':').length !== 2 || prop.split(':').some(isNaN)) {
+    return new Error("The " + propName + " prop should be a string of the form 'x:y'. Example: 16:9");
+  }
+}
+
 VideoDisplay_VideoDisplay.propTypes = {
   registerVideoHostElement: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   renderVideoIntoHostElement: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   unregisterVideoHostElement: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   fullscreen: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
-  aspectRatio: core_["PlayerPropTypes"].aspectRatio,
+
+  /** A string representation of the display's fixed aspect ratio */
+  aspectRatio: aspectRatioString,
+
+  /**
+   * In fullscreen we normally want to use the aspect ratio of the device
+   * display, but if you don't like this behavior, you can override it.
+   */
   maintainAspectRatioInFullscreen: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * A function which should return a React element to display as a placeholder
+   * when the display is unused (i.e. a different `VideoDisplay` elsewhere on
+   * the screen currently is displaying the video content). This function is
+   * passed a `params` object with three properties: `containerWidth` (a
+   * number), `containerHeight` (a number) and `renderLastShownFrame` (a
+   * function which will returning a React element showing a canvas snapshot
+   * of the last frame that was shown before the video was moved out of this
+   * display - platforms like Facebook render frames like this. only works for
+   * actual video content, not audio poster images.)
+   */
   renderPlaceholderContent: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 VideoDisplay_VideoDisplay.defaultProps = {

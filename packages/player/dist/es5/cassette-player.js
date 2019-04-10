@@ -402,6 +402,13 @@ PlayPauseButton_PlayPauseButton.propTypes = {
   activeTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   onTogglePause: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
   onSelectTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * By default the button controls playback of whichever track is active,
+   * but this prop can be specified to make the button control playback of
+   * a specific track (for example in a playlist track selection view where
+   * each track as a play/pause button next to it)
+   */
   trackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 /* harmony default export */ var controls_PlayPauseButton = (Object(core_["playerContextFilter"])(PlayPauseButton_PlayPauseButton, ['paused', 'awaitingPlayResume', 'activeTrackIndex', 'onTogglePause', 'onSelectTrackIndex']));
@@ -1138,7 +1145,17 @@ MediaProgress_MediaProgress.propTypes = {
   seekPreviewTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   seekInProgress: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * The same as the `getDisplayText` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 MediaProgress_MediaProgress.defaultProps = {
@@ -1197,7 +1214,19 @@ MediaProgressDisplay_MediaProgressDisplay.propTypes = {
   activeTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   currentTime: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
   duration: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for progress displays. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number
 };
 MediaProgressDisplay_MediaProgressDisplay.defaultProps = {
@@ -1462,9 +1491,22 @@ function (_Component) {
   return MediaPlayerControls;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["Component"]);
 MediaPlayerControls_MediaPlayerControls.propTypes = {
+  /** An array of [`control`](#control) values (keyword or render prop) */
   controls: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(core_["PlayerPropTypes"].control.isRequired).isRequired,
+
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /** A boolean which must be set `true` to display video */
   showVideo: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * A function which returns a React element containing the
+   * [`VideoDisplay`](#videodisplay) instance
+   */
   renderVideoDisplay: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired
 };
 MediaPlayerControls_MediaPlayerControls.defaultProps = {

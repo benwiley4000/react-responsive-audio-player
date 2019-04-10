@@ -2589,100 +2589,6 @@ __webpack_require__(26)({ target: 'Array', proto: true, forced: !SPECIES_SUPPORT
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-
-
-
-
-var ButtonWrapper = Object(react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(function (_ref, ref) {
-  var className = _ref.className,
-      children = _ref.children,
-      rest = _objectWithoutPropertiesLoose(_ref, ["className", "children"]);
-
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
-    ref: ref,
-    className: Object(_utils_classNames__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])('cassette__media_button_wrapper', className)
-  }, rest), children);
-});
-ButtonWrapper.propTypes = {
-  className: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
-  children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.node.isRequired
-};
-/* harmony default export */ __webpack_exports__["a"] = (ButtonWrapper);
-
-/***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return unquote; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getType; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return showSpaces; });
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
-/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
-/* harmony import */ var core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(55);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
-
-
-
-
-/**
- * Remove quotes around given string.
- *
- * @param {string} string
- * @returns {string}
- */
-function unquote(string) {
-  return string && string.replace(/^['"]|['"]$/g, '');
-}
-/**
- * Return prop type object.
- *
- * @param {object} prop
- * @returns {object}
- */
-
-function getType(prop) {
-  if (prop.flowType) {
-    if (prop.flowType.name === 'union' && prop.flowType.elements.every(function (elem) {
-      return elem.name === 'literal';
-    })) {
-      return Object.assign({}, prop.flowType, {
-        name: 'enum',
-        value: prop.flowType.elements
-      });
-    }
-
-    return prop.flowType;
-  }
-
-  return prop.type;
-}
-/**
- * Show starting and ending whitespace around given string.
- *
- * @param {string} string
- * @returns {string}
- */
-
-function showSpaces(string) {
-  return string && string.replace(/^\s|\s$/g, '␣');
-}
-
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MediaPlayer__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(129);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MediaPlayer", function() { return _MediaPlayer__WEBPACK_IMPORTED_MODULE_0__["default"]; });
@@ -2749,6 +2655,100 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+/***/ }),
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+
+
+
+var ButtonWrapper = Object(react__WEBPACK_IMPORTED_MODULE_0__["forwardRef"])(function (_ref, ref) {
+  var className = _ref.className,
+      children = _ref.children,
+      rest = _objectWithoutPropertiesLoose(_ref, ["className", "children"]);
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", _extends({
+    ref: ref,
+    className: Object(_utils_classNames__WEBPACK_IMPORTED_MODULE_2__[/* default */ "a"])('cassette__media_button_wrapper', className)
+  }, rest), children);
+});
+ButtonWrapper.propTypes = {
+  className: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.string,
+  children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.node.isRequired
+};
+/* harmony default export */ __webpack_exports__["a"] = (ButtonWrapper);
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return unquote; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return showSpaces; });
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+/* harmony import */ var core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_function_name__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+/* harmony import */ var core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_assign__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(55);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+/**
+ * Remove quotes around given string.
+ *
+ * @param {string} string
+ * @returns {string}
+ */
+function unquote(string) {
+  return string && string.replace(/^['"]|['"]$/g, '');
+}
+/**
+ * Return prop type object.
+ *
+ * @param {object} prop
+ * @returns {object}
+ */
+
+function getType(prop) {
+  if (prop.flowType) {
+    if (prop.flowType.name === 'union' && prop.flowType.elements.every(function (elem) {
+      return elem.name === 'literal';
+    })) {
+      return Object.assign({}, prop.flowType, {
+        name: 'enum',
+        value: prop.flowType.elements
+      });
+    }
+
+    return prop.flowType;
+  }
+
+  return prop.type;
+}
+/**
+ * Show starting and ending whitespace around given string.
+ *
+ * @param {string} string
+ * @returns {string}
+ */
+
+function showSpaces(string) {
+  return string && string.replace(/^\s|\s$/g, '␣');
+}
 
 /***/ }),
 /* 24 */
@@ -3739,9 +3739,6 @@ var react_default = /*#__PURE__*/__webpack_require__.n(react);
 var prop_types = __webpack_require__(7);
 var prop_types_default = /*#__PURE__*/__webpack_require__.n(prop_types);
 
-// EXTERNAL MODULE: ./packages/core/src/index.js + 1 modules
-var src = __webpack_require__(4);
-
 // CONCATENATED MODULE: ./packages/components/src/utils/getProgressStyle.js
 function getProgressStyle(progress, progressDirection) {
   var progressAheadPercentage = (1 - (progress || 0)) * 100 + "%";
@@ -3843,7 +3840,6 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
 
 
 
-
 /**
  * A non-interactive version of [`ProgressBar`](#progressbar)
  */
@@ -3889,10 +3885,19 @@ function (_PureComponent) {
   return ProgressBarDisplay;
 }(react["PureComponent"]);
 ProgressBarDisplay_ProgressBarDisplay.propTypes = {
+  /** A CSS classname for the inner div representing elapsed progress */
   progressClassName: prop_types_default.a.string,
+
+  /** A style object applied to the inner div representing elapsed progress */
   progressStyle: prop_types_default.a.object,
+
+  /** A number from 0 to 1 */
   progress: prop_types_default.a.number.isRequired,
-  progressDirection: src["PlayerPropTypes"].progressDirection.isRequired,
+
+  /** Which direction does the progress bar move as it fills up? */
+  progressDirection: prop_types_default.a.oneOf(['left', 'right', 'up', 'down']).isRequired,
+
+  /** A React element to accentuate the progress mark */
   handle: prop_types_default.a.element
 };
 /* harmony default export */ var src_ProgressBarDisplay = __webpack_exports__["default"] = (Object(react["forwardRef"])(function (props, ref) {
@@ -4124,9 +4129,22 @@ function (_Component) {
   return MediaPlayerControls;
 }(react["Component"]);
 MediaPlayerControls_MediaPlayerControls.propTypes = {
+  /** An array of [`control`](#control) values (keyword or render prop) */
   controls: prop_types_default.a.arrayOf(src["PlayerPropTypes"].control.isRequired).isRequired,
+
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: prop_types_default.a.func.isRequired,
+
+  /** A boolean which must be set `true` to display video */
   showVideo: prop_types_default.a.bool.isRequired,
+
+  /**
+   * A function which returns a React element containing the
+   * [`VideoDisplay`](#videodisplay) instance
+   */
   renderVideoDisplay: prop_types_default.a.func.isRequired
 };
 MediaPlayerControls_MediaPlayerControls.defaultProps = {
@@ -4157,9 +4175,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mediaSessionAction", function() { return mediaSessionAction; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mediaSessionArtwork", function() { return mediaSessionArtwork; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "track", function() { return track; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "progressDirection", function() { return progressDirection; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "seekMode", function() { return seekMode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "aspectRatio", function() { return aspectRatio; });
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(58);
@@ -4219,19 +4235,7 @@ var track = prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.shape({
   isUnboundedStream: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.bool,
   meta: prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.object
 });
-var progressDirection = prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.oneOf(['left', 'right', 'up', 'down']);
 var seekMode = prop_types__WEBPACK_IMPORTED_MODULE_0___default.a.oneOf(['paused', 'immediate', 'onrelease']);
-function aspectRatio(props, propName) {
-  var prop = props[propName];
-
-  if (prop === undefined) {
-    return;
-  }
-
-  if (typeof prop !== 'string' || prop.split(':').length !== 2 || prop.split(':').some(isNaN)) {
-    return new Error("The " + propName + " prop should be a string of the form 'x:y'. Example: 16:9");
-  }
-}
 
 /***/ }),
 /* 52 */
@@ -4891,7 +4895,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _cassette_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -4950,6 +4954,13 @@ PlayPauseButton.propTypes = {
   activeTrackIndex: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   onTogglePause: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
   onSelectTrackIndex: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
+
+  /**
+   * By default the button controls playback of whichever track is active,
+   * but this prop can be specified to make the button control playback of
+   * a specific track (for example in a playlist track selection view where
+   * each track as a play/pause button next to it)
+   */
   trackIndex: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(_cassette_core__WEBPACK_IMPORTED_MODULE_2__["playerContextFilter"])(PlayPauseButton, ['paused', 'awaitingPlayResume', 'activeTrackIndex', 'onTogglePause', 'onSelectTrackIndex']));
@@ -5061,7 +5072,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _cassette_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(22);
 /* harmony import */ var _utils_getVolumeIconComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(139);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
@@ -5132,7 +5143,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var svg_react_loader_name_RepeatOneIcon_material_design_icons_av_svg_design_ic_repeat_one_48px_svg___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(252);
 /* harmony import */ var svg_react_loader_name_RepeatOneIcon_material_design_icons_av_svg_design_ic_repeat_one_48px_svg___WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(svg_react_loader_name_RepeatOneIcon_material_design_icons_av_svg_design_ic_repeat_one_48px_svg___WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _cassette_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -5219,7 +5230,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var svg_react_loader_name_ShuffleIcon_material_design_icons_av_svg_design_ic_shuffle_48px_svg___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(253);
 /* harmony import */ var svg_react_loader_name_ShuffleIcon_material_design_icons_av_svg_design_ic_shuffle_48px_svg___WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(svg_react_loader_name_ShuffleIcon_material_design_icons_av_svg_design_ic_shuffle_48px_svg___WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _cassette_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(22);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -5345,7 +5356,17 @@ MediaProgress.propTypes = {
   seekPreviewTime: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   seekInProgress: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool.isRequired,
   duration: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
+
+  /**
+   * The same as the `getDisplayText` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   getDisplayText: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
+
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressDisplay`](#mediaprogressdisplay)
+   */
   durationOverride: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
 };
 MediaProgress.defaultProps = {
@@ -5419,7 +5440,19 @@ MediaProgressDisplay.propTypes = {
   activeTrackIndex: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   currentTime: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   duration: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
+
+  /**
+   * Receives a [`track`](#track) object (or `undefined` if none is active)
+   * and returns a string of display text
+   **/
   getDisplayText: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
+
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for progress displays. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
 };
 MediaProgressDisplay.defaultProps = {
@@ -5443,7 +5476,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var svg_react_loader_name_FullscreenExitIcon_material_design_icons_navigation_svg_design_ic_fullscreen_exit_48px_svg___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(255);
 /* harmony import */ var svg_react_loader_name_FullscreenExitIcon_material_design_icons_navigation_svg_design_ic_fullscreen_exit_48px_svg___WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(svg_react_loader_name_FullscreenExitIcon_material_design_icons_navigation_svg_design_ic_fullscreen_exit_48px_svg___WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _cassette_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(22);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -5507,7 +5540,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Spacer", function() { return Spacer; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(21);
+/* harmony import */ var _common_ButtonWrapper__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(22);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 
@@ -5559,7 +5592,7 @@ var src = __webpack_require__(14);
 var core_src = __webpack_require__(4);
 
 // EXTERNAL MODULE: ./packages/player/src/controls/common/ButtonWrapper.js
-var ButtonWrapper = __webpack_require__(21);
+var ButtonWrapper = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./packages/player/src/utils/getVolumeIconComponent.js
 var getVolumeIconComponent = __webpack_require__(139);
@@ -6291,13 +6324,39 @@ function (_PureComponent) {
   return ProgressBar;
 }(react["PureComponent"]);
 ProgressBar_ProgressBar.propTypes = {
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressClassName: prop_types_default.a.string,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progressStyle: prop_types_default.a.object,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
   progress: prop_types_default.a.number.isRequired,
-  progressDirection: src["PlayerPropTypes"].progressDirection.isRequired,
+
+  /** The same as the [`ProgressBarDisplay`](#progressbardisplay) prop */
+  progressDirection: prop_types_default.a.oneOf(['left', 'right', 'up', 'down']).isRequired,
+
+  /**
+   * The same as the [`ProgressBarDisplay`](#progressbardisplay) prop
+   * (although in this case the handle can be dragged by the user to
+   * readjust the progress value)
+   */
   handle: prop_types_default.a.element,
+
+  /** If set to true, the progress bar is non-interactive */
   readonly: prop_types_default.a.bool.isRequired,
+
+  /**
+   * This function, called repeatedly white a bar drag is in-progress, receives
+   * an updated 0-1 progress value and is expected to appropriately update the
+   * value sent to the `progress` prop
+   */
   onAdjustProgress: prop_types_default.a.func.isRequired,
+
+  /**
+   * This function, called when a bar drag has completed, receives the final
+   * updated 0-1 progress value
+   */
   onAdjustComplete: prop_types_default.a.func.isRequired
 };
 ProgressBar_ProgressBar.defaultProps = {
@@ -8554,7 +8613,13 @@ function (_PureComponent) {
   return FullscreenContextProvider;
 }(react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"]);
 FullscreenContextProvider.propTypes = {
+  /** If set `false`, disables fullscreen for the wrapped area */
   fullscreenEnabled: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool.isRequired,
+
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`FullscreenContextConsumer`](#fullscreencontextconsumer)
+   */
   children: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.oneOfType([prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.node, prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func]).isRequired
 };
 FullscreenContextProvider.defaultProps = {
@@ -8649,6 +8714,11 @@ MediaProgressBar.propTypes = {
   duration: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   onSeekPreview: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
   onSeekComplete: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
+
+  /**
+   * The same as the `durationOverride` prop for
+   * [`MediaProgressBarDisplay`](#mediaprogressbardisplay)
+   */
   durationOverride: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(_cassette_core__WEBPACK_IMPORTED_MODULE_2__["playerContextFilter"])(MediaProgressBar, ['playlist', 'currentTime', 'seekPreviewTime', 'seekInProgress', 'duration', 'onSeekPreview', 'onSeekComplete']));
@@ -8710,6 +8780,13 @@ function (_PureComponent) {
 MediaProgressBarDisplay.propTypes = {
   currentTime: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
   duration: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number.isRequired,
+
+  /**
+   * Sometimes, for example in the case of some media live streams, the
+   * duration property from the media element may not match what we want
+   * to use in the UI for a progress bar. `durationOverride` can be set
+   * if some external data on the media duration is available.
+   */
   durationOverride: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.number
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(_cassette_core__WEBPACK_IMPORTED_MODULE_2__["playerContextFilter"])(MediaProgressBarDisplay, ['currentTime', 'duration']));
@@ -8917,13 +8994,45 @@ function (_PureComponent) {
 
   return VideoDisplay;
 }(react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"]);
+
+function aspectRatioString(props, propName) {
+  var prop = props[propName];
+
+  if (prop === undefined) {
+    return;
+  }
+
+  if (typeof prop !== 'string' || prop.split(':').length !== 2 || prop.split(':').some(isNaN)) {
+    return new Error("The " + propName + " prop should be a string of the form 'x:y'. Example: 16:9");
+  }
+}
+
 VideoDisplay.propTypes = {
   registerVideoHostElement: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
   renderVideoIntoHostElement: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
   unregisterVideoHostElement: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired,
   fullscreen: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool,
-  aspectRatio: _cassette_core__WEBPACK_IMPORTED_MODULE_3__["PlayerPropTypes"].aspectRatio,
+
+  /** A string representation of the display's fixed aspect ratio */
+  aspectRatio: aspectRatioString,
+
+  /**
+   * In fullscreen we normally want to use the aspect ratio of the device
+   * display, but if you don't like this behavior, you can override it.
+   */
   maintainAspectRatioInFullscreen: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool.isRequired,
+
+  /**
+   * A function which should return a React element to display as a placeholder
+   * when the display is unused (i.e. a different `VideoDisplay` elsewhere on
+   * the screen currently is displaying the video content). This function is
+   * passed a `params` object with three properties: `containerWidth` (a
+   * number), `containerHeight` (a number) and `renderLastShownFrame` (a
+   * function which will returning a React element showing a canvas snapshot
+   * of the last frame that was shown before the video was moved out of this
+   * display - platforms like Facebook render frames like this. only works for
+   * actual video content, not audio poster images.)
+   */
   renderPlaceholderContent: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func.isRequired
 };
 VideoDisplay.defaultProps = {
@@ -10768,34 +10877,176 @@ function (_Component) {
   return PlayerContextProvider;
 }(react["Component"]);
 PlayerContextProvider_PlayerContextProvider.propTypes = {
+  /**
+   * An array of [`track`](#track) objects to play in order (except when
+   * shuffle mode is turned on)
+   **/
   playlist: prop_types_default.a.arrayOf(PlayerPropTypes["track"].isRequired).isRequired,
+
+  /** Set to `true` to play media on player load. Think before doing this. It is
+   * often a bad idea, although it can make sense if your app is expressly made
+   * for media playback and you're resuming playback from the last session.
+   * Note that some platforms will disallow this from happening under many
+   * scenarios, and in these cases, `autoplay` will simply fail gracefully.
+   */
   autoplay: prop_types_default.a.bool.isRequired,
+
+  /**
+   * If your app uses a custom implementation of the `HTMLMediaElement`, you
+   * can supply your own factory function to return it. This is an advanced
+   * edge case.
+   */
   createMediaElement: prop_types_default.a.func.isRequired,
+
+  /** If you're using `autoplay` but want to wait a few seconds before the
+   * media playback kicks in, you can specify that timeout in second here.
+   */
   autoplayDelayInSeconds: prop_types_default.a.number.isRequired,
+
+  /**
+   * Similar to `autoplayDelayInSeconds` but for the pause between tracks
+   * (if you want to evoke the feeling of listening to one of those old CDs with
+   * a negative countdown before it starts, which you never asked for).
+   */
   gapLengthInSeconds: prop_types_default.a.number.isRequired,
+
+  /** A [`crossOriginAttribute`](#crossoriginattribute) value */
   crossOrigin: PlayerPropTypes["crossOriginAttribute"],
+
+  /** The starting volume (0-1) */
   defaultVolume: prop_types_default.a.number.isRequired,
+
+  /** The starting `muted` value (`true` or `false`) */
   defaultMuted: prop_types_default.a.bool,
+
+  /** The starting [`repeatStrategy`](#repeatstrategy) */
   defaultRepeatStrategy: PlayerPropTypes["repeatStrategy"].isRequired,
+
+  /** Will shuffle mode be active by default? */
   defaultShuffle: prop_types_default.a.bool,
+
+  /** The starting playback rate (1 is normal, 0.5 is half, 2 is double) */
   defaultPlaybackRate: prop_types_default.a.number.isRequired,
+
+  /**
+   * The starting track index (an advanced use case.. normally you should put
+   * the track you want to hear first at the start of the playlist, unless
+   * you are loading an `initialStateSnapshot` which will override this value
+   * anyway
+   */
   startingTrackIndex: prop_types_default.a.number.isRequired,
+
+  /**
+   * Set this `false` if the player should rest of the final track when
+   * the playlist has completed. Ignored unless the
+   * current [`repeatStrategy`](#repeatstrategy) is `none`
+   */
   loadFirstTrackOnPlaylistComplete: prop_types_default.a.bool,
+
+  /** Use this to set the player's [`seekMode`](#seekmode) */
   seekMode: PlayerPropTypes["seekMode"].isRequired,
+
+  /**
+   * The default media element behavior is to reset the `playbackRate` to 1
+   * whenever a new source is loaded. Set this prop to `true` to maintain the
+   * same irregular playback rate across multiple tracks.
+   */
   maintainPlaybackRate: prop_types_default.a.bool.isRequired,
+
+  /**
+   * By default, activating a back skip in shuffle mode will select the previous
+   * track in the shuffled list, but if the current track was the first selected
+   * track, back skip will be disabled. Setting this prop to `true` will
+   * select new arbitrary tracks in the "past" if back skip is used beyond
+   * the buffered history.
+   */
   allowBackShuffle: prop_types_default.a.bool,
+
+  /**
+   * The number of seconds before pressing back skip becomes "back to
+   * beginning of current track" rather than "go to the previous track"
+   */
   stayOnBackSkipThreshold: prop_types_default.a.number.isRequired,
+
+  /**
+   * An array of [`mediaSessionAction`](#mediasessionaction) types to display
+   * in the end users's system UI, when applicable.
+   * It is *not* the same as the `controls` array.
+   */
   supportedMediaSessionActions: prop_types_default.a.arrayOf(PlayerPropTypes["mediaSessionAction"].isRequired).isRequired,
+
+  /** The number of seconds to seek back or forward when the Media Session API
+   * backseek/forwardseek buttons are activated in the end user's system UI
+   */
   mediaSessionSeekLengthInSeconds: prop_types_default.a.number.isRequired,
+
+  /**
+   * A function called on component mount and component unmount with a reference
+   * to the underlying media element. Generally not recommended for use, but
+   * can be used as an escape hatch for features that aren't well-supported by
+   * Cassette (if you find yourself needing this, you may want to
+   * [open a new issue](https://github.com/benwiley4000/cassette/issues/new)
+   * to talk about adding first-class support for your use case).
+   */
   mediaElementRef: prop_types_default.a.func,
+
+  /**
+   * If you're using `onStateSnapshot` to save snapshots of the media player
+   * state as a serializable object, you should pass that restored object here
+   * to preserve the user's state from the previous session
+   */
   initialStateSnapshot: prop_types_default.a.object,
+
+  /**
+   * Called whenever a new state snapshot is generated. The internals of this
+   * snapshot are not documented and may change in a non-major release, so it's
+   * not safe to rely on them directly. Instead, the state snapshot should
+   * be serialized to JSON with `JSON.stringify` and restored later with
+   * `JSON.parse` to be passed as the `initialStateSnapshot` prop
+   */
   onStateSnapshot: prop_types_default.a.func,
+
+  /**
+   * A function called whenever the active track is set or updated. Passed an
+   * object with the properties `track`, `trackIndex`, `previousTrack` and
+   * `previousTrackIndex` (these may be `null` or `undefined`)
+   */
   onActiveTrackUpdate: prop_types_default.a.func,
-  // A function called when the media element's currentTime attribute has changed
+
+  /**
+   * A function called when the media element's `currentTime` attribute has
+   * changed. Passed an object with the properties `currentTime`, `track` and
+   * `trackIndex`
+   */
   onTimeUpdate: prop_types_default.a.func,
+
+  /**
+   * A function called when playback of the current track has failed for some
+   * reason. Passed an object with the properties `event`,
+   * `track` and `trackIndex`
+   */
   onTrackPlaybackFailure: prop_types_default.a.func,
+
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns a url pointing to a poster image representing the current
+   * track which should be used in a [`VideoDisplay`](#videodisplay) when the
+   * media content hasn't yet loaded
+   */
   getPosterImageForTrack: prop_types_default.a.func.isRequired,
+
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns the value for the media element's `title` attribute, which
+   * may be used in iOS to display information about the current track in the
+   * system UI
+   */
   getMediaTitleAttributeForTrack: prop_types_default.a.func.isRequired,
+
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`PlayerContextConsumer`](#playercontextconsumer)
+   */
   children: prop_types_default.a.oneOfType([prop_types_default.a.node, prop_types_default.a.func]).isRequired
 };
 PlayerContextProvider_PlayerContextProvider.defaultProps = {
@@ -11125,8 +11376,13 @@ function (_PureComponent) {
   return MaybeMarquee;
 }(react["PureComponent"]);
 MaybeMarquee_MaybeMarquee.propTypes = {
+  /** The child content to scroll in the marquee */
   content: prop_types_default.a.node.isRequired,
+
+  /** The distance in pixels the marquee should move each second */
   pixelsPerSecond: prop_types_default.a.number.isRequired,
+
+  /** The direction text should scroll in the marquee */
   scrollDirection: prop_types_default.a.oneOf(['left', 'right']).isRequired
 };
 MaybeMarquee_MaybeMarquee.defaultProps = {
@@ -11263,7 +11519,21 @@ function (_PureComponent) {
 }(react["PureComponent"]);
 
 PlayerContextConsumer_PlayerContextConsumer.propTypes = {
+  /**
+   * A [render prop](https://reactjs.org/docs/render-props.html) function
+   * which receives as its argument an object with the latest values of the
+   * keys specified in the `filterList` prop (if you forget `filterList`, you
+   * will get all the `playerContext` values and a warning in the console)
+   */
   children: prop_types_default.a.func.isRequired,
+
+  /**
+   * A full list of `playerContext` values which will need to be consumed.
+   * Similar to the prop name array passed to
+   * [`playerContextFilter`](#playercontextfilter), but only made up of values
+   * found in [`playerContext`](#playercontext).
+   *
+   */
   filterList: prop_types_default.a.arrayOf(prop_types_default.a.string.isRequired)
 };
 /* harmony default export */ var src_PlayerContextConsumer = __webpack_exports__["default"] = (PlayerContextConsumer_PlayerContextConsumer);
@@ -17482,7 +17752,7 @@ var index = (function () {
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _ButtonWrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(21);
+/* harmony import */ var _ButtonWrapper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
 /* harmony import */ var _utils_classNames__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
@@ -20912,7 +21182,7 @@ module.exports = arrayLikeKeys;
 /* harmony import */ var rsg_components_Text__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(38);
 /* harmony import */ var rsg_components_Para__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(82);
 /* harmony import */ var rsg_components_Table__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(143);
-/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(22);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(23);
 
 
 
@@ -24917,7 +25187,7 @@ function useFullscreenContext() {
 
 
 
-var packageVersion = __webpack_require__(923).version; // TODO: hopefully in the future we'll have a more stable API
+var packageVersion = __webpack_require__(925).version; // TODO: hopefully in the future we'll have a more stable API
 // for observedBits/similar that doesn't require trial and error.
 
 
@@ -29740,7 +30010,7 @@ module.exports = isFinite;
 /* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(925);
+module.exports = __webpack_require__(927);
 
 
 /***/ }),
@@ -47798,20 +48068,11 @@ module.exports = {
                             'metadata': {}
                         },
                         {
-                            'filepath': 'packages/core/src/PlayerContextConsumer.js',
-                            'slug': 'playercontextconsumer',
-                            'pathLine': 'packages/core/src/PlayerContextConsumer.js',
-                            'module': __webpack_require__(132),
-                            'props': __webpack_require__(872),
-                            'hasExamples': true,
-                            'metadata': {}
-                        },
-                        {
                             'filepath': 'packages/core/src/PlayerContextGroup.js',
                             'slug': 'playercontextgroup',
                             'pathLine': 'packages/core/src/PlayerContextGroup.js',
                             'module': __webpack_require__(124),
-                            'props': __webpack_require__(874),
+                            'props': __webpack_require__(872),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -47820,7 +48081,7 @@ module.exports = {
                             'slug': 'playercontextprovider',
                             'pathLine': 'packages/core/src/PlayerContextProvider.js',
                             'module': __webpack_require__(130),
-                            'props': __webpack_require__(876),
+                            'props': __webpack_require__(874),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -47847,7 +48108,7 @@ module.exports = {
                             'filepath': 'packages/core/docs/FullscreenContextConsumer.md',
                             'href': void 0,
                             'components': [],
-                            'content': __webpack_require__(878),
+                            'content': __webpack_require__(876),
                             'external': void 0
                         },
                         {
@@ -47856,12 +48117,20 @@ module.exports = {
                             'usageMode': 'expand',
                             'sectionDepth': 0,
                             'description': 'Used to read and update the state of the surrounding [`playerContext`](#playercontext)',
-                            'slug': 'playercontextconsumer-1',
+                            'slug': 'playercontextconsumer',
                             'sections': [],
-                            'filepath': 'packages/core/docs/PlayerContextConsumer.md',
+                            'filepath': void 0,
                             'href': void 0,
-                            'components': [],
-                            'content': __webpack_require__(879),
+                            'components': [{
+                                    'filepath': 'packages/core/src/PlayerContextConsumer.js',
+                                    'slug': 'playercontextconsumer-1',
+                                    'pathLine': 'packages/core/src/PlayerContextConsumer.js',
+                                    'module': __webpack_require__(132),
+                                    'props': __webpack_require__(877),
+                                    'hasExamples': true,
+                                    'metadata': {}
+                                }],
+                            'content': void 0,
                             'external': void 0
                         },
                         {
@@ -47875,7 +48144,7 @@ module.exports = {
                             'filepath': 'packages/core/docs/playerContextFilter.md',
                             'href': void 0,
                             'components': [],
-                            'content': __webpack_require__(880),
+                            'content': __webpack_require__(879),
                             'external': void 0
                         }
                     ],
@@ -47896,7 +48165,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/fullscreenContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(881),
+                    'content': __webpack_require__(880),
                     'external': void 0
                 },
                 {
@@ -47910,7 +48179,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/playerContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(882),
+                    'content': __webpack_require__(881),
                     'external': void 0
                 },
                 {
@@ -47924,7 +48193,35 @@ module.exports = {
                     'filepath': 'packages/core/docs/Types.md',
                     'href': void 0,
                     'components': [],
+                    'content': __webpack_require__(882),
+                    'external': void 0
+                },
+                {
+                    'name': 'Don\'t Mutate Playlists!',
+                    'exampleMode': 'collapse',
+                    'usageMode': 'expand',
+                    'sectionDepth': 0,
+                    'description': void 0,
+                    'slug': 'dont-mutate-playlists',
+                    'sections': [],
+                    'filepath': 'packages/core/docs/DontMutatePlaylists.md',
+                    'href': void 0,
+                    'components': [],
                     'content': __webpack_require__(883),
+                    'external': void 0
+                },
+                {
+                    'name': 'Does this work with the Web Audio API?',
+                    'exampleMode': 'collapse',
+                    'usageMode': 'expand',
+                    'sectionDepth': 0,
+                    'description': void 0,
+                    'slug': 'does-this-work-with-the-web-audio-api',
+                    'sections': [],
+                    'filepath': 'packages/core/docs/WebAudioAPI.md',
+                    'href': void 0,
+                    'components': [],
+                    'content': __webpack_require__(884),
                     'external': void 0
                 }
             ],
@@ -47957,7 +48254,7 @@ module.exports = {
                             'slug': 'maybemarquee',
                             'pathLine': 'packages/components/src/MaybeMarquee.js',
                             'module': __webpack_require__(131),
-                            'props': __webpack_require__(884),
+                            'props': __webpack_require__(885),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -47966,7 +48263,7 @@ module.exports = {
                             'slug': 'mediaprogressbar',
                             'pathLine': 'packages/components/src/MediaProgressBar.js',
                             'module': __webpack_require__(126),
-                            'props': __webpack_require__(886),
+                            'props': __webpack_require__(887),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -47975,7 +48272,7 @@ module.exports = {
                             'slug': 'mediaprogressbardisplay',
                             'pathLine': 'packages/components/src/MediaProgressBarDisplay.js',
                             'module': __webpack_require__(127),
-                            'props': __webpack_require__(888),
+                            'props': __webpack_require__(889),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -47984,7 +48281,7 @@ module.exports = {
                             'slug': 'progressbar',
                             'pathLine': 'packages/components/src/ProgressBar.js',
                             'module': __webpack_require__(77),
-                            'props': __webpack_require__(890),
+                            'props': __webpack_require__(891),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -47993,7 +48290,7 @@ module.exports = {
                             'slug': 'progressbardisplay',
                             'pathLine': 'packages/components/src/ProgressBarDisplay.js',
                             'module': __webpack_require__(49),
-                            'props': __webpack_require__(892),
+                            'props': __webpack_require__(893),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48002,7 +48299,7 @@ module.exports = {
                             'slug': 'videodisplay',
                             'pathLine': 'packages/components/src/VideoDisplay.js',
                             'module': __webpack_require__(128),
-                            'props': __webpack_require__(894),
+                            'props': __webpack_require__(895),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48025,6 +48322,20 @@ module.exports = {
             'slug': 'cassetteplayer',
             'sections': [
                 {
+                    'name': 'Styling',
+                    'exampleMode': 'collapse',
+                    'usageMode': 'expand',
+                    'sectionDepth': 0,
+                    'description': void 0,
+                    'slug': 'styling',
+                    'sections': [],
+                    'filepath': 'packages/player/docs/styling.md',
+                    'href': void 0,
+                    'components': [],
+                    'content': __webpack_require__(897),
+                    'external': void 0
+                },
+                {
                     'name': 'Player Components',
                     'exampleMode': 'collapse',
                     'usageMode': 'expand',
@@ -48040,7 +48351,7 @@ module.exports = {
                             'slug': 'mediaplayer',
                             'pathLine': 'packages/player/src/MediaPlayer.js',
                             'module': __webpack_require__(129),
-                            'props': __webpack_require__(896),
+                            'props': __webpack_require__(898),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48049,7 +48360,7 @@ module.exports = {
                             'slug': 'mediaplayercontrols',
                             'pathLine': 'packages/player/src/MediaPlayerControls.js',
                             'module': __webpack_require__(50),
-                            'props': __webpack_require__(898),
+                            'props': __webpack_require__(900),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48073,7 +48384,7 @@ module.exports = {
                             'slug': 'backskipbutton',
                             'pathLine': 'packages/player/src/controls/BackSkipButton.js',
                             'module': __webpack_require__(67),
-                            'props': __webpack_require__(900),
+                            'props': __webpack_require__(902),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48082,7 +48393,7 @@ module.exports = {
                             'slug': 'forwardskipbutton',
                             'pathLine': 'packages/player/src/controls/ForwardSkipButton.js',
                             'module': __webpack_require__(68),
-                            'props': __webpack_require__(902),
+                            'props': __webpack_require__(904),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48091,7 +48402,7 @@ module.exports = {
                             'slug': 'fullscreenbutton',
                             'pathLine': 'packages/player/src/controls/FullscreenButton.js',
                             'module': __webpack_require__(74),
-                            'props': __webpack_require__(904),
+                            'props': __webpack_require__(906),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48100,7 +48411,7 @@ module.exports = {
                             'slug': 'mediaprogress',
                             'pathLine': 'packages/player/src/controls/MediaProgress.js',
                             'module': __webpack_require__(72),
-                            'props': __webpack_require__(906),
+                            'props': __webpack_require__(908),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48109,7 +48420,7 @@ module.exports = {
                             'slug': 'mediaprogressdisplay',
                             'pathLine': 'packages/player/src/controls/MediaProgressDisplay.js',
                             'module': __webpack_require__(73),
-                            'props': __webpack_require__(908),
+                            'props': __webpack_require__(910),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48118,7 +48429,7 @@ module.exports = {
                             'slug': 'mutebutton',
                             'pathLine': 'packages/player/src/controls/MuteButton.js',
                             'module': __webpack_require__(69),
-                            'props': __webpack_require__(910),
+                            'props': __webpack_require__(912),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48127,7 +48438,7 @@ module.exports = {
                             'slug': 'playpausebutton',
                             'pathLine': 'packages/player/src/controls/PlayPauseButton.js',
                             'module': __webpack_require__(66),
-                            'props': __webpack_require__(912),
+                            'props': __webpack_require__(914),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48136,7 +48447,7 @@ module.exports = {
                             'slug': 'repeatbutton',
                             'pathLine': 'packages/player/src/controls/RepeatButton.js',
                             'module': __webpack_require__(70),
-                            'props': __webpack_require__(914),
+                            'props': __webpack_require__(916),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48145,7 +48456,7 @@ module.exports = {
                             'slug': 'shufflebutton',
                             'pathLine': 'packages/player/src/controls/ShuffleButton.js',
                             'module': __webpack_require__(71),
-                            'props': __webpack_require__(916),
+                            'props': __webpack_require__(918),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48154,7 +48465,7 @@ module.exports = {
                             'slug': 'spacer',
                             'pathLine': 'packages/player/src/controls/Spacer.js',
                             'module': __webpack_require__(75),
-                            'props': __webpack_require__(918),
+                            'props': __webpack_require__(920),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48163,7 +48474,7 @@ module.exports = {
                             'slug': 'volumecontrol',
                             'pathLine': 'packages/player/src/controls/VolumeControl.js',
                             'module': __webpack_require__(76),
-                            'props': __webpack_require__(920),
+                            'props': __webpack_require__(922),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48197,7 +48508,7 @@ module.exports = {
                     'filepath': 'packages/hooks/docs/useFullscreenContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(922),
+                    'content': __webpack_require__(924),
                     'external': void 0
                 },
                 {
@@ -48211,7 +48522,7 @@ module.exports = {
                     'filepath': 'packages/hooks/docs/usePlayerContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(924),
+                    'content': __webpack_require__(926),
                     'external': void 0
                 }
             ],
@@ -48246,14 +48557,14 @@ module.exports = {
                 ]
             },
             'required': true,
-            'description': '',
+            'description': 'Either a renderable React node or a render prop function like the\none passed into [`FullscreenContextConsumer`](#fullscreencontextconsumer)',
             'tags': {},
             'name': 'children'
         },
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'If set `false`, disables fullscreen for the wrapped area',
             'defaultValue': {
                 'value': 'true',
                 'computed': false
@@ -48295,60 +48606,6 @@ module.exports = []
 if (false) {}
 
 module.exports = {
-    'description': '',
-    'displayName': 'PlayerContextConsumer',
-    'methods': [],
-    'props': [
-        {
-            'type': { 'name': 'func' },
-            'required': true,
-            'description': '',
-            'tags': {},
-            'name': 'children'
-        },
-        {
-            'type': {
-                'name': 'arrayOf',
-                'value': { 'name': 'string' }
-            },
-            'required': false,
-            'description': '',
-            'tags': {},
-            'name': 'filterList'
-        }
-    ],
-    'doclets': {},
-    'examples': __webpack_require__(873)
-}
-	
-
-/***/ }),
-/* 873 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-if (false) {}
-
-var requireMap = {
-    'react': __webpack_require__(0),
-    './../src/PlayerContextConsumer.js': __webpack_require__(132)
-};
-var requireInRuntimeBase = __webpack_require__(8).default;
-var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
-var evalInContextBase = __webpack_require__(9).default;
-var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;\nconst PlayerContextConsumer$0 = require('./../src/PlayerContextConsumer.js');\nconst PlayerContextConsumer = PlayerContextConsumer$0.default || PlayerContextConsumer$0;", requireInRuntime);
-
-module.exports = []
-	
-
-/***/ }),
-/* 874 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-if (false) {}
-
-module.exports = {
     'description': 'A wrapper which can be used to share configuration among multiple descendant [`PlayerContextProvider`](#playercontextprovider) instances as well as prevent multiple media elements from playing audio simultaneously\n',
     'displayName': 'PlayerContextGroup',
     'methods': [],
@@ -48361,18 +48618,20 @@ module.exports = {
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(875)
+    'examples': __webpack_require__(873)
 }
 	
 
 /***/ }),
-/* 875 */
+/* 873 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
+    '@cassette/core': __webpack_require__(4),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../src/PlayerContextGroup.js': __webpack_require__(124)
 };
@@ -48381,14 +48640,32 @@ var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
 var evalInContextBase = __webpack_require__(9).default;
 var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;\nconst PlayerContextGroup$0 = require('./../src/PlayerContextGroup.js');\nconst PlayerContextGroup = PlayerContextGroup$0.default || PlayerContextGroup$0;", requireInRuntime);
 
-module.exports = [{
+module.exports = [
+    {
+        'type': 'code',
+        'content': 'import { PlayerContextGroup } from \'@cassette/core\';\nimport { MediaPlayer } from \'@cassette/player\';\n\nconst playlistA = [\n  {\n    url:\n      \'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4\',\n    title: \'Elephants Dream\',\n    artist: \'Orange Open Movie Project\'\n  }\n];\nconst playlistB = [\n  {\n    url:\n      \'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4\',\n    title: \'Big Buck Bunny\',\n    artist: \'Peach Open Movie Project\'\n  }\n];\n\n// can\'t play audio from more than one piece of media at a time\n<div style={{ display: \'flex\' }}>\n  <PlayerContextGroup>\n    <MediaPlayer\n      playlist={playlistA}\n      controls={[\'spacer\', \'playpause\', \'mute\', \'spacer\']}\n      showVideo\n    />\n    <span style={{ width: 30 }} />\n    <MediaPlayer\n      playlist={playlistB}\n      controls={[\'spacer\', \'playpause\', \'mute\', \'spacer\']}\n      showVideo\n    />\n  </PlayerContextGroup>\n</div>;',
+        'settings': {},
+        'evalInContext': evalInContext
+    },
+    {
         'type': 'markdown',
-        'content': 'Although not required, `PlayerContextGroup` can accept any of the props for `PlayerContextProvider`, which will be passed as defaults to any descendant `PlayerContextProvider` instances.\n\nAdditionally, for advanced use cases, `PlayerContextGroup` instances can be nested inside one another. If a prop is passed to a descendant `PlayerContextGroup`, it will override the default value from the ancestor.'
-    }]
+        'content': 'Although not required, `PlayerContextGroup` can accept any of the props for `PlayerContextProvider`, which will be passed as defaults to any descendant `PlayerContextProvider` instances.'
+    },
+    {
+        'type': 'code',
+        'content': 'import { PlayerContextGroup } from \'@cassette/core\';\nimport { MediaPlayer } from \'@cassette/player\';\n\nconst playlistA = [\n  {\n    url:\n      \'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4\',\n    title: \'Elephants Dream\',\n    artist: \'Orange Open Movie Project\'\n  }\n];\nconst playlistB = [\n  {\n    url:\n      \'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4\',\n    title: \'Big Buck Bunny\',\n    artist: \'Peach Open Movie Project\'\n  }\n];\n\n// can\'t play audio from more than one piece of media at a time,\n// *however* note in this case we autoplay both videos muted so they can\n// play simultaneously just fine (until you unmute both of them)\n<div style={{ display: \'flex\' }}>\n  <PlayerContextGroup autoplay defaultMuted>\n    <MediaPlayer\n      playlist={playlistA}\n      controls={[\'spacer\', \'playpause\', \'mute\', \'spacer\']}\n      showVideo\n    />\n    <span style={{ width: 30 }} />\n    <MediaPlayer\n      playlist={playlistB}\n      controls={[\'spacer\', \'playpause\', \'mute\', \'spacer\']}\n      showVideo\n    />\n  </PlayerContextGroup>\n</div>;',
+        'settings': {},
+        'evalInContext': evalInContext
+    },
+    {
+        'type': 'markdown',
+        'content': 'Additionally, for advanced use cases, `PlayerContextGroup` instances can be nested inside one another. If a prop is passed to a descendant `PlayerContextGroup`, it will override the default value from the ancestor.'
+    }
+]
 	
 
 /***/ }),
-/* 876 */
+/* 874 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48408,7 +48685,7 @@ module.exports = {
                 ]
             },
             'required': true,
-            'description': '',
+            'description': 'Either a renderable React node or a render prop function like the\none passed into [`PlayerContextConsumer`](#playercontextconsumer)',
             'tags': {},
             'name': 'children'
         },
@@ -48421,14 +48698,14 @@ module.exports = {
                 }
             },
             'required': true,
-            'description': '',
+            'description': 'An array of [`track`](#track) objects to play in order (except when\nshuffle mode is turned on)',
             'tags': {},
             'name': 'playlist'
         },
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'By default, activating a back skip in shuffle mode will select the previous\ntrack in the shuffled list, but if the current track was the first selected\ntrack, back skip will be disabled. Setting this prop to `true` will\nselect new arbitrary tracks in the "past" if back skip is used beyond\nthe buffered history.',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -48439,7 +48716,7 @@ module.exports = {
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'Set to `true` to play media on player load. Think before doing this. It is\noften a bad idea, although it can make sense if your app is expressly made\nfor media playback and you\'re resuming playback from the last session.\nNote that some platforms will disallow this from happening under many\nscenarios, and in these cases, `autoplay` will simply fail gracefully.',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -48450,7 +48727,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'If you\'re using `autoplay` but want to wait a few seconds before the\nmedia playback kicks in, you can specify that timeout in second here.',
             'defaultValue': {
                 'value': '0',
                 'computed': false
@@ -48461,7 +48738,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'If your app uses a custom implementation of the `HTMLMediaElement`, you\ncan supply your own factory function to return it. This is an advanced\nedge case.',
             'defaultValue': {
                 'value': '() => document.createElement(\'video\')',
                 'computed': false
@@ -48475,14 +48752,14 @@ module.exports = {
                 'raw': 'PlayerPropTypes.crossOriginAttribute'
             },
             'required': false,
-            'description': '',
+            'description': 'A [`crossOriginAttribute`](#crossoriginattribute) value',
             'tags': {},
             'name': 'crossOrigin'
         },
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'The starting `muted` value (`true` or `false`)',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -48493,7 +48770,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The starting playback rate (1 is normal, 0.5 is half, 2 is double)',
             'defaultValue': {
                 'value': '1',
                 'computed': false
@@ -48507,7 +48784,7 @@ module.exports = {
                 'raw': 'PlayerPropTypes.repeatStrategy.isRequired'
             },
             'required': false,
-            'description': '',
+            'description': 'The starting [`repeatStrategy`](#repeatstrategy)',
             'defaultValue': {
                 'value': '\'playlist\'',
                 'computed': false
@@ -48518,7 +48795,7 @@ module.exports = {
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'Will shuffle mode be active by default?',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -48529,7 +48806,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The starting volume (0-1)',
             'defaultValue': {
                 'value': '1',
                 'computed': false
@@ -48540,7 +48817,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'Similar to `autoplayDelayInSeconds` but for the pause between tracks\n(if you want to evoke the feeling of listening to one of those old CDs with\na negative countdown before it starts, which you never asked for).',
             'defaultValue': {
                 'value': '0',
                 'computed': false
@@ -48551,7 +48828,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function which receives a [`track`](#track) object (if one is active)\nand returns the value for the media element\'s `title` attribute, which\nmay be used in iOS to display information about the current track in the\nsystem UI',
             'defaultValue': {
                 'value': 'getDisplayText',
                 'computed': true
@@ -48562,7 +48839,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function which receives a [`track`](#track) object (if one is active)\nand returns a url pointing to a poster image representing the current\ntrack which should be used in a [`VideoDisplay`](#videodisplay) when the\nmedia content hasn\'t yet loaded',
             'defaultValue': {
                 'value': 'function(track) {\n  return track && track.artwork ? track.artwork[0].src : \'\';\n}',
                 'computed': false
@@ -48573,14 +48850,14 @@ module.exports = {
         {
             'type': { 'name': 'object' },
             'required': false,
-            'description': '',
+            'description': 'If you\'re using `onStateSnapshot` to save snapshots of the media player\nstate as a serializable object, you should pass that restored object here\nto preserve the user\'s state from the previous session',
             'tags': {},
             'name': 'initialStateSnapshot'
         },
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'Set this `false` if the player should rest of the final track when\nthe playlist has completed. Ignored unless the\ncurrent [`repeatStrategy`](#repeatstrategy) is `none`',
             'defaultValue': {
                 'value': 'true',
                 'computed': false
@@ -48591,7 +48868,7 @@ module.exports = {
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'The default media element behavior is to reset the `playbackRate` to 1\nwhenever a new source is loaded. Set this prop to `true` to maintain the\nsame irregular playback rate across multiple tracks.',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -48602,14 +48879,14 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function called on component mount and component unmount with a reference\nto the underlying media element. Generally not recommended for use, but\ncan be used as an escape hatch for features that aren\'t well-supported by\nCassette (if you find yourself needing this, you may want to\n[open a new issue](https://github.com/benwiley4000/cassette/issues/new)\nto talk about adding first-class support for your use case).',
             'tags': {},
             'name': 'mediaElementRef'
         },
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The number of seconds to seek back or forward when the Media Session API\nbackseek/forwardseek buttons are activated in the end user\'s system UI',
             'defaultValue': {
                 'value': '10',
                 'computed': false
@@ -48620,28 +48897,28 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function called whenever the active track is set or updated. Passed an\nobject with the properties `track`, `trackIndex`, `previousTrack` and\n`previousTrackIndex` (these may be `null` or `undefined`)',
             'tags': {},
             'name': 'onActiveTrackUpdate'
         },
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'Called whenever a new state snapshot is generated. The internals of this\nsnapshot are not documented and may change in a non-major release, so it\'s\nnot safe to rely on them directly. Instead, the state snapshot should\nbe serialized to JSON with `JSON.stringify` and restored later with\n`JSON.parse` to be passed as the `initialStateSnapshot` prop',
             'tags': {},
             'name': 'onStateSnapshot'
         },
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function called when the media element\'s `currentTime` attribute has\nchanged. Passed an object with the properties `currentTime`, `track` and\n`trackIndex`',
             'tags': {},
             'name': 'onTimeUpdate'
         },
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function called when playback of the current track has failed for some\nreason. Passed an object with the properties `event`,\n`track` and `trackIndex`',
             'tags': {},
             'name': 'onTrackPlaybackFailure'
         },
@@ -48651,7 +48928,7 @@ module.exports = {
                 'raw': 'PlayerPropTypes.seekMode.isRequired'
             },
             'required': false,
-            'description': '',
+            'description': 'Use this to set the player\'s [`seekMode`](#seekmode)',
             'defaultValue': {
                 'value': '\'immediate\'',
                 'computed': false
@@ -48662,7 +48939,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The starting track index (an advanced use case.. normally you should put\nthe track you want to hear first at the start of the playlist, unless\nyou are loading an `initialStateSnapshot` which will override this value\nanyway',
             'defaultValue': {
                 'value': '0',
                 'computed': false
@@ -48673,7 +48950,7 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The number of seconds before pressing back skip becomes "back to\nbeginning of current track" rather than "go to the previous track"',
             'defaultValue': {
                 'value': '5',
                 'computed': false
@@ -48690,7 +48967,7 @@ module.exports = {
                 }
             },
             'required': false,
-            'description': '',
+            'description': 'An array of [`mediaSessionAction`](#mediasessionaction) types to display\nin the end users\'s system UI, when applicable.\nIt is *not* the same as the `controls` array.',
             'defaultValue': {
                 'value': '[\'play\', \'pause\', \'previoustrack\', \'nexttrack\']',
                 'computed': false
@@ -48701,12 +48978,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(877)
+    'examples': __webpack_require__(875)
 }
 	
 
 /***/ }),
-/* 877 */
+/* 875 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48725,39 +49002,83 @@ module.exports = []
 	
 
 /***/ }),
+/* 876 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = { 'react': __webpack_require__(0) };
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+
+module.exports = []
+	
+
+/***/ }),
+/* 877 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+module.exports = {
+    'description': '',
+    'displayName': 'PlayerContextConsumer',
+    'methods': [],
+    'props': [
+        {
+            'type': { 'name': 'func' },
+            'required': true,
+            'description': 'A [render prop](https://reactjs.org/docs/render-props.html) function\nwhich receives as its argument an object with the latest values of the\nkeys specified in the `filterList` prop (if you forget `filterList`, you\nwill get all the `playerContext` values and a warning in the console)',
+            'tags': {},
+            'name': 'children'
+        },
+        {
+            'type': {
+                'name': 'arrayOf',
+                'value': { 'name': 'string' }
+            },
+            'required': false,
+            'description': 'A full list of `playerContext` values which will need to be consumed.\nSimilar to the prop name array passed to\n[`playerContextFilter`](#playercontextfilter), but only made up of values\nfound in [`playerContext`](#playercontext).',
+            'tags': {},
+            'name': 'filterList'
+        }
+    ],
+    'doclets': {},
+    'examples': __webpack_require__(878)
+}
+	
+
+/***/ }),
 /* 878 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
-var requireMap = { 'react': __webpack_require__(0) };
+var requireMap = {
+    '@cassette/core': __webpack_require__(4),
+    'react': __webpack_require__(0),
+    './../src/PlayerContextConsumer.js': __webpack_require__(132)
+};
 var requireInRuntimeBase = __webpack_require__(8).default;
 var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
 var evalInContextBase = __webpack_require__(9).default;
-var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;\nconst PlayerContextConsumer$0 = require('./../src/PlayerContextConsumer.js');\nconst PlayerContextConsumer = PlayerContextConsumer$0.default || PlayerContextConsumer$0;", requireInRuntime);
 
-module.exports = []
+module.exports = [{
+        'type': 'code',
+        'content': 'import { PlayerContextConsumer } from \'@cassette/core\';\n\n<PlayerContextConsumer filterList={[\'currentTime\', \'paused\', \'onTogglePause\']}>\n  {({ currentTime, paused, onTogglePause }) => (\n    <React.Fragment>\n      <div>\n        The track is {paused ? \'paused\' : \'playing\'}. The time is {currentTime}.\n      </div>\n      <button onClick={onTogglePause}>Toggle pause!</button>\n    </React.Fragment>\n  )}\n</PlayerContextConsumer>;',
+        'settings': {},
+        'evalInContext': evalInContext
+    }]
 	
 
 /***/ }),
 /* 879 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-if (false) {}
-
-var requireMap = { 'react': __webpack_require__(0) };
-var requireInRuntimeBase = __webpack_require__(8).default;
-var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
-var evalInContextBase = __webpack_require__(9).default;
-var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
-
-module.exports = []
-	
-
-/***/ }),
-/* 880 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48776,7 +49097,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 881 */
+/* 880 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48795,7 +49116,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 882 */
+/* 881 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48814,6 +49135,25 @@ module.exports = [{
 	
 
 /***/ }),
+/* 882 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = { 'react': __webpack_require__(0) };
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+
+module.exports = [{
+        'type': 'markdown',
+        'content': 'Here\'s a reference of the special types referenced in these docs:\n\n#### `control`\n\nCan be either a keyword string which corresponds to an available media control\ncomponent, or a custom render prop function.\n\nIf the `control` is a keyword string, the possible values are:\n\n-   `\'playpause\'` (play/pause toggle button)\n-   `\'backskip\'` (previous track skip button)\n-   `\'forwardskip\'` (next track skip button)\n-   `\'volume\'` (a control for adjusting volume and toggling mute)\n-   `\'mute\'` (a control for just toggling mute, no volume bar)\n-   `\'repeat\'` (a control which cycles between no-repeat, repeat-playlist, repeat-track)\n-   `\'shuffle\'` (a control which toggles a shuffle mode)\n-   `\'progress\'` (a drag-to-seek media progress bar)\n-   `\'progressdisplay\'` (a read-only [non-draggable] progress bar)\n-   `\'fullscreen\'` (a button which toggles fullscreen view for the player UI)\n-   `\'spacer\'` (a transparent space-filling element whose default width is\n    `10px`, although the style of the `.cassette__spacer` class can be\n    overridden\n\nThe custom render prop function\nreceives the current [`playerContext`](#playercontext) as the first argument\nand the current [`fullscreenContext`](#fullscreencontext) as the second argument\nwhen passed into the [`MediaPlayer`](#mediaplayer) or\n[`MediaPlayerControls`](#mediaplayercontrols) components.\n\n```jsx\n<span class="token punctuation">(</span><span class="token parameter">playerContext<span class="token punctuation">,</span> fullscreenContext</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>\n  <span class="token keyword">return</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MyControl</span></span> <span class="token attr-name">paused</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playerContext<span class="token punctuation">.</span>paused<span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><span class="token punctuation">;</span>\n<span class="token punctuation">}</span><span class="token punctuation">;</span>\n```\n\n#### `crossOriginAttribute`\n\nOne of the media element\'s possible [`crossOrigin`](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes) values - `\'anonymous\'`, `\'use-credentials\'` or simply unset\n\n#### `mediaSessionAction`\n\nOne of the [UI actions supported by the Media Session API](https://wicg.github.io/mediasession/#actions-model) - `play`, `pause`, `seekbackward`, `seekforward`, `previoustrack` or `nexttrack`\n\n#### `repeatStrategy`\n\nOne of three "repeat strategies" which specify different behavior when the\nplayer reaches the end of a track:\n\n-   `\'track\'` (the just-completed track is played again)\n-   `\'playlist\'` (the playlist is replayed from the beginning when the end of the playlist is reached... doesn\'t mean anything when shuffle mode is active)\n-   `\'none\'` (when the playlist completes, playback stops... doesn\'t mean anything when shuffle mode is active)\n\n#### `seekMode`\n\nOne of three "seek modes" which specify different semantics when the player is\nactively seeking to a new time in the current media, for example by dragging\nthe handle of a progress bar:\n\n-   `\'paused\'` (the media audio playback is halted during dragging, but seeking happens immediately during dragging in order to preview the video frame)\n-   `\'immediate\'` (media is updated as soon as possible while the user drags to adjust the `currentTime`)\n-   `\'onrelease\'` (no seeking or pausing occurs while drag is in progress; `currentTime` adjusted on release)\n\n#### `track`\n\nEach track object can contain the following properties:\n\n-   `url` (_required_ unless `sources` is specified): A string containing the address of the media file to play\n-   `sources` (_required_ unless `url` is specified): An array of objects, if you want to specify multiple files of different types for the same track. Each object requires the properties:\n    -   `src` (_required_): A string containing the address of a file that can be played for this track\n    -   `type` (_required_): A string which is the [media file\'s MIME type](https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats)\n-   `title`: The title of the track - corresponds to the [`MediaMetadata.title` property](https://wicg.github.io/mediasession/#examples)\n-   `artist`: The track\'s artist - corresponds to the [`MediaMetadata.artist` property](https://wicg.github.io/mediasession/#examples)\n-   `album`: The album the track belongs to - corresponds to the [`MediaMetadata.album` property](https://wicg.github.io/mediasession/#examples)\n-   `artwork`: The artwork for the track - corresponds to the [`MediaMetadata.artwork` property](https://wicg.github.io/mediasession/#examples)\n    _NOTE_: Network speed may affect how quickly album artwork shows up in system MediaSession notifications. You can try [these strategies for implementing caching](https://developers.google.com/web/updates/2017/02/media-session#make_it_play_nice_offline).\n-   `duration`: This can be specified to hint to the UI how long a track will be\n    before its metadata has actually loaded\n-   `startingTime`: An advanced use case feature for forcing a track to start at\n    a time other than 0. Normally this can be accomplished sufficiently by restoring\n    a state snapshot, so usage of `startingTime` should be avoided if possible -\n    but if you need to restore the `currentTime` for a piece of media that was\n    consumed long ago in the past, this might be needed.\n-   `isUnboundedStream`: set this to `true` when the media is an unbounded stream\n    to avoid taking twice as long to begin playback (this is due to an iOS bug;\n    more information [here](https://github.com/benwiley4000/cassette/issues/355).)\n-   `meta`: An object containing any other track-specific information you want to store\n\n**NOTE**: Re-rendering the `PlayerContextProvider` with a mutated `playlist` prop or a mutated `track` member will likely not work as expected. Please make a copy of the playlist instead. For more information, [see here](#dont-mutate-playlists).'
+    }]
+	
+
+/***/ }),
 /* 883 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -48828,12 +49168,31 @@ var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react
 
 module.exports = [{
         'type': 'markdown',
-        'content': 'Here\'s a reference of the special types referenced in these docs:\n\nTODO: collect special propTypes and context types to document here'
+        'content': 'The `playlist` prop is considered immutable. This means that if you modify the playlist array directly (for example, using the `push` Array method) and then re-render using the same `playlist` prop, you might run into problems, as no change will be detected and the player controls won\'t update until something else in the player context is changed.\n\nThe reason we deal with `playlist` this way is to avoid a ton of unnecessary re-renders throughout your component tree each time a playlist changes. If we can easily determine whether the contents of a playlist have changed or not, then we can implement our control components with the `PureComponent` React class, which only re-renders if one of its prop values is different.\n\nThe catch is that you might not be used to manipulating by creating a new Array instead of modifying the existing array. So here\'s a cheat sheet that can help you out ([shout-out to this guide for helping with ideas](http://vincent.billey.me/pure-javascript-immutable-array/)):\n\n```js\n<span class="token comment">// we can use array methods like concat, slice, map and filter,</span>\n<span class="token comment">// which make a copy of the array instead of mutating it</span>\n\n<span class="token comment">// add new track to end of playlist</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.push(newTrack)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>newTrack<span class="token punctuation">)</span>\n\n<span class="token comment">// remove last track</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.pop()</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>\n\n<span class="token comment">// add new track to front</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.unshift(oldPlaylist)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> <span class="token punctuation">[</span>newTrack<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>oldPlaylist<span class="token punctuation">)</span>\n\n<span class="token comment">// remove first track</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.shift()</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>\n\n<span class="token comment">// insert track at a given index (in front of a track in the playlist)</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.splice(index, 0, newTrack)</span>\n<span class="token keyword">const</span> index <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>trackInPlaylist<span class="token punctuation">)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist\n  <span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span>\n  <span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>newTrack<span class="token punctuation">,</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>\n\n<span class="token comment">// replace track at a given index</span>\n<span class="token comment">// mutating equivalent: oldPlaylist[index] = newTrack</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist\n  <span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span>\n  <span class="token comment">// note we slice at index + 1 this time</span>\n  <span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>newTrack<span class="token punctuation">,</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>\n\n<span class="token comment">// replace track by reference</span>\n<span class="token comment">// mutating equivalent:</span>\n<span class="token comment">//   oldPlaylist[oldPlaylist.indexOf(trackInPlaylist)] = newTrack</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist\n  <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token parameter">track</span> <span class="token operator">=></span> track <span class="token operator">===</span> trackInPlaylist <span class="token operator">?</span> newTrack <span class="token punctuation">:</span> track<span class="token punctuation">)</span>\n\n<span class="token comment">// remove track at a given index</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.splice(index, 1)</span>\n<span class="token keyword">const</span> index <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">indexOf</span><span class="token punctuation">(</span>trackInPlaylist<span class="token punctuation">)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist\n  <span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span>\n  <span class="token punctuation">.</span><span class="token function">concat</span><span class="token punctuation">(</span>oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span>index <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>\n\n<span class="token comment">// remove track by reference</span>\n<span class="token comment">// mutating equivalent:</span>\n<span class="token comment">//   oldPlaylist.splice(oldPlaylist.indexOf(trackInPlaylist), 1)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist\n  <span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span><span class="token parameter">track</span> <span class="token operator">=></span> track <span class="token operator">!==</span> trackInPlaylist<span class="token punctuation">)</span>\n\n<span class="token comment">// sort the playlist</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.sort(compareFunction)</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>compareFunction<span class="token punctuation">)</span>\n\n<span class="token comment">// reverse the order of the playlist</span>\n<span class="token comment">// mutating equivalent: oldPlaylist.reverse()</span>\n<span class="token keyword">const</span> newPlaylist <span class="token operator">=</span> oldPlaylist<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reverse</span><span class="token punctuation">(</span><span class="token punctuation">)</span>\n```'
     }]
 	
 
 /***/ }),
 /* 884 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = { 'react': __webpack_require__(0) };
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+
+module.exports = [{
+        'type': 'markdown',
+        'content': 'We don\'t expose any special props for manipulating the Web Audio API with React.\n\nHowever, you _can_ use the `mediaElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) to process your media before it gets sent to the speaker.\n\nFor example, you could use this code to add a low pass to high pass filter transition during the first 10 seconds your media player is mounted:\n\n```jsx\n<span class="token operator">&lt;</span>MediaPlayer\n  playlist<span class="token operator">=</span><span class="token punctuation">{</span>playlist<span class="token punctuation">}</span>\n  mediaElementRef<span class="token operator">=</span><span class="token punctuation">{</span><span class="token parameter">media</span> <span class="token operator">=></span> <span class="token punctuation">{</span>\n    <span class="token keyword">const</span> ctx <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AudioContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">let</span> source <span class="token operator">=</span> ctx<span class="token punctuation">.</span><span class="token function">createMediaElementSource</span><span class="token punctuation">(</span>media<span class="token punctuation">)</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">const</span> filterType <span class="token keyword">of</span> <span class="token punctuation">[</span><span class="token string">\'lowpass\'</span><span class="token punctuation">,</span> <span class="token string">\'highpass\'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>\n      <span class="token keyword">const</span> filter <span class="token operator">=</span> ctx<span class="token punctuation">.</span><span class="token function">createBiquadFilter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>\n      filter<span class="token punctuation">.</span>type <span class="token operator">=</span> filterType<span class="token punctuation">;</span>\n      filter<span class="token punctuation">.</span>frequency<span class="token punctuation">.</span>value <span class="token operator">=</span> <span class="token number">100</span><span class="token punctuation">;</span>\n      filter<span class="token punctuation">.</span>frequency<span class="token punctuation">.</span><span class="token function">exponentialRampToValueAtTime</span><span class="token punctuation">(</span><span class="token number">3000</span><span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span>\n      source <span class="token operator">=</span> source<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span>filter<span class="token punctuation">)</span><span class="token punctuation">;</span>\n    <span class="token punctuation">}</span>\n\n    source<span class="token punctuation">.</span><span class="token function">connect</span><span class="token punctuation">(</span>ctx<span class="token punctuation">.</span>destination<span class="token punctuation">)</span><span class="token punctuation">;</span>\n  <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span>\n  crossOrigin<span class="token operator">=</span><span class="token string">"anonymous"</span>\n  autoplay\n<span class="token operator">/</span><span class="token operator">></span>\n```\n\nYou might need to set the `crossOrigin` prop in order for Web Audio API processing to work correctly.'
+    }]
+	
+
+/***/ }),
+/* 885 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48847,14 +49206,14 @@ module.exports = {
         {
             'type': { 'name': 'node' },
             'required': true,
-            'description': '',
+            'description': 'The child content to scroll in the marquee',
             'tags': {},
             'name': 'content'
         },
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The distance in pixels the marquee should move each second',
             'defaultValue': {
                 'value': '30',
                 'computed': false
@@ -48877,7 +49236,7 @@ module.exports = {
                 ]
             },
             'required': false,
-            'description': '',
+            'description': 'The direction text should scroll in the marquee',
             'defaultValue': {
                 'value': '\'left\'',
                 'computed': false
@@ -48888,12 +49247,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(885)
+    'examples': __webpack_require__(886)
 }
 	
 
 /***/ }),
-/* 885 */
+/* 886 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48938,7 +49297,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 886 */
+/* 887 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48951,18 +49310,18 @@ module.exports = {
     'props': [{
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The same as the `durationOverride` prop for\n[`MediaProgressBarDisplay`](#mediaprogressbardisplay)',
             'tags': {},
             'name': 'durationOverride'
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(887)
+    'examples': __webpack_require__(888)
 }
 	
 
 /***/ }),
-/* 887 */
+/* 888 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48999,7 +49358,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 888 */
+/* 889 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49012,18 +49371,18 @@ module.exports = {
     'props': [{
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'Sometimes, for example in the case of some media live streams, the\nduration property from the media element may not match what we want\nto use in the UI for a progress bar. `durationOverride` can be set\nif some external data on the media duration is available.',
             'tags': {},
             'name': 'durationOverride'
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(889)
+    'examples': __webpack_require__(890)
 }
 	
 
 /***/ }),
-/* 889 */
+/* 890 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49048,7 +49407,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 890 */
+/* 891 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49062,59 +49421,76 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': true,
-            'description': '',
+            'description': 'This function, called when a bar drag has completed, receives the final\nupdated 0-1 progress value',
             'tags': {},
             'name': 'onAdjustComplete'
         },
         {
             'type': { 'name': 'func' },
             'required': true,
-            'description': '',
+            'description': 'This function, called repeatedly white a bar drag is in-progress, receives\nan updated 0-1 progress value and is expected to appropriately update the\nvalue sent to the `progress` prop',
             'tags': {},
             'name': 'onAdjustProgress'
         },
         {
             'type': { 'name': 'number' },
             'required': true,
-            'description': '',
+            'description': 'The same as the [`ProgressBarDisplay`](#progressbardisplay) prop',
             'tags': {},
             'name': 'progress'
         },
         {
+            'type': {
+                'name': 'enum',
+                'value': [
+                    {
+                        'value': '\'left\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'right\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'up\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'down\'',
+                        'computed': false
+                    }
+                ]
+            },
+            'required': true,
+            'description': 'The same as the [`ProgressBarDisplay`](#progressbardisplay) prop',
+            'tags': {},
+            'name': 'progressDirection'
+        },
+        {
             'type': { 'name': 'element' },
             'required': false,
-            'description': '',
+            'description': 'The same as the [`ProgressBarDisplay`](#progressbardisplay) prop\n(although in this case the handle can be dragged by the user to\nreadjust the progress value)',
             'tags': {},
             'name': 'handle'
         },
         {
             'type': { 'name': 'string' },
             'required': false,
-            'description': '',
+            'description': 'The same as the [`ProgressBarDisplay`](#progressbardisplay) prop',
             'tags': {},
             'name': 'progressClassName'
         },
         {
-            'type': {
-                'name': 'progressDirection',
-                'raw': 'PlayerPropTypes.progressDirection.isRequired'
-            },
-            'required': false,
-            'description': '',
-            'tags': {},
-            'name': 'progressDirection'
-        },
-        {
             'type': { 'name': 'object' },
             'required': false,
-            'description': '',
+            'description': 'The same as the [`ProgressBarDisplay`](#progressbardisplay) prop',
             'tags': {},
             'name': 'progressStyle'
         },
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'If set to true, the progress bar is non-interactive',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -49125,12 +49501,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(891)
+    'examples': __webpack_require__(892)
 }
 	
 
 /***/ }),
-/* 891 */
+/* 892 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49155,7 +49531,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 892 */
+/* 893 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49169,50 +49545,67 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': true,
-            'description': '',
+            'description': 'A number from 0 to 1',
             'tags': {},
             'name': 'progress'
         },
         {
+            'type': {
+                'name': 'enum',
+                'value': [
+                    {
+                        'value': '\'left\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'right\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'up\'',
+                        'computed': false
+                    },
+                    {
+                        'value': '\'down\'',
+                        'computed': false
+                    }
+                ]
+            },
+            'required': true,
+            'description': 'Which direction does the progress bar move as it fills up?',
+            'tags': {},
+            'name': 'progressDirection'
+        },
+        {
             'type': { 'name': 'element' },
             'required': false,
-            'description': '',
+            'description': 'A React element to accentuate the progress mark',
             'tags': {},
             'name': 'handle'
         },
         {
             'type': { 'name': 'string' },
             'required': false,
-            'description': '',
+            'description': 'A CSS classname for the inner div representing elapsed progress',
             'tags': {},
             'name': 'progressClassName'
         },
         {
-            'type': {
-                'name': 'progressDirection',
-                'raw': 'PlayerPropTypes.progressDirection.isRequired'
-            },
-            'required': false,
-            'description': '',
-            'tags': {},
-            'name': 'progressDirection'
-        },
-        {
             'type': { 'name': 'object' },
             'required': false,
-            'description': '',
+            'description': 'A style object applied to the inner div representing elapsed progress',
             'tags': {},
             'name': 'progressStyle'
         }
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(893)
+    'examples': __webpack_require__(894)
 }
 	
 
 /***/ }),
-/* 893 */
+/* 894 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49237,7 +49630,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 894 */
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49250,11 +49643,11 @@ module.exports = {
     'props': [
         {
             'type': {
-                'name': 'aspectRatio',
-                'raw': 'PlayerPropTypes.aspectRatio'
+                'name': 'aspectRatioString',
+                'raw': 'aspectRatioString'
             },
             'required': false,
-            'description': '',
+            'description': 'A string representation of the display\'s fixed aspect ratio',
             'defaultValue': {
                 'value': '\'16:9\'',
                 'computed': false
@@ -49265,7 +49658,7 @@ module.exports = {
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'In fullscreen we normally want to use the aspect ratio of the device\ndisplay, but if you don\'t like this behavior, you can override it.',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -49276,7 +49669,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function which should return a React element to display as a placeholder\nwhen the display is unused (i.e. a different `VideoDisplay` elsewhere on\nthe screen currently is displaying the video content). This function is\npassed a `params` object with three properties: `containerWidth` (a\nnumber), `containerHeight` (a number) and `renderLastShownFrame` (a\nfunction which will returning a React element showing a canvas snapshot\nof the last frame that was shown before the video was moved out of this\ndisplay - platforms like Facebook render frames like this. only works for\nactual video content, not audio poster images.)',
             'defaultValue': {
                 'value': 'function(params) {\n  const { containerWidth, containerHeight, renderLastShownFrame } = params;\n  return (\n    <div\n      style={{\n        width: containerWidth,\n        height: containerHeight,\n        display: \'flex\',\n        justifyContent: \'center\',\n        alignItems: \'center\'\n      }}\n    >\n      {renderLastShownFrame()}\n    </div>\n  );\n}',
                 'computed': false
@@ -49287,12 +49680,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(895)
+    'examples': __webpack_require__(896)
 }
 	
 
 /***/ }),
-/* 895 */
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49317,7 +49710,26 @@ module.exports = [{
 	
 
 /***/ }),
-/* 896 */
+/* 897 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = { 'react': __webpack_require__(0) };
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+
+module.exports = [{
+        'type': 'markdown',
+        'content': 'In order to use the default stylings you\'ll need to grab the compiled `cassette-player.css` sheet from the `@cassette/player` module\'s `dist/` directory. Using webpack with appropriate style loaders, you can do:\n\n```js\n<span class="token keyword">import</span> <span class="token string">\'@cassette/player/dist/css/cassette-player.css\'</span><span class="token punctuation">;</span>\n```\n\nAgain, if you\'re not using npm, you can get the sheet [here](https://github.com/benwiley4000/cassette/releases).'
+    }]
+	
+
+/***/ }),
+/* 898 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49333,12 +49745,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(897)
+    'examples': __webpack_require__(899)
 }
 	
 
 /***/ }),
-/* 897 */
+/* 899 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49346,7 +49758,7 @@ if (false) {}
 
 var requireMap = {
     '@cassette/components': __webpack_require__(14),
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../src/MediaPlayer.js': __webpack_require__(129)
 };
@@ -49370,7 +49782,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 898 */
+/* 900 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49390,7 +49802,7 @@ module.exports = {
                 }
             },
             'required': false,
-            'description': '',
+            'description': 'An array of [`control`](#control) values (keyword or render prop)',
             'defaultValue': {
                 'value': '[\n  \'spacer\',\n  \'backskip\',\n  \'playpause\',\n  \'forwardskip\',\n  \'spacer\',\n  \'progress\'\n]',
                 'computed': false
@@ -49401,7 +49813,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'Receives a [`track`](#track) object (or `undefined` if none is active)\nand returns a string of display text',
             'defaultValue': {
                 'value': 'getDisplayText',
                 'computed': true
@@ -49412,7 +49824,7 @@ module.exports = {
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
+            'description': 'A function which returns a React element containing the\n[`VideoDisplay`](#videodisplay) instance',
             'defaultValue': {
                 'value': 'function(playerContext, fullscreenContext) {\n  return (\n    <VideoDisplay\n      className="cassette__video_display_container"\n      onClick={playerContext.onTogglePause}\n    />\n  );\n}',
                 'computed': false
@@ -49423,7 +49835,7 @@ module.exports = {
         {
             'type': { 'name': 'bool' },
             'required': false,
-            'description': '',
+            'description': 'A boolean which must be set `true` to display video',
             'defaultValue': {
                 'value': 'false',
                 'computed': false
@@ -49434,12 +49846,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(899)
+    'examples': __webpack_require__(901)
 }
 	
 
 /***/ }),
-/* 899 */
+/* 901 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49447,7 +49859,7 @@ if (false) {}
 
 var requireMap = {
     '@cassette/components': __webpack_require__(14),
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../src/MediaPlayerControls.js': __webpack_require__(50)
 };
@@ -49465,7 +49877,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 900 */
+/* 902 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49477,19 +49889,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(901)
+    'examples': __webpack_require__(903)
 }
 	
 
 /***/ }),
-/* 901 */
+/* 903 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/BackSkipButton.js': __webpack_require__(67)
 };
@@ -49507,7 +49919,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 902 */
+/* 904 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49519,19 +49931,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(903)
+    'examples': __webpack_require__(905)
 }
 	
 
 /***/ }),
-/* 903 */
+/* 905 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/ForwardSkipButton.js': __webpack_require__(68)
 };
@@ -49549,7 +49961,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 904 */
+/* 906 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49561,12 +49973,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(905)
+    'examples': __webpack_require__(907)
 }
 	
 
 /***/ }),
-/* 905 */
+/* 907 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49574,7 +49986,7 @@ if (false) {}
 
 var requireMap = {
     '@cassette/core': __webpack_require__(4),
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/FullscreenButton.js': __webpack_require__(74)
 };
@@ -49608,7 +50020,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 906 */
+/* 908 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49622,76 +50034,14 @@ module.exports = {
         {
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'The same as the `durationOverride` prop for\n[`MediaProgressDisplay`](#mediaprogressdisplay)',
             'tags': {},
             'name': 'durationOverride'
         },
         {
             'type': { 'name': 'func' },
             'required': false,
-            'description': '',
-            'defaultValue': {
-                'value': 'getDisplayText',
-                'computed': true
-            },
-            'tags': {},
-            'name': 'getDisplayText'
-        }
-    ],
-    'doclets': {},
-    'tags': {},
-    'examples': __webpack_require__(907)
-}
-	
-
-/***/ }),
-/* 907 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-if (false) {}
-
-var requireMap = {
-    '@cassette/player': __webpack_require__(23),
-    'react': __webpack_require__(0),
-    './../../src/controls/MediaProgress.js': __webpack_require__(72)
-};
-var requireInRuntimeBase = __webpack_require__(8).default;
-var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
-var evalInContextBase = __webpack_require__(9).default;
-var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;\nconst MediaProgress$0 = require('./../../src/controls/MediaProgress.js');\nconst MediaProgress = MediaProgress$0.default || MediaProgress$0;", requireInRuntime);
-
-module.exports = [{
-        'type': 'code',
-        'content': 'import { MediaProgress } from \'@cassette/player\';\n\n<div\n  style={{\n    background: \'#333\',\n    borderRadius: 3,\n    height: 50,\n    display: \'flex\'\n  }}\n>\n  <MediaProgress />\n</div>;',
-        'settings': {},
-        'evalInContext': evalInContext
-    }]
-	
-
-/***/ }),
-/* 908 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-if (false) {}
-
-module.exports = {
-    'description': 'A non-interactive version of [`MediaProgress`](#mediaprogress) which always uses the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)\n',
-    'displayName': 'MediaProgressDisplay',
-    'methods': [],
-    'props': [
-        {
-            'type': { 'name': 'number' },
-            'required': false,
-            'description': '',
-            'tags': {},
-            'name': 'durationOverride'
-        },
-        {
-            'type': { 'name': 'func' },
-            'required': false,
-            'description': '',
+            'description': 'The same as the `getDisplayText` prop for\n[`MediaProgressDisplay`](#mediaprogressdisplay)',
             'defaultValue': {
                 'value': 'getDisplayText',
                 'computed': true
@@ -49714,7 +50064,69 @@ module.exports = {
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
+    'react': __webpack_require__(0),
+    './../../src/controls/MediaProgress.js': __webpack_require__(72)
+};
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;\nconst MediaProgress$0 = require('./../../src/controls/MediaProgress.js');\nconst MediaProgress = MediaProgress$0.default || MediaProgress$0;", requireInRuntime);
+
+module.exports = [{
+        'type': 'code',
+        'content': 'import { MediaProgress } from \'@cassette/player\';\n\n<div\n  style={{\n    background: \'#333\',\n    borderRadius: 3,\n    height: 50,\n    display: \'flex\'\n  }}\n>\n  <MediaProgress />\n</div>;',
+        'settings': {},
+        'evalInContext': evalInContext
+    }]
+	
+
+/***/ }),
+/* 910 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+module.exports = {
+    'description': 'A non-interactive version of [`MediaProgress`](#mediaprogress) which always uses the `currentTime` of the playing media (which may differ from the `seekPreviewTime` if your app also displays an interactive seek bar)\n',
+    'displayName': 'MediaProgressDisplay',
+    'methods': [],
+    'props': [
+        {
+            'type': { 'name': 'number' },
+            'required': false,
+            'description': 'Sometimes, for example in the case of some media live streams, the\nduration property from the media element may not match what we want\nto use in the UI for progress displays. `durationOverride` can be set\nif some external data on the media duration is available.',
+            'tags': {},
+            'name': 'durationOverride'
+        },
+        {
+            'type': { 'name': 'func' },
+            'required': false,
+            'description': 'Receives a [`track`](#track) object (or `undefined` if none is active)\nand returns a string of display text',
+            'defaultValue': {
+                'value': 'getDisplayText',
+                'computed': true
+            },
+            'tags': {},
+            'name': 'getDisplayText'
+        }
+    ],
+    'doclets': {},
+    'tags': {},
+    'examples': __webpack_require__(911)
+}
+	
+
+/***/ }),
+/* 911 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = {
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/MediaProgressDisplay.js': __webpack_require__(73)
 };
@@ -49732,7 +50144,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 910 */
+/* 912 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49744,19 +50156,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(911)
+    'examples': __webpack_require__(913)
 }
 	
 
 /***/ }),
-/* 911 */
+/* 913 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/MuteButton.js': __webpack_require__(69)
 };
@@ -49774,7 +50186,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 912 */
+/* 914 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49787,25 +50199,25 @@ module.exports = {
     'props': [{
             'type': { 'name': 'number' },
             'required': false,
-            'description': '',
+            'description': 'By default the button controls playback of whichever track is active,\nbut this prop can be specified to make the button control playback of\na specific track (for example in a playlist track selection view where\neach track as a play/pause button next to it)',
             'tags': {},
             'name': 'trackIndex'
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(913)
+    'examples': __webpack_require__(915)
 }
 	
 
 /***/ }),
-/* 913 */
+/* 915 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/PlayPauseButton.js': __webpack_require__(66)
 };
@@ -49823,7 +50235,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 914 */
+/* 916 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49835,19 +50247,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(915)
+    'examples': __webpack_require__(917)
 }
 	
 
 /***/ }),
-/* 915 */
+/* 917 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/RepeatButton.js': __webpack_require__(70)
 };
@@ -49865,7 +50277,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 916 */
+/* 918 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49877,19 +50289,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(917)
+    'examples': __webpack_require__(919)
 }
 	
 
 /***/ }),
-/* 917 */
+/* 919 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/ShuffleButton.js': __webpack_require__(71)
 };
@@ -49907,7 +50319,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 918 */
+/* 920 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49919,19 +50331,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(919)
+    'examples': __webpack_require__(921)
 }
 	
 
 /***/ }),
-/* 919 */
+/* 921 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/Spacer.js': __webpack_require__(75)
 };
@@ -49949,7 +50361,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 920 */
+/* 922 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49961,19 +50373,19 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(921)
+    'examples': __webpack_require__(923)
 }
 	
 
 /***/ }),
-/* 921 */
+/* 923 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
 if (false) {}
 
 var requireMap = {
-    '@cassette/player': __webpack_require__(23),
+    '@cassette/player': __webpack_require__(21),
     'react': __webpack_require__(0),
     './../../src/controls/VolumeControl.js': __webpack_require__(76)
 };
@@ -49991,7 +50403,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 922 */
+/* 924 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50016,13 +50428,13 @@ module.exports = [{
 	
 
 /***/ }),
-/* 923 */
+/* 925 */
 /***/ (function(module) {
 
 module.exports = {"name":"@cassette/hooks","version":"2.0.0-alpha.33","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-hooks.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.8.0"},"devDependencies":{"rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"@cassette/core":"^2.0.0-alpha.33","prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
-/* 924 */
+/* 926 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50052,7 +50464,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 925 */
+/* 927 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51678,7 +52090,7 @@ var src = __webpack_require__(4);
 var components_src = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./packages/player/src/index.js
-var player_src = __webpack_require__(23);
+var player_src = __webpack_require__(21);
 
 // EXTERNAL MODULE: ./packages/core/src/GroupContext.js
 var GroupContext = __webpack_require__(42);

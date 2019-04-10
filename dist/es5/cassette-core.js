@@ -307,9 +307,7 @@ __webpack_require__.d(PlayerPropTypes_namespaceObject, "mediaSource", function()
 __webpack_require__.d(PlayerPropTypes_namespaceObject, "mediaSessionAction", function() { return mediaSessionAction; });
 __webpack_require__.d(PlayerPropTypes_namespaceObject, "mediaSessionArtwork", function() { return mediaSessionArtwork; });
 __webpack_require__.d(PlayerPropTypes_namespaceObject, "track", function() { return PlayerPropTypes_track; });
-__webpack_require__.d(PlayerPropTypes_namespaceObject, "progressDirection", function() { return progressDirection; });
 __webpack_require__.d(PlayerPropTypes_namespaceObject, "seekMode", function() { return seekMode; });
-__webpack_require__.d(PlayerPropTypes_namespaceObject, "aspectRatio", function() { return aspectRatio; });
 
 // EXTERNAL MODULE: external {"root":"React","commonjs":"react","commonjs2":"react","amd":"react"}
 var external_root_React_commonjs_react_commonjs2_react_amd_react_ = __webpack_require__(1);
@@ -401,19 +399,7 @@ var PlayerPropTypes_track = external_root_PropTypes_commonjs_prop_types_commonjs
   isUnboundedStream: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
   meta: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object
 });
-var progressDirection = external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['left', 'right', 'up', 'down']);
 var seekMode = external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOf(['paused', 'immediate', 'onrelease']);
-function aspectRatio(props, propName) {
-  var prop = props[propName];
-
-  if (prop === undefined) {
-    return;
-  }
-
-  if (typeof prop !== 'string' || prop.split(':').length !== 2 || prop.split(':').some(isNaN)) {
-    return new Error("The " + propName + " prop should be a string of the form 'x:y'. Example: 16:9");
-  }
-}
 // CONCATENATED MODULE: ./packages/core/src/factories/createCustomMediaElement.js
 var loopchange = 'loopchange';
 var srcrequest = 'srcrequest';
@@ -2160,34 +2146,176 @@ function (_Component) {
   return PlayerContextProvider;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["Component"]);
 PlayerContextProvider_PlayerContextProvider.propTypes = {
+  /**
+   * An array of [`track`](#track) objects to play in order (except when
+   * shuffle mode is turned on)
+   **/
   playlist: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(PlayerPropTypes_track.isRequired).isRequired,
+
+  /** Set to `true` to play media on player load. Think before doing this. It is
+   * often a bad idea, although it can make sense if your app is expressly made
+   * for media playback and you're resuming playback from the last session.
+   * Note that some platforms will disallow this from happening under many
+   * scenarios, and in these cases, `autoplay` will simply fail gracefully.
+   */
   autoplay: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * If your app uses a custom implementation of the `HTMLMediaElement`, you
+   * can supply your own factory function to return it. This is an advanced
+   * edge case.
+   */
   createMediaElement: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /** If you're using `autoplay` but want to wait a few seconds before the
+   * media playback kicks in, you can specify that timeout in second here.
+   */
   autoplayDelayInSeconds: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * Similar to `autoplayDelayInSeconds` but for the pause between tracks
+   * (if you want to evoke the feeling of listening to one of those old CDs with
+   * a negative countdown before it starts, which you never asked for).
+   */
   gapLengthInSeconds: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /** A [`crossOriginAttribute`](#crossoriginattribute) value */
   crossOrigin: crossOriginAttribute,
+
+  /** The starting volume (0-1) */
   defaultVolume: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /** The starting `muted` value (`true` or `false`) */
   defaultMuted: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
+
+  /** The starting [`repeatStrategy`](#repeatstrategy) */
   defaultRepeatStrategy: PlayerPropTypes_repeatStrategy.isRequired,
+
+  /** Will shuffle mode be active by default? */
   defaultShuffle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
+
+  /** The starting playback rate (1 is normal, 0.5 is half, 2 is double) */
   defaultPlaybackRate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * The starting track index (an advanced use case.. normally you should put
+   * the track you want to hear first at the start of the playlist, unless
+   * you are loading an `initialStateSnapshot` which will override this value
+   * anyway
+   */
   startingTrackIndex: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * Set this `false` if the player should rest of the final track when
+   * the playlist has completed. Ignored unless the
+   * current [`repeatStrategy`](#repeatstrategy) is `none`
+   */
   loadFirstTrackOnPlaylistComplete: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
+
+  /** Use this to set the player's [`seekMode`](#seekmode) */
   seekMode: seekMode.isRequired,
+
+  /**
+   * The default media element behavior is to reset the `playbackRate` to 1
+   * whenever a new source is loaded. Set this prop to `true` to maintain the
+   * same irregular playback rate across multiple tracks.
+   */
   maintainPlaybackRate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * By default, activating a back skip in shuffle mode will select the previous
+   * track in the shuffled list, but if the current track was the first selected
+   * track, back skip will be disabled. Setting this prop to `true` will
+   * select new arbitrary tracks in the "past" if back skip is used beyond
+   * the buffered history.
+   */
   allowBackShuffle: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool,
+
+  /**
+   * The number of seconds before pressing back skip becomes "back to
+   * beginning of current track" rather than "go to the previous track"
+   */
   stayOnBackSkipThreshold: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * An array of [`mediaSessionAction`](#mediasessionaction) types to display
+   * in the end users's system UI, when applicable.
+   * It is *not* the same as the `controls` array.
+   */
   supportedMediaSessionActions: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(mediaSessionAction.isRequired).isRequired,
+
+  /** The number of seconds to seek back or forward when the Media Session API
+   * backseek/forwardseek buttons are activated in the end user's system UI
+   */
   mediaSessionSeekLengthInSeconds: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.number.isRequired,
+
+  /**
+   * A function called on component mount and component unmount with a reference
+   * to the underlying media element. Generally not recommended for use, but
+   * can be used as an escape hatch for features that aren't well-supported by
+   * Cassette (if you find yourself needing this, you may want to
+   * [open a new issue](https://github.com/benwiley4000/cassette/issues/new)
+   * to talk about adding first-class support for your use case).
+   */
   mediaElementRef: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+
+  /**
+   * If you're using `onStateSnapshot` to save snapshots of the media player
+   * state as a serializable object, you should pass that restored object here
+   * to preserve the user's state from the previous session
+   */
   initialStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.object,
+
+  /**
+   * Called whenever a new state snapshot is generated. The internals of this
+   * snapshot are not documented and may change in a non-major release, so it's
+   * not safe to rely on them directly. Instead, the state snapshot should
+   * be serialized to JSON with `JSON.stringify` and restored later with
+   * `JSON.parse` to be passed as the `initialStateSnapshot` prop
+   */
   onStateSnapshot: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+
+  /**
+   * A function called whenever the active track is set or updated. Passed an
+   * object with the properties `track`, `trackIndex`, `previousTrack` and
+   * `previousTrackIndex` (these may be `null` or `undefined`)
+   */
   onActiveTrackUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
-  // A function called when the media element's currentTime attribute has changed
+
+  /**
+   * A function called when the media element's `currentTime` attribute has
+   * changed. Passed an object with the properties `currentTime`, `track` and
+   * `trackIndex`
+   */
   onTimeUpdate: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+
+  /**
+   * A function called when playback of the current track has failed for some
+   * reason. Passed an object with the properties `event`,
+   * `track` and `trackIndex`
+   */
   onTrackPlaybackFailure: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func,
+
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns a url pointing to a poster image representing the current
+   * track which should be used in a [`VideoDisplay`](#videodisplay) when the
+   * media content hasn't yet loaded
+   */
   getPosterImageForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * A function which receives a [`track`](#track) object (if one is active)
+   * and returns the value for the media element's `title` attribute, which
+   * may be used in iOS to display information about the current track in the
+   * system UI
+   */
   getMediaTitleAttributeForTrack: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`PlayerContextConsumer`](#playercontextconsumer)
+   */
   children: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOfType([external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.node, external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func]).isRequired
 };
 PlayerContextProvider_PlayerContextProvider.defaultProps = {
@@ -2390,7 +2518,21 @@ function (_PureComponent) {
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 
 PlayerContextConsumer_PlayerContextConsumer.propTypes = {
+  /**
+   * A [render prop](https://reactjs.org/docs/render-props.html) function
+   * which receives as its argument an object with the latest values of the
+   * keys specified in the `filterList` prop (if you forget `filterList`, you
+   * will get all the `playerContext` values and a warning in the console)
+   */
   children: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func.isRequired,
+
+  /**
+   * A full list of `playerContext` values which will need to be consumed.
+   * Similar to the prop name array passed to
+   * [`playerContextFilter`](#playercontextfilter), but only made up of values
+   * found in [`playerContext`](#playercontext).
+   *
+   */
   filterList: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.arrayOf(external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.string.isRequired)
 };
 /* harmony default export */ var src_PlayerContextConsumer = (PlayerContextConsumer_PlayerContextConsumer);
@@ -2630,7 +2772,13 @@ function (_PureComponent) {
   return FullscreenContextProvider;
 }(external_root_React_commonjs_react_commonjs2_react_amd_react_["PureComponent"]);
 FullscreenContextProvider_FullscreenContextProvider.propTypes = {
+  /** If set `false`, disables fullscreen for the wrapped area */
   fullscreenEnabled: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.bool.isRequired,
+
+  /**
+   * Either a renderable React node or a render prop function like the
+   * one passed into [`FullscreenContextConsumer`](#fullscreencontextconsumer)
+   */
   children: external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.oneOfType([external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.node, external_root_PropTypes_commonjs_prop_types_commonjs2_prop_types_amd_prop_types_default.a.func]).isRequired
 };
 FullscreenContextProvider_FullscreenContextProvider.defaultProps = {
