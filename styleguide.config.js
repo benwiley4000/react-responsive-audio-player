@@ -90,6 +90,14 @@ module.exports = {
         {
           name: 'Types',
           content: 'packages/core/docs/Types.md'
+        },
+        {
+          name: "Don't Mutate Playlists!",
+          content: 'packages/core/docs/DontMutatePlaylists.md'
+        },
+        {
+          name: 'Does this work with the Web Audio API?',
+          content: 'packages/core/docs/WebAudioAPI.md'
         }
       ]
     },
@@ -109,6 +117,10 @@ module.exports = {
       description:
         '**`@cassette/player`** provides a responsive, zero-config-needed React media player component, implemented with [`@cassette/core`](#cassettecore). Its control components can also be consumed directly.',
       sections: [
+        {
+          name: 'Styling',
+          content: 'packages/player/docs/styling.md'
+        },
         {
           name: 'Player Components',
           components: 'packages/player/src/[A-Z]*.js'
