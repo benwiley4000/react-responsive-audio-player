@@ -143,139 +143,128 @@ Don't try installing this one.. it won't work! 😄
 -->
 
 ## [v1.5.0] - 2018-09-30
-* The `style` prop to `AudioPlayer` is now deprecated. Use styles on a container element, or CSS, instead.
-* Fixed a bug where selection on the document would remain disabled if the `AudioPlayer` were to unmount during a seek.
+### Deprecated
+- The `style` prop to `AudioPlayer` is now deprecated. Use styles on a container element, or CSS, instead.
+
+### Fixed
+- Fixes a bug where selection on the document would remain disabled if the `AudioPlayer` were to unmount during a seek.
+
 ## [v1.4.2] - 2018-09-30
-Besides miscellaneous documentation and development-related changes, this release deprecates the practice of mutating playlists passed to the `AudioPlayer` component. Playlists should be shallow copied if they need to be modified. Mutated playlists won't trigger re-renders in version 2.
+### Deprecated
+- Deprecates the practice of mutating playlists passed to the `AudioPlayer` component. Playlists should be shallow copied if they need to be modified. Mutated playlists will no longer trigger re-renders in v2.0.0.
+
 ## [v1.4.1] - 2018-09-30
 This version is the same as v1.4.0 and was published by mistake - it will be removed from npm.
+
 ## [v1.4.0] - 2018-09-03
-New support for the `crossOrigin` prop, which enables cross-origin audio sources to be manipulated by the Web Audio API.
+### Added
+- New support for the `crossOrigin` prop, which enables cross-origin audio sources to be manipulated by the Web Audio API.
+
 ## [v1.3.2] - 2018-08-17
-Resolved security vulnerabilities in dependency graph. Please upgrade!
+### Security
+- Resolved security vulnerabilities in dependency graph. Please upgrade!
+
 ## [v1.3.1] - 2018-03-25
-Reopened an old `wontfix` (#28) and fixed it. There's now better error handling:
-* No more abort errors fired when rapidly skipping through tracks or pausing before play has a chance to happen.
-* Only emit warning about autoplay being disabled if the error was a `NotAllowedError`.
+### Changed
+- Only emit warning about autoplay being disabled if the error was a `NotAllowedError`.
+
+### Fixed
+- No more abort errors fired when rapidly skipping through tracks or pausing before play has a chance to happen.
+
 ## [v1.3.0] - 2018-02-24
-### Features
+### Added
+- New integration with the Media Session API which allows track metadata and playback controls to be displayed in system notifications (Chrome for Android, and other supporting platforms) (#148)
+    - See #146 for a detailed list of new prop options
+- The `<audio>` element now lives in the DOM (for Media Session API support) (#148)
+- New `getDisplayText` prop defines display text as function of track object (#148)
 
-* New integration with the Media Session API which allows track metadata and playback controls to be displayed in system notifications (Chrome for Android, and other supporting platforms) (#148)
-  * See #146 for a detailed list of new prop options
-* The `<audio>` element now lives in the DOM (for Media Session API support) (#148)
-* New `getDisplayText` prop defines display text as function of track object (#148)
+### Changed
+- Previously, the audio always paused before changing to a new track. There was no real benefit to this, and it caused weird behavior in the Media Session API integration (pause button would very briefly render as a play button) so that behavior was removed. Audio now only pauses on track change if the playlist is completed, and non-cycling. (#153)
 
-### Bugfixes
+### Deprecated
+- The `displayText` property on a playlist track is deprecated in favor of the `artist` and `title` properties (also used by Media Session API) (#148). Will be removed in v2.0.0.
+    - If this isn't enough, you can define the `getDisplayText` prop
 
-* Pause state no longer gets out-of-sync at the end of a non-cycling playlist (#154)
-
-### Deprecations
-
-* The `displayText` property on a playlist track is deprecated in favor of the `artist` and `title` properties (also used by Media Session API) (#148)
-  * If this isn't enough, you can define the `getDisplayText` prop
-
-### Minor behavior changes
-
-Previously, the audio always paused before changing to a new track. There was no real benefit to this, and it caused weird behavior in the Media Session API integration (pause button would very briefly render as a play button) so that behavior was removed. Audio now only pauses on track change if the playlist is completed, and non-cycling. (#153)
+### Fixed
+- Pause state no longer gets out-of-sync at the end of a non-cycling playlist (#154)
 
 ## [v1.2.1] - 2018-02-14
-Fixed #144, where the forward skip button acted like the back skip button.
+### Fixed
+- Fixed #144, where the forward skip button acted like the back skip button.
+
 ## [v1.2.0] - 2018-02-03
-### Features
+### Added
+- There's a new `controls` array prop, which allows customized selection and ordering of control components.
 
-There's a new `controls` array prop, which allows customized selection and ordering of control components.
+### Changed
+- There was some refactoring of audio controls code (including HTML strucure) to make the `controls` prop implementation possible. While this shouldn't affect you in most cases, your player might look slightly different if you had specified custom margins for the `.audio_controls` CSS class. Apply that custom margin to the `.spacer` class instead (as `width`).
 
-### Bugfixes
+### Deprecated
+- The `hideBackSkip`, `hideForwardSkip` and `disableSeek` props are deprecated (replaced by `controls`). Will be removed in v2.0.0.
 
-Definitively solved issues with time seeking after updates to layout, by just removing the `ResizeObserver` and querying for the box dimensions on every render (turns out this isn't that slow!). Removed the `resize-observer-polyfill` as a result.
-
-### Deprecations
-
-The `hideBackSkip`, `hideForwardSkip` and `disableSeek` props are deprecated (replaced by `controls`).
-
-### Minor warning about styles
-
-There was some refactoring of audio controls code (including HTML strucure) to make the `controls` prop implementation possible. While this shouldn't affect you in most cases, your player might look slightly different if you had specified custom margins for the `.audio_controls` CSS class. Apply that custom margin to the `.spacer` class instead (as `width`).
-
+### Fixed
+- Definitively solved issues with time seeking after updates to layout, by just removing the `ResizeObserver` and querying for the box dimensions on every render (turns out this isn't that slow!).
 
 ## [v1.1.5] - 2018-01-01
-Marked as compatible with React 16.
+### Added
+- Official support for React 16.
+
 ## [v1.1.4] - 2017-05-20
-### Bug fixes
-* It's no longer possible to select out-of-bounds times by dragging on the progress bar. (#46)
-* You'll no longer experience seeking bugs if the progress bar resizes, but not the window (we're now tracking the resizing of the element itself). (#49)
-
-### Other notes
-* Now using standalone prop-types package (spun out of React). Thanks @zdizzle6717! (#31)
-
-### Files
-[audioplayer.js](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.js)
-[audioplayer.css](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.css)
-[audioplayer.min.js](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.min.js)
-[audioplayer.min.css](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.min.css)
+### Fixed
+- It's no longer possible to select out-of-bounds times by dragging on the progress bar. (#46)
+- You'll no longer experience seeking bugs if the progress bar resizes, but not the window (we're now tracking the resizing of the element itself). (#49)
 
 ## [v1.1.3] - 2017-05-14
-Introduces a patch, fixing a bug causing drag-to-seek to stop working while the drag takes place outside the bounds of the progress bar. (#33)
+### Fixed
+- Fixes a bug causing drag-to-seek to stop working while the drag takes place outside the bounds of the progress bar. (#33)
+
 ## [v1.1.2] - 2016-11-28
-A couple more event listener-related patches (thanks @prettymuchbryce):
+### Fixed
 - Fixing the undefined `audio` references in `componentWillUnmount()` which threw an error upon unmounting the component. (#26)
 - Cleanup for timeouts in `componentWillUnmount`; these callbacks could be fired after the component had already been unmounted, resulting in a React error. (#27)
 
 ## [v1.1.1] - 2016-11-28
-Includes a couple of patches to make audio element listeners work better with [`audioElementRef`](https://github.com/benwiley4000/react-responsive-audio-player/commit/a8b35ffe5959880dd9a316115e9e77a171f47215):
-- Previously we optimistically updated the state to `paused: true` whenever the pause button was clicked. Now that the audio element can be exposed and manipulated via `audioElementRef` this isn't so good; the audio element could be paused and our component wouldn't know. Now the state updates to `paused: true` in response to (and only in response to) the audio element's `pause` event.
-- Previously we didn't unbind internal audio element listeners on unmount, since the assumption was the element would be garbage-collected soon enough. However since the audio element reference could now outlast the component lifecycle we need to make sure those listeners are unbound before unmount.
+### Fixes
+- The internal `paused` state now syncs with changes made directly to the audio element via `audioElementRef`
+- We now unbind internal audio element listeners on component unmount
 
 ## [v1.1.0] - 2016-11-20
-A number of new non-breaking features have been added in v1.1.0. Thanks particularly to @prettymuchbryce for implementing a lot (most) of these features.
-
-### New props
-- `hideForwardSkip`: just like `hideBackSkip` but for the forward skip button. **false** by default.
-- `disableSeek`: a boolean value that if true prevents seeking. **false** by default.
-- `cycle`: a boolean value that if true continues playing from the beginning after the playlist has completed. **true** by default. (This was always implicitly true, but now you can turn it off).
-- `onMediaEvent`: An object whose keys are [media event types](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events) and whose values are callback functions. **undefined** by default.
-- `audioElementRef`: A callback function called after the component mounts and before it unmounts. Similar to [React ref callback prop](https://facebook.github.io/react/docs/refs-and-the-dom.html#the-ref-callback-attribute) but its only parameter is the internally-referenced HTML audio element, not the component itself. **undefined** by default. _NOTE:_ This ref should not be used for audio element event listeners; use `onMediaEvent`.
-
-For usage details re: `onMediaEvent` and `audioElementRef` check out [example.html](https://github.com/benwiley4000/react-responsive-audio-player/commit/a8b35ffe5959880dd9a316115e9e77a171f47215#diff-62ad28cc71ae9a54a611bc2d551533f6).
-
-### Development changes
-- `npm run dev` now fires up a webpack dev server with live reloading. A browser tab also opens automatically to the first available port starting at 8080 on localhost, displaying example.html.
-- [`rimraf`](https://www.npmjs.com/package/rimraf) from npm used instead of `rm -rf` in package.json scripts so Windows developers don't have problems.
+### Added
+- `hideForwardSkip` prop: just like `hideBackSkip` but for the forward skip button. **false** by default.
+- `disableSeek` prop: a boolean value that if true prevents seeking. **false** by default.
+- `cycle` prop: a boolean value that if true continues playing from the beginning after the playlist has completed. **true** by default. (This was always implicitly true, but now you can turn it off).
+- `onMediaEvent` prop: An object whose keys are [media event types](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events) and whose values are callback functions. **undefined** by default.
+- `audioElementRef` prop: A callback function called after the component mounts and before it unmounts. Similar to [React ref callback prop](https://facebook.github.io/react/docs/refs-and-the-dom.html#the-ref-callback-attribute) but its only parameter is the internally-referenced HTML audio element, not the component itself. **undefined** by default. _NOTE:_ This ref should not be used for audio element event listeners; use `onMediaEvent`.
+- For usage details re: `onMediaEvent` and `audioElementRef` check out [example.html](https://github.com/benwiley4000/react-responsive-audio-player/commit/a8b35ffe5959880dd9a316115e9e77a171f47215#diff-62ad28cc71ae9a54a611bc2d551533f6).
 
 ## [v1.0.0] - 2016-10-28
-Almost the same as [v1.0.0-beta.1](https://github.com/benwiley4000/react-responsive-audio-player/releases/tag/v1.0.0-beta.1), except that the `placeAtTop` React component prop has been removed.
+### Added
+- `classnames` is now bundled by webpack, so it's unnecessary for users to install it themselves.
+- React `style` prop now supported, passed to outer div in component render method. (#11)
+- React 15 peer dependency supported along with 0.14. (#4)
 
-Also, an `example.html` file has been added, which can be used for testing changes.
+### Changed
+- Change to how `playlist` prop changes are handled. A falsy (`null`) prop can now be accepted and will cause the player to display a message asking the user to load a playlist. Whenever the prop updates, instead of automatically stopping and resetting playback, the player will attempt to continue playing the current track if it exists in the new playlist. The next track in playback will be whatever comes after that track in the new playlist. (#10)
 
-## [v1.0.0-beta.1] - 2016-10-24
-Staging for first major release.
-
-Breaking changes:
-- Change to how `playlist` prop changes are handled. A falsy (`null`) prop can now be accepted and will cause the player to display a message asking the user to load a playlist. Whenever the prop updates, instead of automatically stopping and resetting playback, the player will attempt to continue playing the current track if it exists in the new playlist. The next track in playback will be whatever comes after that track in the new playlist. https://github.com/benwiley4000/react-responsive-audio-player/pull/10
-- The default fixed position styles have been removed and can be specified either via CSS or via React inline styles, if desired. This makes the component more modular/portable by default. https://github.com/benwiley4000/react-responsive-audio-player/pull/11
-
-Minor Changes:
-- `classnames` is no longer a peer dependency. It's a development dependency bundled by webpack, so it's unnecessary for users to install it themselves. The function is small enough that requiring the user to provide their own version seemed like overkill.
-- React `style` prop now supported, passed to outer div in component render method. https://github.com/benwiley4000/react-responsive-audio-player/pull/11
-- React 15 peer dependency supported along with 0.14. https://github.com/benwiley4000/react-responsive-audio-player/pull/4
-
-Miscellaneous Changes:
-- The README has been cleaned up a little.
-- The code style has been updated to better reflect current React conventions.
-
-Pending changes before official release:
-- Use CSS modules with webpack css-loader, which will automatically make classnames unique and avoid the necessity for so many deeply nested rules. This should have no effect on the build, other than a slight performance improvement with CSS. https://github.com/benwiley4000/react-responsive-audio-player/issues/8
+### Removed
+- The `placeAtTop` prop is removed
+- The default fixed position styles have been removed and can be specified either via CSS or via React inline styles, if desired. This makes the component more modular/portable by default. (#11)
 
 ## [v0.3.0] - 2016-03-19
-Besides a few minor cleanups and enhancements, the two major changes are:
-1. There is now a `gapLengthInSeconds` option which can be specified via a prop. If not provided, there will be no gap. This is only applicable to automatic progression; manually skipping will not trigger a delay.
-2. The component now has a `componentWillUnmount` method for unbinding `document` and `window` listeners and dereferencing the audio element when the component is removed from the DOM.
+### Added
+- There is now a `gapLengthInSeconds` option which can be specified via a prop. If not provided, there will be no gap. This is only applicable to automatic progression; manually skipping will not trigger a delay.
+
+### Changed
+- `document` and `window` listeners are removed and the audio element is dereferenced when the component is unmounted from the DOM.
 
 ## [v0.2.0] - 2016-03-16
-All features - track skipping, time seeking, autoplay, and the rest of the options specified in the README, working. Proper explanation provided in README. Package can be required as a module, or included in a script tag (thereby creating the class `window.AudioPlayer`).
+### Added
+- All features - track skipping, time seeking, autoplay, and the rest of the options specified in the README, working.
+- Package can be required as a module, or included in a script tag (thereby creating the class `window.AudioPlayer`).
 
 ## v0.1.0 - 2016-03-16
-Initial prerelease.
+### Added
+- Initial prerelease.
 
 [Unreleased]: https://github.com/benwiley4000/cassette/compare/v1.5.0...HEAD
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
