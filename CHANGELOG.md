@@ -1,3 +1,4 @@
+<!--
 ## [] - 2019-04-10
 Changelog forthcoming!
 
@@ -138,6 +139,9 @@ The other good news is that video performance is now much better!
 
 ## [] - 2018-10-04
 Don't try installing this one.. it won't work! 😄 
+
+-->
+
 ## [v1.5.0] - 2018-09-30
 * The `style` prop to `AudioPlayer` is now deprecated. Use styles on a container element, or CSS, instead.
 * Fixed a bug where selection on the document would remain disabled if the `AudioPlayer` were to unmount during a seek.
