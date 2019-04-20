@@ -164,7 +164,7 @@ Don't try installing this one.. it won't work! 😄
 ### Deprecated
 - Deprecates the practice of mutating playlists passed to the `AudioPlayer` component. Playlists should be shallow copied if they need to be modified. Mutated playlists will no longer trigger re-renders in v2.0.0.
 
-## [v1.4.1] - 2018-09-30
+## v1.4.1 - 2018-09-30
 This version is the same as v1.4.0 and was published by mistake - it will be removed from npm.
 
 ## [v1.4.0] - 2018-09-03
@@ -280,8 +280,7 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 [Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.0...HEAD
 [v2.0.0-beta.0]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.0
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
-[v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.1...v1.4.2
-[v1.4.1]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.1
+[v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0
 [v1.3.2]: https://github.com/benwiley4000/cassette/compare/v1.3.1...v1.3.2
 [v1.3.1]: https://github.com/benwiley4000/cassette/compare/v1.3.0...v1.3.1
