@@ -138,22 +138,22 @@ The other good news is that video performance is now much better!
 
 ## [] - 2018-10-04
 Don't try installing this one.. it won't work! 😄 
-## [1.5.0] - 2018-09-30
+## [v1.5.0] - 2018-09-30
 * The `style` prop to `AudioPlayer` is now deprecated. Use styles on a container element, or CSS, instead.
 * Fixed a bug where selection on the document would remain disabled if the `AudioPlayer` were to unmount during a seek.
-## [1.4.2] - 2018-09-30
+## [v1.4.2] - 2018-09-30
 Besides miscellaneous documentation and development-related changes, this release deprecates the practice of mutating playlists passed to the `AudioPlayer` component. Playlists should be shallow copied if they need to be modified. Mutated playlists won't trigger re-renders in version 2.
-## [1.4.1] - 2018-09-30
+## [v1.4.1] - 2018-09-30
 This version is the same as v1.4.0 and was published by mistake - it will be removed from npm.
-## [1.4.0] - 2018-09-03
+## [v1.4.0] - 2018-09-03
 New support for the `crossOrigin` prop, which enables cross-origin audio sources to be manipulated by the Web Audio API.
-## [1.3.2] - 2018-08-17
+## [v1.3.2] - 2018-08-17
 Resolved security vulnerabilities in dependency graph. Please upgrade!
-## [1.3.1] - 2018-03-25
+## [v1.3.1] - 2018-03-25
 Reopened an old `wontfix` (#28) and fixed it. There's now better error handling:
 * No more abort errors fired when rapidly skipping through tracks or pausing before play has a chance to happen.
 * Only emit warning about autoplay being disabled if the error was a `NotAllowedError`.
-## [1.3.0] - 2018-02-24
+## [v1.3.0] - 2018-02-24
 ### Features
 
 * New integration with the Media Session API which allows track metadata and playback controls to be displayed in system notifications (Chrome for Android, and other supporting platforms) (#148)
@@ -174,9 +174,9 @@ Reopened an old `wontfix` (#28) and fixed it. There's now better error handling:
 
 Previously, the audio always paused before changing to a new track. There was no real benefit to this, and it caused weird behavior in the Media Session API integration (pause button would very briefly render as a play button) so that behavior was removed. Audio now only pauses on track change if the playlist is completed, and non-cycling. (#153)
 
-## [1.2.1] - 2018-02-14
+## [v1.2.1] - 2018-02-14
 Fixed #144, where the forward skip button acted like the back skip button.
-## [1.2.0] - 2018-02-03
+## [v1.2.0] - 2018-02-03
 ### Features
 
 There's a new `controls` array prop, which allows customized selection and ordering of control components.
@@ -194,9 +194,9 @@ The `hideBackSkip`, `hideForwardSkip` and `disableSeek` props are deprecated (re
 There was some refactoring of audio controls code (including HTML strucure) to make the `controls` prop implementation possible. While this shouldn't affect you in most cases, your player might look slightly different if you had specified custom margins for the `.audio_controls` CSS class. Apply that custom margin to the `.spacer` class instead (as `width`).
 
 
-## [1.1.5] - 2018-01-01
+## [v1.1.5] - 2018-01-01
 Marked as compatible with React 16.
-## [1.1.4] - 2017-05-20
+## [v1.1.4] - 2017-05-20
 ### Bug fixes
 * It's no longer possible to select out-of-bounds times by dragging on the progress bar. (#46)
 * You'll no longer experience seeking bugs if the progress bar resizes, but not the window (we're now tracking the resizing of the element itself). (#49)
@@ -210,19 +210,19 @@ Marked as compatible with React 16.
 [audioplayer.min.js](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.min.js)
 [audioplayer.min.css](https://unpkg.com/react-responsive-audio-player@1.1.4/dist/audioplayer.min.css)
 
-## [1.1.3] - 2017-05-14
+## [v1.1.3] - 2017-05-14
 Introduces a patch, fixing a bug causing drag-to-seek to stop working while the drag takes place outside the bounds of the progress bar. (#33)
-## [1.1.2] - 2016-11-28
+## [v1.1.2] - 2016-11-28
 A couple more event listener-related patches (thanks @prettymuchbryce):
 - Fixing the undefined `audio` references in `componentWillUnmount()` which threw an error upon unmounting the component. (#26)
 - Cleanup for timeouts in `componentWillUnmount`; these callbacks could be fired after the component had already been unmounted, resulting in a React error. (#27)
 
-## [1.1.1] - 2016-11-28
+## [v1.1.1] - 2016-11-28
 Includes a couple of patches to make audio element listeners work better with [`audioElementRef`](https://github.com/benwiley4000/react-responsive-audio-player/commit/a8b35ffe5959880dd9a316115e9e77a171f47215):
 - Previously we optimistically updated the state to `paused: true` whenever the pause button was clicked. Now that the audio element can be exposed and manipulated via `audioElementRef` this isn't so good; the audio element could be paused and our component wouldn't know. Now the state updates to `paused: true` in response to (and only in response to) the audio element's `pause` event.
 - Previously we didn't unbind internal audio element listeners on unmount, since the assumption was the element would be garbage-collected soon enough. However since the audio element reference could now outlast the component lifecycle we need to make sure those listeners are unbound before unmount.
 
-## [1.1.0] - 2016-11-20
+## [v1.1.0] - 2016-11-20
 A number of new non-breaking features have been added in v1.1.0. Thanks particularly to @prettymuchbryce for implementing a lot (most) of these features.
 
 ### New props
@@ -238,12 +238,12 @@ For usage details re: `onMediaEvent` and `audioElementRef` check out [example.ht
 - `npm run dev` now fires up a webpack dev server with live reloading. A browser tab also opens automatically to the first available port starting at 8080 on localhost, displaying example.html.
 - [`rimraf`](https://www.npmjs.com/package/rimraf) from npm used instead of `rm -rf` in package.json scripts so Windows developers don't have problems.
 
-## [1.0.0] - 2016-10-28
+## [v1.0.0] - 2016-10-28
 Almost the same as [v1.0.0-beta.1](https://github.com/benwiley4000/react-responsive-audio-player/releases/tag/v1.0.0-beta.1), except that the `placeAtTop` React component prop has been removed.
 
 Also, an `example.html` file has been added, which can be used for testing changes.
 
-## [1.0.0-beta.1] - 2016-10-24
+## [v1.0.0-beta.1] - 2016-10-24
 Staging for first major release.
 
 Breaking changes:
