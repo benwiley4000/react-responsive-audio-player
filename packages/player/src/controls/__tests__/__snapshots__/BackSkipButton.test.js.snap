@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Back skip button renders correctly 1`] = `
+<div
+  className="cassette__media_button_wrapper"
+>
+  <button
+    className="cassette__skip_button cassette__media_button back"
+    onClick={[Function]}
+    type="button"
+  >
+    <div
+      className="skip_button_inner foreground"
+    >
+      <div
+        className="right_facing_triangle"
+      />
+      <div
+        className="right_facing_triangle"
+      />
+      <div
+        className="vertical_bar"
+      />
+    </div>
+  </button>
+</div>
+`;

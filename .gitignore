@@ -1,2 +1,5 @@
 node_modules
 dist
+styleguide
+.DS_Store
+lerna-debug.log

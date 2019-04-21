@@ -5,7 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-- Nothing - the latest release has the same code as the master branch.
+
+## [v2.0.0-beta.0] - 2019-04-10
+- Details coming soon
 
 <!--
 ## [] - 2019-04-10
@@ -275,7 +277,8 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 ### Added
 - Initial prerelease.
 
-[Unreleased]: https://github.com/benwiley4000/cassette/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.0...HEAD
+[v2.0.0-beta.0]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.0
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0

@@ -1,0 +1,23 @@
+// used by RepeatButton and ShuffleButton components
+
+@import 'variables';
+
+.cassette {
+  &__material_toggle {
+    background: none;
+    border: none;
+
+    .inner {
+      margin-left: -8px;
+      margin-right: -8px;
+      width: 48px;
+      height: 42px;
+    }
+    svg {
+      fill: $cassette_material_toggle_btn_off_color;
+    }
+    &.on svg {
+      fill: $cassette_material_toggle_btn_on_color;
+    }
+  }
+}

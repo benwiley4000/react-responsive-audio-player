@@ -3,13 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>React Responsive Audio Player</title>
-    <link rel="stylesheet" href="audioplayer.css">
+    <title>Cassette</title>
+    <link rel="stylesheet" href="dist/css/cassette-player.css">
     <style>
       html,
       body {
         margin: 0;
         background: gold;
+      }
+      #media_player_container {
+        width: 500px;
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
       }
       .demo {
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -19,63 +24,70 @@
         color: #222;
         font-size: 42px;
       }
+      .source {
+        margin-top: 2rem;
+        margin-left: 2.6rem;
+        margin-right: 1rem;
+        font-style: italic;
+        font-size: 18px;
+      }
+      .mute_message {
+        margin-left: 2.6rem;
+        margin-right: 1rem;
+      }
+      .mute_message.hidden {
+        display: none;
+      }
+      .video_display {
+        height: 250px;
+        border: 1px solid #333;
+        margin-left: 2rem;
+      }
+      @media (max-width: 330px) {
+        .cassette__shuffle_btn {
+          display: none;
+        }
+      }
+      @media (max-width: 400px) {
+        .cassette__repeat_btn {
+          display: none;
+        }
+      }
     </style>
   </head>
   <body>
     <main class="demo">
-      <h1 class="header">React Responsive Audio Player</h1>
-      <div id="audio_player_container"></div>
+      <h1 class="header">Cassette</h1>
+      <div id="media_player_container"></div>
     </main>
 
-    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@16.3.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.3.0/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/prop-types/prop-types.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill"></script>
 
-    <script src="audioplayer.js"></script>
+    <script type="module" src="dist/esm/cassette-core.js"></script>
+    <script nomodule src="dist/es5/cassette-core.js"></script>
+
+    <script type="module" src="dist/esm/cassette-components.js"></script>
+    <script nomodule src="dist/es5/cassette-components.js"></script>
+
+    <script type="module" src="dist/esm/cassette-player.js"></script>
+    <script nomodule src="dist/es5/cassette-player.js"></script>
+
+    <script src="example/playlist.js"></script>
+    <script src="example/ExampleApp.js"></script>
+    <script src="example/ExamplePlayerContextProvider.js"></script>
+    <script src="example/ExampleMediaPlayer.js"></script>
+    <script src="example/ExampleMediaInfo.js"></script>
+    <script src="example/ExampleMuteMessage.js"></script>
     <script>
-      var playlist = [
-        {
-          url: 'http://benwiley4000.github.io/react-responsive-audio-player/audio/secret_of_trash_island.mp3',
-          title: 'Trash Island',
-          album: 'React Responsive Audio Player',
-          artwork: [{ src: 'https://3c1703fe8d.site.internapcdn.net/newman/csz/news/800/2017/photographer.jpg' }]
-        },
-        {
-          url: 'http://benwiley4000.github.io/react-responsive-audio-player/audio/marty_mcpaper_theme.mp3',
-          title: 'Marty McPaper',
-          album: 'React Responsive Audio Player',
-          artwork: [{ src: 'https://i.imgur.com/jyfPSbw.jpg' }]
-        },
-        {
-          url: 'http://benwiley4000.github.io/react-responsive-audio-player/audio/in_the_hall_of_the_mountain_king.mp3',
-          title: 'Mountain King',
-          album: 'React Responsive Audio Player',
-          artwork: [{ src: 'https://i.pinimg.com/originals/c4/c1/cc/c4c1ccd2e9ad9bc1a8acdc8d74f2f039.jpg' }]
-        }
-      ];
-      var audioElement = {};
-      ReactDOM.render(
-        React.createElement(
-          'div',
-          { style: { position: 'fixed', bottom: 0, width: '100%' } },
-          React.createElement(AudioPlayer, {
-            playlist: playlist,
-            autoplay: true,
-            audioElementRef: function (elem) {
-              audioElement = elem;
-            },
-            onMediaEvent: {
-              'playing': function (e) {
-                console.log('Playback has started', audioElement.src);
-              },
-              'pause': function (e) {
-                console.log('Playback was paused', audioElement.src);
-              }
-            }
-          })
-        ),
-        document.getElementById('audio_player_container')
-      );
+      window.onload = function() {
+        ReactDOM.render(
+          React.createElement(ExampleApp, { playlist: playlist }),
+          document.getElementById('media_player_container')
+        );
+      }
     </script>
   </body>
 </html>

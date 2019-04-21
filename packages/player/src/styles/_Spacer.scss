@@ -1,0 +1,7 @@
+@import 'variables';
+
+.cassette {
+  &__spacer {
+    width: $cassette_spacer_width;
+  }
+}

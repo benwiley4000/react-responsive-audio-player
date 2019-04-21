@@ -1,0 +1,54 @@
+$cassette_base_height: 50px !default;
+$cassette_base_bg_color: #333 !default;
+$cassette_base_text_color: #fff !default;
+
+$cassette_btn_bg_color: #fff !default;
+$cassette_btn_height: $cassette_base_height !default;
+$cassette_btn_margin: 4px !default;
+$cassette_btn_padding: 11px !default;
+$cassette_btn_normal_opacity: 0.8 !default;
+$cassette_btn_hover_opacity: 1 !default;
+$cassette_btn_active_opacity: 0.7 !default;
+
+$cassette_spacer_width: 10px !default;
+
+$cassette_info_font_size: 19.2px !default;
+$cassette_time_font_size: 23px !default;
+$cassette_time_margin: 20px !default;
+
+$cassette_marquee_margin: $cassette_spacer_width !default;
+
+$cassette_play_btn_color: $cassette_btn_bg_color !default;
+$cassette_play_btn_pause_bar_width: 36% !default;
+$cassette_play_btn_height: 30px !default;
+$cassette_play_btn_width: 30px !default;
+$cassette_play_btn_transition_duration: 0.25s !default;
+$cassette_play_btn_transition_timing_function: ease !default;
+
+$cassette_skip_btn_color: $cassette_btn_bg_color !default;
+
+$cassette_progress_bg_color: rgba(127, 127, 127, 0.295) !default;
+
+$cassette_volume_control_height: $cassette_base_height !default;
+
+$cassette_volume_bar_color: $cassette_progress_bg_color !default;
+$cassette_volume_bar_width: 22px !default;
+$cassette_volume_bar_height: 80px !default;
+$cassette_volume_bar_gutter_close: 28px !default;
+$cassette_volume_bar_gutter_far: 50px !default;
+$cassette_volume_bar_box_shadow: 1px 1px 6px 2px rgba(#242424, 0.8) !default;
+
+$cassette_volume_handle_color: $cassette_btn_bg_color !default;
+$cassette_volume_handle_box_shadow: 1px 1px 6px 0px
+  rgba($cassette_base_bg_color, 0.8) !default;
+$cassette_volume_handle_size: 34px !default;
+$cassette_volume_handle_border_width: 0px !default;
+$cassette_volume_handle_normal_opacity: $cassette_btn_normal_opacity !default;
+$cassette_volume_handle_hover_opacity: $cassette_btn_hover_opacity !default;
+$cassette_volume_handle_active_opacity: $cassette_btn_hover_opacity !default; // on purpose
+
+$cassette_material_toggle_btn_on_color: $cassette_btn_bg_color !default;
+$cassette_material_toggle_btn_off_color: rgba(
+  $cassette_material_toggle_btn_on_color,
+  0.5
+) !default;

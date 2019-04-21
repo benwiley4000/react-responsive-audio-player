@@ -1,0 +1,19 @@
+@import 'variables';
+
+.cassette {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__control_bar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+    background-color: $cassette_base_bg_color;
+
+    > * {
+      height: $cassette_base_height;
+    }
+  }
+}

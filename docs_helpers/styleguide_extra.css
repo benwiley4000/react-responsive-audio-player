@@ -1,0 +1,15 @@
+div[class*='rsg--hasSidebar'] {
+  overflow: scroll;
+  height: calc(100vh - 50px);
+  min-height: initial;
+}
+
+div[class*='rsg--sidebar'] {
+  height: calc(100vh - 50px);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}

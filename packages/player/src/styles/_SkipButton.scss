@@ -1,0 +1,32 @@
+@import 'variables';
+
+.cassette {
+  &__skip_button {
+    background: none;
+    border: none;
+
+    &.back {
+      transform: rotate(180deg);
+    }
+
+    .skip_button_inner {
+      display: flex;
+      flex-direction: row;
+    }
+    .right_facing_triangle {
+      width: 0;
+      height: 0;
+      border-left: 16px solid $cassette_skip_btn_color;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+    }
+    .vertical_bar {
+      width: 0;
+      height: 0;
+      margin-left: -3px;
+      border-left: 3px solid $cassette_skip_btn_color;
+      border-top: 10px solid $cassette_skip_btn_color;
+      border-bottom: 10px solid $cassette_skip_btn_color;
+    }
+  }
+}

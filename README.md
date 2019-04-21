@@ -1,253 +1,33 @@
-# react-responsive-audio-player
+# cassette
 
-![react-responsive-audio-player in action](demo.gif)
+<img alt="https://www.pexels.com/photo/black-lx90-cassette-tape-1228497/" src="cassette.jpg" title="Photo by Stas Knop from Pexels" />
 
-### [see a live demo here](https://benwiley4000.github.io/react-responsive-audio-player/)
+Cassette is a zero-config-required media player component library for React. The default responsive UI works great in desktop or mobile web browsers. The flexible core handles the logical complexities of common audio and video player paradigms, while allowing you to implement any UI you can come up with.
 
-A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React. Give it a playlist and go.
+### This is Cassette v2, which is in beta.
 
-[![NPM](https://nodei.co/npm/react-responsive-audio-player.png)](https://npmjs.org/package/react-responsive-audio-player)
+See version 1 (also known as `react-responsive-audio-player`) [here](https://github.com/benwiley4000/cassette/blob/master/README.md)!
 
-**If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/react-responsive-audio-player/releases).**
+## Cassette is split into four packages
 
-## Usage
-HTML:
-```html
-<!DOCTYPE html>
-<html>
-  <head><link rel="stylesheet" href="audioplayer.css"></head>
-  <body>
-    <div id="audio_player_container"></div>
-    <script src="dist/main.js"></script>
-  </body>
-</html>
-```
-JavaScript (with JSX):
-```javascript
-// dist/main.js
-var React = require('react');
-var ReactDOM = require('react-dom');
-var AudioPlayer = require('react-responsive-audio-player');
+- [`@cassette/core`](/packages/core) provides React Context-based components which expose an API for consuming and updating media player state
+- [`@cassette/components`](/packages/components) contains some convenient React component building blocks which can be used in media player user interfaces created with `@cassette/core`
+- [`@cassette/player`](/packages/player) provides a responsive, zero-config-needed React media player component, implemented with `@cassette/core`
+- [`@cassette/hooks`](/packages/hooks) provides optional [React Hooks](https://reactjs.org/docs/hooks-intro.html) for consuming media player state
 
-var playlist =
-  [{ url: 'audio/track1.mp3',
-     title: 'Track 1 by Some Artist' },
-   { url: 'audio/track2.mp3',
-     title: 'Some Other Artist - Track 2' }];
-ReactDOM.render(
-  <AudioPlayer playlist={playlist} />,
-  document.getElementById('audio_player_container')
-);
-```
-JavaScript (without JSX):
-```javascript
-// dist/main.js
-...
-ReactDOM.render(
-  React.createElement(AudioPlayer, { playlist: playlist }),
-  document.getElementById('audio_player_container')
-);
+### [See full documentation (with integrated live demos) here](https://benwiley4000.github.io/cassette/styleguide)
+
+#### ⚠️ Note on installation
+
+If you wanted to install, for instance, the `@cassette/core` and `@cassette/player` packages, you would run:
+
+```console
+npm install @cassette/core @cassette/player
 ```
 
-## Getting started
-### Quick start
-The fastest way to get off the ground with this module is to paste the following code into an HTML file and open it in a web browser:
-```html
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>React Responsive Audio Player</title>
-    <style> html, body { margin: 0; background: lightseagreen; } </style>
-    <link rel="stylesheet" href="https://unpkg.com/react-responsive-audio-player@1.5.0/dist/audioplayer.css">
-  </head>
-  <body>
-    <div id="audio_player_container"></div>
+**I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette) (without the `@`).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
 
-    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/prop-types/prop-types.js"></script>
-    <script src="https://unpkg.com/react-responsive-audio-player@1.5.0/dist/audioplayer.js"></script>
-    <script>
-      var playlist =
-        [{ url: 'song1.mp3', title: 'Track 1 - a track to remember' },
-         { url: 'song2.ogg', title: 'Oggs Oggs Oggs' }];
-      ReactDOM.render(
-        React.createElement(
-          'div',
-          { style: { position: 'fixed', bottom: 0, width: '100%' } },
-          React.createElement(AudioPlayer, {
-            playlist: playlist,
-            autoplay: true,
-            autoplayDelayInSeconds: 2.1,
-            controls: ['playpause', 'forwardskip', 'progressdisplay']
-          })
-        ),
-        document.getElementById('audio_player_container')
-      );
-    </script>
-  </body>
-</html>
-```
-Of course you'll need to include paths to actual audio files, or the player will display and not work.
-
-### Package installation
-If you use [npm](https://www.npmjs.com/) and a front-end package bundling system like [Browserify](http://browserify.org/) or [webpack](https://webpack.github.io/), it's recommended that you install the package and its dependencies in your project:
-```
-npm install --save react-responsive-audio-player react react-dom
-```
-While `react-dom` isn't technically a peer dependency, you'll need it if you plan to place the audio player in the DOM, which you probably will.
-
-When you first include the component in your project it might not look how you're expecting. Be sure to check the **Styling** section below.
-
-### Pre-built releases
-If you prefer not to use a package bundler, you can find built releases to download [here](https://github.com/benwiley4000/react-responsive-audio-player/releases).
-
-## Options
-Options can be passed to the AudioPlayer element as props. Currently supported props are:
-
-* `playlist` (*required*): an array containing data about the tracks which will be played. **undefined** by default. Each track object can contain the following properties:
-  - `url` (*required*): A string containing the address of the audio file to play
-  - `title`: The title of the track - corresponds to the [`MediaMetadata.title` property](https://wicg.github.io/mediasession/#examples)
-  - `artist`: The track's artist - corresponds to the [`MediaMetadata.artist` property](https://wicg.github.io/mediasession/#examples)
-  - `album`: The album the track belongs to - corresponds to the [`MediaMetadata.album` property](https://wicg.github.io/mediasession/#examples)
-  - `artwork`: The artwork for the track - corresponds to the [`MediaMetadata.artwork` property](https://wicg.github.io/mediasession/#examples)
-    *NOTE*: Network speed may affect how quickly album artwork shows up in system MediaSession notifications. You can try [these strategies for implementing caching](https://developers.google.com/web/updates/2017/02/media-session#make_it_play_nice_offline).
-  - `meta`: An object containing any other track-specific information you want to store
-
-  **NOTE**: Although in version 1 it works to re-render the `AudioPlayer` with a mutated `playlist` prop, this usage is now ***deprecated*** and will not work correctly in version 2. Please make a copy of the playlist instead. For more information, [see here](https://github.com/benwiley4000/react-responsive-audio-player/blob/bcab159f365bd82ad25ee9e0288224e0d174b886/docs/playlist_in_progress.md).
-
-* `controls`: an array of keyword strings which correspond to available audio control components. The order of keywords translates to the order of rendered controls. The default array is: `['spacer', 'backskip', 'playpause', 'forwardskip', 'spacer', 'progress']`. The possible keyword values are:
-  - `'playpause'` (play/pause toggle button)
-  - `'backskip'` (previous track skip button)
-  - `'forwardskip'` (next track skip button)
-  - `'progress'` (a drag-to-seek audio progress bar)
-  - `'progressdisplay'` (a read-only [non-draggable] progress bar)
-  - `'spacer'` (a transparent space-filling element whose default width is `10px`, although [the style of the `.spacer` class can be overridden](src/index.scss))
-
-* `autoplay`: a boolean value (`true`/`false`) that if true will cause the player to begin automatically once mounted. **false** by default.
-
-  **NOTE**: Autoplaying audio or video is considered highly annoying in most contexts and is [disabled by some browsers](https://developers.google.com/web/updates/2017/09/autoplay-policy-changes). Please use this option judiciously!
-
-* `autoplayDelayInSeconds`: a number value that represents the number of seconds to wait until beginning autoplay. Will be ignored if `autoplay` is false. **0** by default. *NOTE:* Delay is managed by `setTimeout` and is therefore inexact. If you need to time an autoplay exactly, find a different module that uses the [WebAudio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) for playback (or fork this one!).
-
-* `gapLengthInSeconds`: a number value that represents the number of seconds to wait at the end of a track before beginning the next one in the playlist. Not applicable for manually-initiated skip. **0** by default. *NOTE:* Like `autoplayDelayInSeconds`, this delay is inexact.
-
-* `cycle`: a boolean value that if true continues playing from the beginning after the playlist has completed. **true** by default.
-
-* `stayOnBackSkipThreshold`: a number value that represents the number of seconds of progress after which pressing the back button will simply restart the current track. **5** by default.
-
-* `supportedMediaSessionActions`: an array of [Media Session API action names](https://wicg.github.io/mediasession/#actions-model). This determines which system audio controls should be available on platforms supporting the Media Session API. It is *not* the same as the `controls` array. The default array is: `['play', 'pause', 'previoustrack', 'nexttrack']`. The possible values are:
-  - `'play'` (ignored at present since systems should provide a default implementation regardless)
-  - `'pause'` (ignored at present, for same reason as `'play'`)
-  - `'seekbackward'`
-  - `'seekforward'`
-  - `'previoustrack'`
-  - `'nexttrack'`
-
-* `mediaSessionSeekLengthInSeconds`: a number value representing the number of seconds forward or backward to seek when handling the Media Session API `seekbackward` and `seekforward` actions. **10** by default.
-
-* `getDisplayText`: a function which takes a track object and returns a string used to represent that track in the UI. By default, the track will be displayed as "[artist] - [title]".
-
-* `onMediaEvent`: An object where the keys are [media event types](https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events) and the values are callback functions. **undefined** by default.
-
-* `audioElementRef`: A callback function called after the component mounts and before it unmounts. Similar to [React ref callback prop](https://facebook.github.io/react/docs/refs-and-the-dom.html#the-ref-callback-attribute) but its only parameter is the internally-referenced HTML audio element, not the component itself. **undefined** by default. *NOTE:* This ref should not be used for audio element event listeners; use `onMediaEvent`.
-
-* `crossOrigin`: A string value corresponding to the [`crossOrigin`](https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_settings_attributes) media element attribute for adjusting CORS settings.
-
-None of these options are required, though the player will be functionally disabled if no `playlist` prop is provided.
-
-### Deprecated options
-
-These will be removed in v2.0!  Please migrate away.
-
-* `hideBackSkip`: a boolean value that if true disables the back skip button by hiding it from view. **false** by default. Use the `controls` prop instead.
-
-* `hideForwardSkip`: a boolean value that if true disables the forward skip button by hiding it from view. **false** by default. Use the `controls` prop instead.
-
-* `disableSeek`: a boolean value that if true prevents seeking. **false** by default. Use the `controls` prop instead.
-
-* `displayText` on the track object for `playlist`: a string value that determines the UI display name for a track. Instead, use `title` and `artist` to provide information on a track object, and use the `getDisplayText` function prop for custom display if needed.
-
-* `style`: a React style object which is applied to the outermost div in the component. **undefined** by default.
-
-## Does this work with the Web Audio API?
-
-We don't expose any special props for manipulating the Web Audio API with React.
-
-However, you *can* use the `audioElementRef` prop and [`createMediaElementSource`](https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaElementSource) to process your audio before it gets sent to the speaker.
-
-For example, you could use this code to add a low pass to high pass filter transition during the first 10 seconds your audio player is mounted:
-
-```jsx
-<AudioPlayer
-  playlist={playlist}
-  audioElementRef={audio => {
-    const ctx = new AudioContext();
-
-    let source = ctx.createMediaElementSource(audio);
-
-    for (const filterType of ['lowpass', 'highpass']) {
-      const filter = ctx.createBiquadFilter();
-      filter.type = filterType;
-      filter.frequency.value = 100;
-      filter.frequency.exponentialRampToValueAtTime(3000, 10);
-      source = source.connect(filter);
-    }
-
-    source.connect(ctx.destination);
-  }},
-  crossOrigin="anonymous"
-  autoplay
-/>
-```
-
-You might need to set the `crossOrigin` prop in order for Web Audio API processing to work correctly.
-
-## Styling
-
-In order to use the default stylings you'll need to grab the compiled `audioplayer.css` sheet from the module's `dist/` directory. Again, if you're not using npm, you can get the sheet [here](https://github.com/benwiley4000/react-responsive-audio-player/releases).
-
-It's easy to override the default styles with CSS. Alternatively, for styles which only affect the outer element, you can use [React inline styles](https://facebook.github.io/react/docs/dom-elements.html#style).
-
-For example, if you want your audio player to take the full screen width, do the following:
-* Include the following code in your own CSS:
-  ```css
-  html,
-  body {
-    margin: 0;
-  }
-  ```
-* Give your audio player fixed position styling, e.g.
-  ```jsx
-  <AudioPlayer style={{ position: 'fixed', bottom: 0 }} />
-  ```
-
-## Usage with SASS
-
-If you preprocess your styles with Sass, you can have more powerful control via Sass variables. The defaults are located at the top of [**src/index.scss**](src/index.scss):
-
-```scss
-$audio_player_base_height: 50px !default;
-$audio_player_base_bg_color: #333 !default;
-$audio_player_base_text_color: #fff !default;
-// ...etc
-```
-The `!default` flag means you can override these variable definitions before the styles are included.
-
-```scss
-// Include var overrides before default styles import
-$audio_player_base_bg_color: firebrick;
-
-// Using webpack css/sass module import syntax
-@import '~react-responsive-audio-player/src/index';
-
-// include other overrides afterward
-.audio_player {
-  width: 600px;
-}
-```
+**If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases). You can also look on unpkg, e.g. [here](https://unpkg.com/@cassette/core@2.0.0-beta.0/dist/es5/).**
 
 # Development
 
@@ -260,3 +40,11 @@ Thanks to [BrowserStack](http://browserstack.com/) for providing their platform 
 <a href="https://www.browserstack.com">
   <img alt="BrowserStack Logo" height="100" src="https://p14.zdusercontent.com/attachment/1015988/DucCZ7r9Wh1qj5RTUQUtIgaDM?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..QyFYSeGwuz3hu2DYiIp-Wg.wG_egoKd46-VIYOLxlSOyc3zxeZQz0rLx0q6vklPvnEYiTRW2UolruFNGe2_h-Ci7kDR8hYqKyCbDJx8apDXyiJwwRiL1qYuBq9pdk8NP4h9znXRgs-5FCvAT-QX9ICsoDUEdHa8Bvj0sc_9ZjMocTn_njqzCkVv7PtKqT-QYf3zJIlsib0JvRgiMGuw__AyId65m1z7Q93LC4pVzlvqBL_4B26I2Mvt4NPqvlTbVUg_tbIWUDqzmhNBfqCWAuIfNYDb_EtIkdR8fWQ-uOFd5qjkB84NOi2ljlo7g5WrFYI.5MCH_b_7gSlMJ4L9twhThA">
 </a>
+
+## Icons
+
+The standard control components make use of icons from various sources.
+
+The CSS YouTube-style play/pause button and the skip button were authored in part by [@benwiley4000](https://github.com/benwiley4000), with heavy assistance from [this CodePen](https://codepen.io/OxyDesign/pen/ojpepQ) by [@OxyDesign](https://github.com/OxyDesign).
+
+The SVG repeat, shuffle, fullscreen and volume icons come from Google's [material-design-icons](https://github.com/google/material-design-icons).

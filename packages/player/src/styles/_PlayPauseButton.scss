@@ -1,0 +1,71 @@
+@import 'variables';
+
+.cassette {
+  /* https://codepen.io/OxyDesign/pen/ojpepQ */
+  &__play_pause_button {
+    background: none;
+    border: none;
+
+    .foreground {
+      position: relative;
+      width: $cassette_play_btn_width;
+      height: $cassette_play_btn_height;
+    }
+
+    .left,
+    .right {
+      position: absolute;
+      top: 0;
+      transition-property: width;
+      transition-duration: $cassette_play_btn_transition_duration;
+      transition-timing-function: $cassette_play_btn_transition_timing_function;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        transition-property: border, height;
+        transition-duration: $cassette_play_btn_transition_duration;
+        transition-timing-function: $cassette_play_btn_transition_timing_function;
+        border-style: solid;
+        border-width: $cassette_play_btn_height/2 $cassette_play_btn_width;
+        border-color: transparent transparent transparent
+          $cassette_play_btn_color;
+        width: 0;
+        height: 0;
+      }
+    }
+
+    .left {
+      left: 0;
+
+      &::after {
+        left: 0;
+      }
+    }
+
+    .right {
+      right: 0;
+
+      &::after {
+        right: 0 - $cassette_play_btn_width;
+      }
+    }
+
+    &.playing {
+      .left,
+      .right {
+        width: $cassette_play_btn_pause_bar_width;
+
+        &::after {
+          border-width: 0 $cassette_play_btn_width;
+          height: $cassette_play_btn_height;
+        }
+      }
+    }
+  }
+}

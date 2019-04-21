@@ -1,31 +1,51 @@
 {
-  "name": "react-responsive-audio-player",
-  "version": "1.5.0",
+  "name": "cassette",
+  "private": true,
+  "version": "2.0.0-beta.0",
   "description": "A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.",
   "main": "dist/audioplayer.js",
   "scripts": {
+    "bootstrap": "lerna bootstrap",
     "build:clean": "rimraf dist",
-    "build:webpack": "BUILD_MODE=all webpack --progress",
-    "build": "npm run build:clean && npm run build:webpack",
-    "dev": "BUILD_MODE=unminimized webpack-serve --open --open-path example.html",
-    "dev:network": "BUILD_MODE=unminimized webpack-serve --host 0.0.0.0 --open --open-path example.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:example": "webpack --progress",
+    "dev": "BUILD_MODE=unminimized webpack-serve --open --open-path ./example.html",
+    "dev:network": "BUILD_MODE=unminimized webpack-serve --host 0.0.0.0 --open --open-path ./example.html",
+    "docs": "styleguidist build",
+    "docs:serve": "styleguidist server",
+    "preversion": "npm run lint:all && npm test",
+    "prettier": "pretty-quick --staged --no-restage \"**/*.js\" \"**/*.scss\"",
+    "prettier:all": "prettier --write \"**/*.js\" \"**/*.scss\"",
+    "publish": "lerna publish",
+    "lint": "lint-staged",
+    "lint:all": "eslint \"**/*.js\" && node prettier-check.js \"**/*.scss\"",
+    "test": "jest"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/benwiley4000/react-responsive-audio-player.git"
+    "url": "https://github.com/benwiley4000/cassette.git"
   },
   "engines": {
-    "node": "*"
+    "node": ">=6.0.0",
+    "npm": ">=5.0.0"
   },
   "keywords": [
     "audio",
-    "html5",
+    "video",
+    "media",
+    "ui",
     "react",
     "reactjs",
     "responsive",
     "music",
-    "player"
+    "player",
+    "html5",
+    "component",
+    "components"
   ],
   "author": {
     "name": "Ben Wiley",
@@ -33,30 +53,50 @@
     "url": "http://benwiley.org/"
   },
   "license": "MIT",
-  "peerDependencies": {
-    "react": "0.14.x || 15.x.x || 16.x.x"
-  },
   "devDependencies": {
-    "array-find-index": "^1.0.2",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^7.1.1",
-    "babel-core": "^6.24.1",
-    "babel-loader": "^7.0.0",
-    "babel-preset-es2015": "^6.0.0",
-    "babel-preset-react": "^6.0.0",
-    "classnames": "^2.2.5",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^9.0.0",
+    "babel-jest": "^24.7.1",
+    "babel-loader": "^8.0.0-beta.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
     "compression-webpack-plugin": "^1.1.11",
-    "css-loader": "^0.28.4",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-react": "^7.11.1",
+    "glob": "^7.1.3",
+    "gulp": "^4.0.0",
+    "gulp-cli": "^2.0.1",
+    "gulp-postcss": "^7.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglifycss": "^1.0.8",
+    "husky": "^1.0.0-rc.14",
+    "jest": "^24.7.1",
+    "lerna": "^3.13.3",
+    "lint-staged": "^7.2.2",
     "mini-css-extract-plugin": "^0.2.0",
-    "node-sass": "^4.9.3",
-    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^2.0.5",
+    "prettier": "1.14.2",
+    "pretty-quick": "^1.7.0",
+    "prop-types": "^15.5.10",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
+    "react-styleguidist": "^9.0.6",
+    "react-test-renderer": "^16.6.3",
     "rimraf": "^2.5.4",
     "sass-loader": "^6.0.5",
+    "svg-react-loader": "^0.4.6",
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.2"
-  },
-  "dependencies": {
-    "prop-types": "^15.5.10"
   }
 }

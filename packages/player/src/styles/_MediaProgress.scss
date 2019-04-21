@@ -1,0 +1,16 @@
+@import 'variables';
+
+.cassette {
+  &__media_progress_container {
+    position: relative;
+    flex-grow: 1;
+    min-width: 300px;
+  }
+  &__media_progress_bar {
+    height: 100%;
+
+    .progress {
+      background-color: $cassette_progress_bg_color;
+    }
+  }
+}

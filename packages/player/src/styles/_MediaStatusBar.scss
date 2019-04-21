@@ -1,0 +1,39 @@
+@import 'variables';
+
+.cassette {
+  &__media_status_bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  &__media_info_marquee {
+    flex-grow: 1;
+    margin-left: $cassette_marquee_margin;
+    margin-right: $cassette_marquee_margin;
+    font-size: $cassette_info_font_size;
+    color: $cassette_base_text_color;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    > * {
+      width: 100%;
+
+      > * {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  &__media_time_progress {
+    margin-right: $cassette_time_margin;
+    align-self: center;
+    color: $cassette_base_text_color;
+    font-size: $cassette_time_font_size;
+  }
+}

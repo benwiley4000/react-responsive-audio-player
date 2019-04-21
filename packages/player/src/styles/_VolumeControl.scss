@@ -1,0 +1,99 @@
+@import 'variables';
+
+.cassette {
+  &__volume_control {
+    height: $cassette_volume_control_height;
+    position: relative;
+
+    &__volume_bar_container {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+
+      &.hiddenup,
+      &.hiddenright {
+        visibility: hidden;
+      }
+      &.hiddenup,
+      &.upabove {
+        width: 100%;
+        height: $cassette_volume_bar_height + $cassette_volume_bar_gutter_close +
+          $cassette_volume_bar_gutter_far;
+      }
+      &.hiddenright,
+      &.rightabove,
+      &.rightbelow {
+        width: $cassette_volume_bar_height + $cassette_volume_bar_gutter_far * 2;
+        height: $cassette_volume_bar_width + $cassette_volume_bar_gutter_close *
+          2;
+      }
+      &.hiddenup,
+      &.hiddenright,
+      &.upabove,
+      &.rightabove {
+        bottom: $cassette_volume_control_height;
+      }
+      &.rightbelow {
+        top: $cassette_volume_control_height;
+      }
+    }
+    &__volume_bar {
+      position: absolute;
+      border-radius: $cassette_volume_bar_width / 2;
+      background-color: $cassette_base_bg_color;
+      box-shadow: $cassette_volume_bar_box_shadow;
+
+      &.hiddenup,
+      &.upabove {
+        bottom: $cassette_volume_bar_gutter_close;
+        top: $cassette_volume_bar_gutter_far;
+        left: 50%;
+        transform: translateX(-50%);
+        width: $cassette_volume_bar_width;
+      }
+      &.hiddenright,
+      &.rightabove,
+      &.rightbelow {
+        bottom: $cassette_volume_bar_gutter_close;
+        top: $cassette_volume_bar_gutter_close;
+        left: $cassette_volume_bar_gutter_far;
+        right: $cassette_volume_bar_gutter_far;
+      }
+
+      .volume {
+        border-radius: $cassette_volume_bar_width / 2;
+        background-color: $cassette_volume_bar_color;
+      }
+      .handle {
+        cursor: pointer;
+        width: $cassette_volume_handle_size +
+          $cassette_volume_handle_border_width * 2;
+        height: $cassette_volume_handle_size +
+          $cassette_volume_handle_border_width * 2;
+        border-radius: 50%;
+        background-color: $cassette_volume_bar_color;
+        box-shadow: $cassette_volume_handle_box_shadow;
+        position: relative;
+
+        > div {
+          position: absolute;
+          top: $cassette_volume_handle_border_width;
+          left: $cassette_volume_handle_border_width;
+          width: $cassette_volume_handle_size;
+          height: $cassette_volume_handle_size;
+          border-radius: 50%;
+          background-color: $cassette_volume_handle_color;
+          opacity: $cassette_volume_handle_normal_opacity;
+        }
+        &:hover > div,
+        &.highlight > div {
+          opacity: $cassette_volume_handle_hover_opacity;
+        }
+        &:active > div {
+          opacity: $cassette_volume_handle_active_opacity;
+        }
+      }
+    }
+  }
+}

@@ -1,2 +1,5 @@
 node_modules
 demo.gif
+styleguide
+.DS_Store
+lerna-debug.log

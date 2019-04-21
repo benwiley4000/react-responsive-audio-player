@@ -1,0 +1,31 @@
+@import 'variables';
+
+.cassette {
+  &__media_button_wrapper {
+    display: inline-block;
+  }
+
+  &__media_button {
+    padding-left: $cassette_btn_padding;
+    padding-right: $cassette_btn_padding;
+    margin-left: $cassette_btn_margin;
+    margin-right: $cassette_btn_margin;
+    cursor: pointer;
+    align-self: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: $cassette_btn_height;
+
+    .foreground {
+      opacity: $cassette_btn_normal_opacity;
+    }
+    &:hover .foreground,
+    &.highlight .foreground {
+      opacity: $cassette_btn_hover_opacity;
+    }
+    &:active .foreground {
+      opacity: $cassette_btn_active_opacity;
+    }
+  }
+}
