@@ -6,152 +6,77 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v2.0.0-beta.0] - 2019-04-10
-- Details coming soon
+## [v2.0.0-beta.1] - 2019-04-22
+v2 is a huge update! And yes, there are breaking changes. If you're just trying to upgrade from v1, you can check the **Changed** and **Removed** sections.
 
-<!--
-## [] - 2019-04-10
-Changelog forthcoming!
+These notes are on changes since the previous stable release ([v1.5.0](#v150---2018-09-30)). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
 
-Script and CSS files included below... that's a lot of files! (Maybe we need a better way to organize them..)
-## [] - 2019-04-10
-Very minor final breaking change before beta. The PlayerPropTypes export no longer has types exposed for `aspectRatio` or `progressDirection` which I highly doubt anyway was using anyway, bust just in case...
-## [] - 2019-04-09
-## Fixes
+All updates are mentioned on a broad level, but it wouldn't make sense to explain all new and changed APIs in minute detail here, so be sure to [read the docs](https://benwiley4000.github.io/cassette/styleguide).
 
-* In v2.0.0-alpha.29 we introduced a bug where attempting to adjust the volume would just move the volume to one extreme. This would also have affected any other use of the `ProgressBar` component where the progress bar moved or resized on the page. This was all due to a mistake in a performance refactor for the progress bar, where we stopped correctly monitoring changes to the progress bar's bounding box. Since the volume bar first renders hidden, it had a 0x0 bounding box, and never updated.
+### Changed
+- The project has been renamed from react-responsive-audio-player to Cassette ([#284](https://github.com/benwiley4000/cassette/issues/284), [#291](https://github.com/benwiley4000/cassette/issues/291)), and is now distributed in several packages ([#292](https://github.com/benwiley4000/cassette/issues/292)), so upgrading to version 2 will mean installing a new package or packages from npm. A simple upgrade will typically require only the `@cassette/player` package.
+    - Previously the package had a default export (`AudioPlayer`). `AudioPlayer` has been renamed to `MediaPlayer`  and is a named export from `@cassette/player`. So anything that previously looked like `import AudioPlayer from 'react-responsive-audio-player'` will become `import { MediaPlayer } from '@cassette/player'`.
+    - `MediaPlayer` is the combination of two components: `MediaPlayerControls` from the `@cassette/player` package and `PlayerContextProvider` ([#214](https://github.com/benwiley4000/cassette/issues/214)) from the `@cassette/core` package. `MediaPlayer` doesn't accept any unique props of its own, but rather all the props accepted by `MediaPlayerControls` and `PlayerContextProvider`. Discussion of prop changes or additions since v1 in this changelog section pertain to one of those two components.
+- The `audioElementRef` prop to `PlayerContextProvider`/`MediaPlayer` has been renamed `mediaElementRef` ([#284](https://github.com/benwiley4000/cassette/issues/284))
+- A few minor style tweaks and improvements have been made for the player UI ([#69](https://github.com/benwiley4000/cassette/issues/69), [#94](https://github.com/benwiley4000/cassette/issues/94)), but things look overall the same when you upgrade. However HTML and CSS have been totally refactored and classes renamed for v2 so any CSS extensions you wrote for v1 will need to be recreated using the new stylesheets for v2. ([#42](https://github.com/benwiley4000/cassette/issues/42), [#81](https://github.com/benwiley4000/cassette/issues/81))
+- New/improved timestamp formatting in the default UI implementation from `@cassette/player` ([#397](https://github.com/benwiley4000/cassette/issues/397))
+- When an end user begins seeking with a progress bar or similar, the default behavior (which can be configured) is now to update the `currentTime` immediately instead of waiting until the user releases the mouse. ([#204](https://github.com/benwiley4000/cassette/issues/204))
+- Initiating a forward skip during playback of the last track in a playlist, when the `cycle` prop is `false`, no longer works - the action will be ignored and playback will continue. ([#68](https://github.com/benwiley4000/cassette/issues/68))
+- Track duration is now reset to 0 when a new track is selected, then changes once metadata loads. To avoid this funny intermediate state, you should set the `duration` property on your tracks! ([#372](https://github.com/benwiley4000/cassette/issues/372))
+- We no longer pause media when the `stalled` event fires ([#166](https://github.com/benwiley4000/cassette/issues/166))
+- If a user tries to manually set the media `src` to something that isn't in the playlist, it will now be reset automatically to the previous state ([#178](https://github.com/benwiley4000/cassette/issues/178))
+- Although things will still function without it, the `isUnboundedStream` property should be set on track objects that are indeed unbounded streams (e.g. radio) since one of our fixes means retrying media fetches that yield `Infinity` duration. Setting `isUnboundedStream` to `true` skips the refetch. ([#373](https://github.com/benwiley4000/cassette/issues/373))
+- Now requires a peer dependency of React v16.3 or higher ([#138](https://github.com/benwiley4000/cassette/issues/138))
 
+### Removed
+- The `onMediaEvent` prop is removed, since most of its use cases can be solved better now by using the `PlayerContextProvider` ([#226](https://github.com/benwiley4000/cassette/issues/226))
+    - `mediaElementRef` (previously called `audioElementRef` ([#284](https://github.com/benwiley4000/cassette/issues/284))) still exists as an escape hatch
+- The `cycle` prop was removed. Use `defaultRepeatStrategy` instead, and any subsequent updates should be set via `playerContext` (since we would expect this setting to be changed as a result of an end user action) ([#79](https://github.com/benwiley4000/cassette/issues/79))
+- Features deprecated in v1.x.x have now been totally removed:
+    - The `style` prop to `AudioPlayer` (now `MediaPlayer`) is no longer accepted. Use styles on a container element, or CSS, instead.
+    - Mutating and re-using playlist arrays no longer works as expected. Playlists should be shallow copied if they need to be modified. See [this docs entry](https://benwiley4000.github.io/cassette/styleguide/#dont-mutate-playlists) for more information. ([#268](https://github.com/benwiley4000/cassette/issues/268))
+    - The `displayText` property on a playlist track is removed in favor of the `artist` and `title` properties (also used by Media Session API) ([#148](https://github.com/benwiley4000/cassette/issues/148)).
+        - If this isn't enough, you can pass the `getDisplayText` prop to `MediaPlayer`/`MediaPlayerControls`.
+    - The `hideBackSkip`, `hideForwardSkip` and `disableSeek` props from `AudioPlayer` in v1.x.x are not available on `MediaPlayer`/`MediaPlayerControls`. Use the `controls` prop instead, which is more flexible.
 
-## [] - 2019-04-08
-One of the last pre-beta releases!
+### Added
+- Video ([#206](https://github.com/benwiley4000/cassette/issues/206), [#316](https://github.com/benwiley4000/cassette/issues/316)) and fullscreen ([#221](https://github.com/benwiley4000/cassette/issues/221)) support!
+    - New `showVideo` prop for `MediaPlayer`/`MediaPlayerControls` can be set true to activate a video display ([#221](https://github.com/benwiley4000/cassette/issues/221))
+    - Can pass custom video display implementation to `MediaPlayer`/`MediaPlayerControls` ([#253](https://github.com/benwiley4000/cassette/issues/253))
+    - Video display will show track album artwork for audio ([#241](https://github.com/benwiley4000/cassette/issues/241))
+- React Context-based API exposes media state and callbacks and allows totally custom player UI implementation ([#138](https://github.com/benwiley4000/cassette/issues/138), [#208](https://github.com/benwiley4000/cassette/issues/208))
+    - Besides what comes in the `@cassette/core` package, there is a `@cassette/hooks` package for those who prefer to work with React hooks ([#361](https://github.com/benwiley4000/cassette/issues/361))
+- `PlayerContextGroup` can wrap multiple `PlayerContextProvider`/`MediaPlayer` instances to share configuration and prevent simultaneous audio playback ([#219](https://github.com/benwiley4000/cassette/issues/219))
+- Several new control types for `@cassette/player`: volume ([#72](https://github.com/benwiley4000/cassette/issues/72)), mute ([#257](https://github.com/benwiley4000/cassette/issues/257)), repeat ([#79](https://github.com/benwiley4000/cassette/issues/79)), shuffle ([#87](https://github.com/benwiley4000/cassette/issues/87)), read-only progress ([#60](https://github.com/benwiley4000/cassette/issues/60)), fullscreen ([#221](https://github.com/benwiley4000/cassette/issues/221))
+- Helper primitives for building custom UI (`ProgressBar`, `ProgressBarDisplay`, `MaybeMarquee` ([#245](https://github.com/benwiley4000/cassette/issues/245)), `VideoDisplay`) available from `@cassette/components` package ([#292](https://github.com/benwiley4000/cassette/issues/292))
+- Keyboard navigation support for UI controls ([#124](https://github.com/benwiley4000/cassette/issues/124), [#396](https://github.com/benwiley4000/cassette/issues/396))
+- New `controls` prop functionality for `MediaPlayerControls`/`MediaPlayer` - previously in v1 `controls` supported a few control types as keywords, but in v2 several more built-in control keywords are supported, and custom controls can be implemented by passing in a function as a member of the `controls` array ([#42](https://github.com/benwiley4000/cassette/issues/42))
+- New props for `PlayerContextProvider`, which can also be passed to `MediaPlayer`:
+    - `initialStateSnapshot` and `onStateSnapshot` can be used to persist media player state and restore at load time later ([#226](https://github.com/benwiley4000/cassette/issues/226))
+    - `loadFirstTrackOnPlaylistComplete` can be set `false` to prevent a playlist from resetting on the first track when the playlist finishes ([#42](https://github.com/benwiley4000/cassette/issues/42))
+    - `defaultVolume`, `defaultMuted`, `defaultPlaybackRate`, `startingTrackIndex` ([#61](https://github.com/benwiley4000/cassette/issues/61))
+    - `defaultRepeatStrategy` ([#79](https://github.com/benwiley4000/cassette/issues/79))
+    - `maintainPlaybackRate` - can be set `true` in order to override the default browser behavior which resets the playback rate on every new track ([#129](https://github.com/benwiley4000/cassette/issues/129))
+    - `seekMode` - for specifying whether to pause, seek immediately, or continue playback and seek after release, when seeking with a progress bar ([#204](https://github.com/benwiley4000/cassette/issues/204))
+    - `onActiveTrackUpdate` callback prop ([#76](https://github.com/benwiley4000/cassette/issues/76), [#406](https://github.com/benwiley4000/cassette/issues/406))
+    - `onTrackPlaybackFailure` callback prop ([#356](https://github.com/benwiley4000/cassette/issues/356))
+    - `onTimeUpdate` callback prop ([#369](https://github.com/benwiley4000/cassette/issues/369))
+- Support for specifying multiple source audio files (e.g. ogg, mp3) for the same track ([#178](https://github.com/benwiley4000/cassette/issues/178))
+- `duration` property supported on playlist track objects so the player can display nicely before media has finished loading ([#372](https://github.com/benwiley4000/cassette/issues/372))
+- `@cassette/player` exports components for individual player controls now ([#42](https://github.com/benwiley4000/cassette/issues/42), [#231](https://github.com/benwiley4000/cassette/issues/231), [#341](https://github.com/benwiley4000/cassette/issues/341))
+- SCSS and CSS stylesheets for individual control components are now shipped for `@cassette/player`, in case you want to include only a subset of CSS you know you'll use. ([#42](https://github.com/benwiley4000/cassette/issues/42)) ([#73](https://github.com/benwiley4000/cassette/issues/73), [#231](https://github.com/benwiley4000/cassette/issues/231))
+- A `trackIndex` can now be passed to a play/pause button in order to tie that button to a particular track in the playlist ([#338](https://github.com/benwiley4000/cassette/issues/338))
+- A `durationOverride` can be set on a media progress bar if you're running a live stream or similar and have stream duration info that isn't available to the media element ([#379](https://github.com/benwiley4000/cassette/issues/379))
+- The media `title` attribute is now set, and configurable, for system notifcation support on iOS ([#344](https://github.com/benwiley4000/cassette/issues/344))
+- You can set a `startingTime` property on a track object if you need to restore `currentTime` from some previously recorded state (advanced use case) ([#369](https://github.com/benwiley4000/cassette/issues/369))
+- You can now bring your own `HTMLMediaElement` implementation ([#349](https://github.com/benwiley4000/cassette/issues/349))
 
-## Breaking changes
-
-`PlayerContextProvider` takes a few event callbacks.. `onActiveTrackUpdate`, `onTimeUpdate` and `onTrackPlaybackFailure`. In order to preempt future problems where we want to add more function arguments and the call signatures get unwieldy, we're going to convert these all to single-argument hashes while we're still allowed to make breaking changes.
-
-### *Before*
-* `onActiveTrackUpdate(track, trackIndex)`
-* `onTimeUpdate(currentTime, track, trackIndex)`
-* `onTrackPlaybackFailure(track, trackIndex, event)`
-
-### *Now*
-* `onActiveTrackUpdate({ track, trackIndex })`
-* `onTimeUpdate({ currentTime, track, trackIndex })`
-* `onTrackPlaybackFailure({ track, trackIndex, event })`
-
-## New features
-
-One motivation for the change above was wanting to minimize confusion while supporting `previousTrack` and `previousTrackIndex` arguments for `onActiveTrackUpdate`. So now you can have:
-
-#### `onActiveTrackUpdate({ track, trackIndex, previousTrack, previousTrackIndex })`
-
-## [] - 2019-02-27
-## Features
-* The `MediaPlayer` controls are now completely navigable/controllable by keyboard, the first of several accessibility features tracked in issue [#261](https://github.com/benwiley4000/cassette/issues/261). ([#396](https://github.com/benwiley4000/cassette/issues/396))
-
-## Improvements
-* Better formatting for timestamps (particularly timestamps over 1 hour) ([#397](https://github.com/benwiley4000/cassette/issues/397))
-* More flexible media status bar layout that never wraps the timestamp ([#398](https://github.com/benwiley4000/cassette/issues/398))
-
-## Fixes
-* Respect track `duration` property during initial load (was only respected when tracks are changing before) ([#392](https://github.com/benwiley4000/cassette/issues/392))
-* Don't jump back to `currentTime: 0` while loading a track at a timestamp other than 0 ([#392](https://github.com/benwiley4000/cassette/issues/392))
-## [] - 2019-02-20
-## Breaking changes
-* The filenames for the @cassette/hooks package were being output as `cassette-core` before - it's now `cassette-hooks` as intended. If you were using the package with the wrong filename already, that will be a breaking change for you. ([#389](https://github.com/benwiley4000/cassette/issues/389))
-* The `ProgressBar` prop `onAdjustComplete` now receives the progress value at the time adjusting completes, which might break something if you were passing the `onSeekComplete` context value directly (that function expects a timestamp, not a 0-1 progress value) ([#386](https://github.com/benwiley4000/cassette/issues/386))
-
-## Fixes
-* Some significant seek performance improvements for the `ProgressBar` and all components which consume it (`MediaProgress`, `MediaProgressBar`, `VolumeControl`). Previously we performed layout computations up front and updated all consumers of the `progress` state on the page at once via Context. This made clicking and dragging on the progress bar show noticeable lag. Now we pre-cache the needed style computation and re-render the active progress bar before anything else on the page, better ensuring a responsive interaction. ([#386](https://github.com/benwiley4000/cassette/issues/386))
-* Before we would collect an excess buildup of `requestAnimationFrame` callbacks while Cassette was running in a background tab - particularly the Cassette docs page. This could cause the page to be totally unresponsive when re-focusing the tab. That issue should now be gone. ([#387](https://github.com/benwiley4000/cassette/issues/387))
-## [] - 2019-02-18
-Fixes the React prop type spec for the playlist track's `duration` property (your code will work the same if you stick with v2.0.0-alpha.27 but you will get less helpful console messages). ([#382](https://github.com/benwiley4000/cassette/issues/382))
-## [] - 2019-02-18
-This release contains a bunch of stuff, almost all related to time and duration.
-
-There are breaking changes, although the majority of users will likely be unaffected.
-
-## Breaking changes
-* The `startingTime` prop, which was new for the v2 alpha, has been removed and replaced by the optional `startingTime` property on the playlist track object ([#369](https://github.com/benwiley4000/cassette/issues/369))
-* The new `isUnboundedStream` track property should be set to `true` for any track that is an unbounded live stream. Otherwise loading the source will take twice as long as before (nothing will break, though). Typical time-bound sources are unaffected. ([#373](https://github.com/benwiley4000/cassette/issues/373))
-* If you were reading the internals of the Cassette state snapshot in your program, your program will break. If you were using the snapshot in a normal way, nothing will break. If this does break your program and you don't know what to do, please [open an issue](https://github.com/benwiley4000/cassette/issues/new) so we can find a good solution for your use case! :slightly_smiling_face: 
-
-## Changes that almost definitely won't break anything
-* `currentTime` state set on media element after `loadeddata` event instead of `loadedmetadata` event, and `trackLoading` now remains `true` until the `canplay` event has fired ([#370](https://github.com/benwiley4000/cassette/issues/370))
-* The context `duration` property is now always a number even if a live stream is playing ([#377](https://github.com/benwiley4000/cassette/issues/377))
-* `currentTime` from snapshot no longer respected for live streams ([#378](https://github.com/benwiley4000/cassette/issues/378))
-
-## Features
-* New `duration` playlist track property (which can be specified as a number in milliseconds, or a `mm:ss`/`hh:mm:ss` formatted string) is used as a stand-in until the track's metadata has loaded. Specifying this will make track loads feel snappier. ([#372](https://github.com/benwiley4000/cassette/issues/372))
-* The `startingTime` playlist track property can be used to restore previous timestamps of tracks that were skipped before being finished. It is the developer's responsibility to store and retrieve the timestamp as well as update it in the playlist at runtime if needed, as the track will begin at its defined `startingTime` each time it is played. For most applications this is not needed. ([#369](https://github.com/benwiley4000/cassette/issues/369))
-* The `onTimeUpdate` prop to `PlayerContextProvider` can be used to save track timestamps to be used for the `startingTime` property ([#369](https://github.com/benwiley4000/cassette/issues/369))
-* New `durationOverride` prop is optional for `MediaProgress`, `MediaProgressDisplay`, `MediaProgressBar` and `MediaProgressBarDisplay`. Not needed for most cases but may be desirable for a live stream in order to display the maximum seekable range even while the playing/buffering section is offset in the past. ([#379](https://github.com/benwiley4000/cassette/issues/379))
-
-## Fixes
-* Prevent `crossOrigin` issues in Microsoft Edge ([#368](https://github.com/benwiley4000/cassette/issues/368))
-* `currentTime` gets set correctly on iOS ([#370](https://github.com/benwiley4000/cassette/issues/370))
-* Prevent bad display and seeking issues for unbounded live streams by using the maximum visited timestamp as the duration ([#377](https://github.com/benwiley4000/cassette/issues/377))
-* No more unresponsive hangs when restoring a non-zero `currentTime` from snapshot for a live stream source - the time will be reset to 0 (and new snapshots won't save the currentTime for live stream sources) ([#378](https://github.com/benwiley4000/cassette/issues/378))
-* Prevent `Infinity` track duration for non-live stream sources on iOS ([#373](https://github.com/benwiley4000/cassette/issues/373))
-## [] - 2019-02-11
-v2.0.0-alpha.25 of `@cassette/hooks` was unpublished and replaced with v2.0.0-alpha.26 - the build configuration was screwed up the first time it was published.
-## [] - 2019-02-11
-## New features
-* React Hooks (if that's your thing).. new `useFullscreenContext` and `usePlayerContext` exports from the `@cassette/hooks` package.
-
-## Deprecated usage
-* `PlayerContextConsumer`'s usage does not break, but you will now receive a warning if you do not pass the new `filterList` prop listing which items from the `playerContext` are being consumed.
-## [] - 2019-02-11
-The breaking changes are minor and most likely non-disruptive, although it's possible you will be affected if you were doing something weird with the `paused` state.
-
-## Breaking changes
-* The `paused` state in `playerContext` will now be `true` between the time a track load begins and the time the track starts playing. Previously it was `false` during this time
-* The `awaitingResumeOnSeekComplete` context state has been removed and replaced by `awaitingPlayResume`, which is true either if seeking is in progress or if the track play is pending a track load. The `PlayPauseButton` uses this internally so the visual behavior has not changed (except in Firefox, where there was a bug before). ([#360](https://github.com/benwiley4000/cassette/issues/360))
-
-## Features
-* New `getDisplayText` prop for `MediaProgress` and `MediaProgressDisplay` ([#358](https://github.com/benwiley4000/cassette/issues/358))
-* New `mediaCannotPlay` state in `playerContext` is `true` if a load error occurred for the current track. `onTrackPlaybackFailure` callback prop to `PlayerContextProvider` allows listening for track load errors. ([#356](https://github.com/benwiley4000/cassette/issues/356))
-* New subscription optimization for `playerContext` ([#350](https://github.com/benwiley4000/cassette/issues/350))
-
-## Fixes
-* The media status bar for `MediaPlayer` now reflects the `getDisplayText` prop instead of the default implementation. ([#358](https://github.com/benwiley4000/cassette/issues/358))
-## [] - 2019-01-30
-This version allows specifying a custom media element implementation via the `createMediaElement` function prop (https://github.com/benwiley4000/cassette/pull/349).
-## [] - 2019-01-23
-New prop on `PlayerContextProvider` - `getMediaTitleAttributeForTrack`. This function prop allows you to set a custom `title` attribute on the media element which is used in the system media controls on iOS. If you don't specify, the value will be `artist - trackname`.
-## [] - 2019-01-15
-Two new exports from `@cassette/components`: `MediaProgressBar` and its non-interactive counterpart `MediaProgressBarDisplay`.
-## [] - 2019-01-14
-New feature: `trackIndex` prop to `PlayPauseButton` from `@cassette/player` makes the button belong to a specific track instead of the playlist in general.
-## [] - 2019-01-05
-Some more miscellaneous bug fixes (to be detailed in the upcoming changelog)
-## [] - 2018-12-11
-Fixes issue where a snapshot reload will error out if saved `activeTrackIndex` is greater than the length of the new playlist.
-## [] - 2018-12-10
-This is the first (and hopefully only) alpha release with major breaking changes. But the good news is that unless you were doing something fancy with a `VideoDisplay` instance, you probably won't be affected.
-
-The other good news is that video performance is now much better!
-
-## Breaking changes ([#316](https://github.com/benwiley4000/cassette/issues/316))
-* You used to be able to render a bunch of simultaneous `VideoDisplay` instances under the same `PlayerContextProvider`. You can still render a bunch of `VideoDisplay` instances, but now only one of them can display video at a time.
-    - This is because we used to be drawing the video onto a bunch of canvas elements to display, and now we're just passing around the video element itself, and it can only be in one place at a time. The motivating reason is performance on less powerful devices, and the fact displaying multiple simultaneous views of the same media is an extremely niche use case.
-* Control of resolution, still images, frame processing, etc has been removed from `VideoDisplay` as this isn't relevant when using the video tag. Hopefully no one was relying on this - seems doubtful.
-
-## Features
-* `onActiveTrackUpdate` prop to `PlayerContextProvider` / `MediaPlayer` ([#317](https://github.com/benwiley4000/cassette/issues/317))
-* `onSetVolumeComplete` can now take a volume argument. (7ec89f6)
-
-## Fixes
-* Fixed some progress bar related issues ([#312](https://github.com/benwiley4000/cassette/issues/312)).
-* Upgraded Styleguidist to patch a security vulnerability in webpack dev server (not a runtime issue) (4acb284)
-## [] - 2018-11-19
-
-## [] - 2018-10-05
-
-## [] - 2018-10-04
-Don't try installing this one.. it won't work! 😄 
-
--->
+### Fixed
+- Prevent fullscreen player from opening automatically on iOS ([#307](https://github.com/benwiley4000/cassette/issues/307))
+- Fix issue with `undefined` `crossOrigin` prop in Microsoft Edge ([#368](https://github.com/benwiley4000/cassette/issues/368))
+- Proper time/progress display for unbounded streams e.g. radio ([#377](https://github.com/benwiley4000/cassette/issues/377))
+- Address weird infinity duration bug on iOS ([#373](https://github.com/benwiley4000/cassette/issues/373))
+    - This fix means you should set the `isUnboundedStream` property on a playlist track if it is indeed an unbounded stream
 
 ## [v1.5.0] - 2018-09-30
 ### Deprecated
@@ -277,8 +202,8 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 ### Added
 - Initial prerelease.
 
-[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.0...HEAD
-[v2.0.0-beta.0]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.0
+[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...HEAD
+[v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.1
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0
