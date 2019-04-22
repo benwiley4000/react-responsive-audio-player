@@ -45,6 +45,10 @@ const contextPropNames = [
 module.exports = {
   sections: [
     {
+      name: 'Cassette Quick Start',
+      content: 'quickstart.md'
+    },
+    {
       name: '@cassette/core',
       description:
         '**`@cassette/core`** provides [React Context](https://reactjs.org/docs/context.html)-based components which expose an API for consuming and updating media player state. The API abstraction maps very closely to the set of actions that would be available to an end user of a conventional media player, while remaining flexible enough to accommodate varying media player design paradigms.',
