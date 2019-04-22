@@ -252,7 +252,7 @@ module.exports = g;
 /* 6 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.33","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-beta.1","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 7 */
@@ -778,11 +778,6 @@ function getDisplayText(track) {
     return '';
   }
 
-  if (track.displayText) {
-    // TODO: Remove this check when support for the displayText prop is gone.
-    return track.displayText;
-  }
-
   if (track.title && track.artist) {
     return `${track.artist} - ${track.title}`;
   }
@@ -941,7 +936,7 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
   constructor(props) {
     super(props);
     let currentTime = 0;
-    const activeTrackIndex = utils_convertToNumberWithinIntervalBounds(props.startingTrackIndex, 0);
+    let activeTrackIndex = utils_convertToNumberWithinIntervalBounds(props.startingTrackIndex, 0);
     const playlistIsValid = utils_isPlaylistValid(props.playlist);
 
     if (playlistIsValid && props.playlist[activeTrackIndex]) {
@@ -954,6 +949,17 @@ class PlayerContextProvider_PlayerContextProvider extends external_root_React_co
     if (initialStateSnapshot) {
       try {
         restoredStateFromSnapshot = restoreStateFromSnapshot(initialStateSnapshot, props);
+        const _restoredStateFromSna = restoredStateFromSnapshot,
+              a = _restoredStateFromSna.activeTrackIndex,
+              c = _restoredStateFromSna.currentTime;
+
+        if (typeof a === 'number') {
+          activeTrackIndex = a;
+        }
+
+        if (typeof c === 'number') {
+          currentTime = c;
+        }
       } catch (err) {
         Object(console["b" /* logWarning */])(err);
         Object(console["b" /* logWarning */])('Loading Cassette state from snapshot failed.');

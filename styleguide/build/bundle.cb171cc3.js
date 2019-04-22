@@ -9748,6 +9748,17 @@ function (_Component) {
     if (initialStateSnapshot) {
       try {
         restoredStateFromSnapshot = restoreStateFromSnapshot(initialStateSnapshot, props);
+        var _restoredStateFromSna = restoredStateFromSnapshot,
+            a = _restoredStateFromSna.activeTrackIndex,
+            c = _restoredStateFromSna.currentTime;
+
+        if (typeof a === 'number') {
+          activeTrackIndex = a;
+        }
+
+        if (typeof c === 'number') {
+          currentTime = c;
+        }
       } catch (err) {
         Object(console["b" /* logWarning */])(err);
         Object(console["b" /* logWarning */])('Loading Cassette state from snapshot failed.');
@@ -11546,11 +11557,6 @@ PlayerContextConsumer_PlayerContextConsumer.propTypes = {
 function getDisplayText(track) {
   if (!track) {
     return '';
-  }
-
-  if (track.displayText) {
-    // TODO: Remove this check when support for the displayText prop is gone.
-    return track.displayText;
   }
 
   if (track.title && track.artist) {
@@ -25187,7 +25193,7 @@ function useFullscreenContext() {
 
 
 
-var packageVersion = __webpack_require__(925).version; // TODO: hopefully in the future we'll have a more stable API
+var packageVersion = __webpack_require__(926).version; // TODO: hopefully in the future we'll have a more stable API
 // for observedBits/similar that doesn't require trial and error.
 
 
@@ -30010,7 +30016,7 @@ module.exports = isFinite;
 /* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(927);
+module.exports = __webpack_require__(928);
 
 
 /***/ }),
@@ -38931,7 +38937,7 @@ module.exports = ReactPropTypesSecret;
 /* 439 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/core","version":"2.0.0-alpha.33","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/core","version":"2.0.0-beta.1","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-core.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.3.0"},"devDependencies":{"array-find-index":"^1.0.2","rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
 /* 440 */
@@ -48040,6 +48046,20 @@ module.exports = {
     'patterns': void 0,
     'sections': [
         {
+            'name': 'Cassette Quick Start',
+            'exampleMode': 'collapse',
+            'usageMode': 'expand',
+            'sectionDepth': 0,
+            'description': void 0,
+            'slug': 'cassette-quick-start',
+            'sections': [],
+            'filepath': 'quickstart.md',
+            'href': void 0,
+            'components': [],
+            'content': __webpack_require__(870),
+            'external': void 0
+        },
+        {
             'name': '@cassette/core',
             'exampleMode': 'collapse',
             'usageMode': 'expand',
@@ -48063,7 +48083,7 @@ module.exports = {
                             'slug': 'fullscreencontextprovider',
                             'pathLine': 'packages/core/src/FullscreenContextProvider.js',
                             'module': __webpack_require__(125),
-                            'props': __webpack_require__(870),
+                            'props': __webpack_require__(871),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48072,7 +48092,7 @@ module.exports = {
                             'slug': 'playercontextgroup',
                             'pathLine': 'packages/core/src/PlayerContextGroup.js',
                             'module': __webpack_require__(124),
-                            'props': __webpack_require__(872),
+                            'props': __webpack_require__(873),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48081,7 +48101,7 @@ module.exports = {
                             'slug': 'playercontextprovider',
                             'pathLine': 'packages/core/src/PlayerContextProvider.js',
                             'module': __webpack_require__(130),
-                            'props': __webpack_require__(874),
+                            'props': __webpack_require__(875),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48108,7 +48128,7 @@ module.exports = {
                             'filepath': 'packages/core/docs/FullscreenContextConsumer.md',
                             'href': void 0,
                             'components': [],
-                            'content': __webpack_require__(876),
+                            'content': __webpack_require__(877),
                             'external': void 0
                         },
                         {
@@ -48126,7 +48146,7 @@ module.exports = {
                                     'slug': 'playercontextconsumer-1',
                                     'pathLine': 'packages/core/src/PlayerContextConsumer.js',
                                     'module': __webpack_require__(132),
-                                    'props': __webpack_require__(877),
+                                    'props': __webpack_require__(878),
                                     'hasExamples': true,
                                     'metadata': {}
                                 }],
@@ -48144,7 +48164,7 @@ module.exports = {
                             'filepath': 'packages/core/docs/playerContextFilter.md',
                             'href': void 0,
                             'components': [],
-                            'content': __webpack_require__(879),
+                            'content': __webpack_require__(880),
                             'external': void 0
                         }
                     ],
@@ -48165,7 +48185,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/fullscreenContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(880),
+                    'content': __webpack_require__(881),
                     'external': void 0
                 },
                 {
@@ -48179,7 +48199,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/playerContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(881),
+                    'content': __webpack_require__(882),
                     'external': void 0
                 },
                 {
@@ -48193,7 +48213,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/Types.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(882),
+                    'content': __webpack_require__(883),
                     'external': void 0
                 },
                 {
@@ -48207,7 +48227,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/DontMutatePlaylists.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(883),
+                    'content': __webpack_require__(884),
                     'external': void 0
                 },
                 {
@@ -48221,7 +48241,7 @@ module.exports = {
                     'filepath': 'packages/core/docs/WebAudioAPI.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(884),
+                    'content': __webpack_require__(885),
                     'external': void 0
                 }
             ],
@@ -48254,7 +48274,7 @@ module.exports = {
                             'slug': 'maybemarquee',
                             'pathLine': 'packages/components/src/MaybeMarquee.js',
                             'module': __webpack_require__(131),
-                            'props': __webpack_require__(885),
+                            'props': __webpack_require__(886),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48263,7 +48283,7 @@ module.exports = {
                             'slug': 'mediaprogressbar',
                             'pathLine': 'packages/components/src/MediaProgressBar.js',
                             'module': __webpack_require__(126),
-                            'props': __webpack_require__(887),
+                            'props': __webpack_require__(888),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48272,7 +48292,7 @@ module.exports = {
                             'slug': 'mediaprogressbardisplay',
                             'pathLine': 'packages/components/src/MediaProgressBarDisplay.js',
                             'module': __webpack_require__(127),
-                            'props': __webpack_require__(889),
+                            'props': __webpack_require__(890),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48281,7 +48301,7 @@ module.exports = {
                             'slug': 'progressbar',
                             'pathLine': 'packages/components/src/ProgressBar.js',
                             'module': __webpack_require__(77),
-                            'props': __webpack_require__(891),
+                            'props': __webpack_require__(892),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48290,7 +48310,7 @@ module.exports = {
                             'slug': 'progressbardisplay',
                             'pathLine': 'packages/components/src/ProgressBarDisplay.js',
                             'module': __webpack_require__(49),
-                            'props': __webpack_require__(893),
+                            'props': __webpack_require__(894),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48299,7 +48319,7 @@ module.exports = {
                             'slug': 'videodisplay',
                             'pathLine': 'packages/components/src/VideoDisplay.js',
                             'module': __webpack_require__(128),
-                            'props': __webpack_require__(895),
+                            'props': __webpack_require__(896),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48332,7 +48352,7 @@ module.exports = {
                     'filepath': 'packages/player/docs/styling.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(897),
+                    'content': __webpack_require__(898),
                     'external': void 0
                 },
                 {
@@ -48351,7 +48371,7 @@ module.exports = {
                             'slug': 'mediaplayer',
                             'pathLine': 'packages/player/src/MediaPlayer.js',
                             'module': __webpack_require__(129),
-                            'props': __webpack_require__(898),
+                            'props': __webpack_require__(899),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48360,7 +48380,7 @@ module.exports = {
                             'slug': 'mediaplayercontrols',
                             'pathLine': 'packages/player/src/MediaPlayerControls.js',
                             'module': __webpack_require__(50),
-                            'props': __webpack_require__(900),
+                            'props': __webpack_require__(901),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48384,7 +48404,7 @@ module.exports = {
                             'slug': 'backskipbutton',
                             'pathLine': 'packages/player/src/controls/BackSkipButton.js',
                             'module': __webpack_require__(67),
-                            'props': __webpack_require__(902),
+                            'props': __webpack_require__(903),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48393,7 +48413,7 @@ module.exports = {
                             'slug': 'forwardskipbutton',
                             'pathLine': 'packages/player/src/controls/ForwardSkipButton.js',
                             'module': __webpack_require__(68),
-                            'props': __webpack_require__(904),
+                            'props': __webpack_require__(905),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48402,7 +48422,7 @@ module.exports = {
                             'slug': 'fullscreenbutton',
                             'pathLine': 'packages/player/src/controls/FullscreenButton.js',
                             'module': __webpack_require__(74),
-                            'props': __webpack_require__(906),
+                            'props': __webpack_require__(907),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48411,7 +48431,7 @@ module.exports = {
                             'slug': 'mediaprogress',
                             'pathLine': 'packages/player/src/controls/MediaProgress.js',
                             'module': __webpack_require__(72),
-                            'props': __webpack_require__(908),
+                            'props': __webpack_require__(909),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48420,7 +48440,7 @@ module.exports = {
                             'slug': 'mediaprogressdisplay',
                             'pathLine': 'packages/player/src/controls/MediaProgressDisplay.js',
                             'module': __webpack_require__(73),
-                            'props': __webpack_require__(910),
+                            'props': __webpack_require__(911),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48429,7 +48449,7 @@ module.exports = {
                             'slug': 'mutebutton',
                             'pathLine': 'packages/player/src/controls/MuteButton.js',
                             'module': __webpack_require__(69),
-                            'props': __webpack_require__(912),
+                            'props': __webpack_require__(913),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48438,7 +48458,7 @@ module.exports = {
                             'slug': 'playpausebutton',
                             'pathLine': 'packages/player/src/controls/PlayPauseButton.js',
                             'module': __webpack_require__(66),
-                            'props': __webpack_require__(914),
+                            'props': __webpack_require__(915),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48447,7 +48467,7 @@ module.exports = {
                             'slug': 'repeatbutton',
                             'pathLine': 'packages/player/src/controls/RepeatButton.js',
                             'module': __webpack_require__(70),
-                            'props': __webpack_require__(916),
+                            'props': __webpack_require__(917),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48456,7 +48476,7 @@ module.exports = {
                             'slug': 'shufflebutton',
                             'pathLine': 'packages/player/src/controls/ShuffleButton.js',
                             'module': __webpack_require__(71),
-                            'props': __webpack_require__(918),
+                            'props': __webpack_require__(919),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48465,7 +48485,7 @@ module.exports = {
                             'slug': 'spacer',
                             'pathLine': 'packages/player/src/controls/Spacer.js',
                             'module': __webpack_require__(75),
-                            'props': __webpack_require__(920),
+                            'props': __webpack_require__(921),
                             'hasExamples': true,
                             'metadata': {}
                         },
@@ -48474,7 +48494,7 @@ module.exports = {
                             'slug': 'volumecontrol',
                             'pathLine': 'packages/player/src/controls/VolumeControl.js',
                             'module': __webpack_require__(76),
-                            'props': __webpack_require__(922),
+                            'props': __webpack_require__(923),
                             'hasExamples': true,
                             'metadata': {}
                         }
@@ -48508,7 +48528,7 @@ module.exports = {
                     'filepath': 'packages/hooks/docs/useFullscreenContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(924),
+                    'content': __webpack_require__(925),
                     'external': void 0
                 },
                 {
@@ -48522,7 +48542,7 @@ module.exports = {
                     'filepath': 'packages/hooks/docs/usePlayerContext.md',
                     'href': void 0,
                     'components': [],
-                    'content': __webpack_require__(926),
+                    'content': __webpack_require__(927),
                     'external': void 0
                 }
             ],
@@ -48538,6 +48558,25 @@ module.exports = {
 
 /***/ }),
 /* 870 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+if (false) {}
+
+var requireMap = { 'react': __webpack_require__(0) };
+var requireInRuntimeBase = __webpack_require__(8).default;
+var requireInRuntime = requireInRuntimeBase.bind(null, requireMap);
+var evalInContextBase = __webpack_require__(9).default;
+var evalInContext = evalInContextBase.bind(null, "const React$0 = require('react');\nconst React = React$0.default || React$0;", requireInRuntime);
+
+module.exports = [{
+        'type': 'markdown',
+        'content': 'Want to get unramped with Cassette quickly, without reading a bunch of API documentation?\n\n1.  If you\'re using HTML with script tags, here\'s your minimum Hello World with Cassette:\n\n    ```html\n    <span class="token doctype">&lt;!DOCTYPE html></span>\n\n    <span class="token comment">&lt;!-- include @cassette/player\'s stylesheet --></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/@cassette/player/dist/css/cassette-player.css<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>\n\n    <span class="token comment">&lt;!-- app container --></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">max-width</span><span class="token punctuation">:</span><span class="token number">700</span><span class="token unit">px</span></span><span class="token punctuation">"</span></span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>app<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>\n\n    <span class="token comment">&lt;!-- dependencies --></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/react@16.8.6/umd/react.development.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/prop-types@15.7.2/prop-types.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/resize-observer-polyfill@1.5.1/dist/ResizeObserver.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n\n    <span class="token comment">&lt;!-- other @cassette packages which are dependencies --></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/@cassette/core@2.0.0-beta.1/dist/es5/cassette-core.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/@cassette/components@2.0.0-beta.1/dist/es5/cassette-components.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n\n    <span class="token comment">&lt;!-- @cassette/player\'s javascript --></span>\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://unpkg.com/@cassette/player@2.0.0-beta.1/dist/es5/cassette-player.js<span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n\n    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span><span class="token punctuation">></span></span><span class="token script"><span class="token language-javascript">\n      <span class="token comment">// your code!</span>\n\n      <span class="token keyword">var</span> MediaPlayer <span class="token operator">=</span> cassettePlayer<span class="token punctuation">.</span>MediaPlayer<span class="token punctuation">;</span>\n\n      <span class="token keyword">var</span> playlist <span class="token operator">=</span> <span class="token punctuation">[</span>\n        <span class="token punctuation">{</span>\n          url<span class="token punctuation">:</span>\n            <span class="token string">\'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4\'</span><span class="token punctuation">,</span>\n          title<span class="token punctuation">:</span> <span class="token string">\'Big Buck Bunny\'</span>\n        <span class="token punctuation">}</span><span class="token punctuation">,</span>\n        <span class="token punctuation">{</span>\n          url<span class="token punctuation">:</span>\n            <span class="token string">\'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4\'</span><span class="token punctuation">,</span>\n          title<span class="token punctuation">:</span> <span class="token string">\'Elephants Dream\'</span>\n        <span class="token punctuation">}</span>\n      <span class="token punctuation">]</span><span class="token punctuation">;</span>\n\n      ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n        React<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span>\n          MediaPlayer<span class="token punctuation">,</span>\n          <span class="token punctuation">{</span>\n            playlist<span class="token punctuation">:</span> playlist<span class="token punctuation">,</span>\n            showVideo<span class="token punctuation">:</span> <span class="token boolean">true</span>\n          <span class="token punctuation">}</span>\n        <span class="token punctuation">)</span><span class="token punctuation">,</span>\n        document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n      <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>\n    ```\n\n    <img src="/styleguide/img/hello_cassette.png">\n\n2.  If you\'re using npm or yarn and a bundler like Parcel or Webpack, you can do the same thing with this JavaScript (just install `@cassette/player` first):\n\n    ```jsx\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> MediaPlayer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/player\'</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">const</span> playlist <span class="token operator">=</span> <span class="token punctuation">[</span>\n      <span class="token punctuation">{</span>\n        url<span class="token punctuation">:</span>\n          <span class="token string">\'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4\'</span><span class="token punctuation">,</span>\n        title<span class="token punctuation">:</span> <span class="token string">\'Big Buck Bunny\'</span>\n      <span class="token punctuation">}</span><span class="token punctuation">,</span>\n      <span class="token punctuation">{</span>\n        url<span class="token punctuation">:</span>\n          <span class="token string">\'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4\'</span><span class="token punctuation">,</span>\n        title<span class="token punctuation">:</span> <span class="token string">\'Elephants Dream\'</span>\n      <span class="token punctuation">}</span>\n    <span class="token punctuation">]</span><span class="token punctuation">;</span>\n\n    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MediaPlayer</span></span>\n        <span class="token attr-name">playlist</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playlist<span class="token punctuation">}</span></span>\n        <span class="token attr-name">showVideo</span>\n      <span class="token punctuation">/></span></span><span class="token punctuation">,</span>\n      document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n    <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    ```\n\n3.  Let\'s say you want to change the controls a bit. You don\'t need the back skip button, but you _would_ like to add a mute control. That\'s easy:\n\n    ```jsx\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> MediaPlayer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/player\'</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">const</span> playlist <span class="token operator">=</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">;</span>\n\n    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MediaPlayer</span></span>\n        <span class="token attr-name">playlist</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playlist<span class="token punctuation">}</span></span>\n        <span class="token attr-name">showVideo</span>\n        <span class="token attr-name">controls</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">[</span>\n          <span class="token string">\'spacer\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'playpause\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'forwardskip\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'mute\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'spacer\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'progress\'</span>\n        <span class="token punctuation">]</span><span class="token punctuation">}</span></span>\n      <span class="token punctuation">/></span></span><span class="token punctuation">,</span>\n      document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n    <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    ```\n\n    <img src="/styleguide/img/custom_controls.png">\n\n4.  You also want to throw in a control to adjust the playback rate. But that\'s not included with Cassette! The good news is, it\'s also simple to implement a control like that yourself:\n\n    ```jsx\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> MediaPlayer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/player\'</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">const</span> playlist <span class="token operator">=</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">function</span> <span class="token function">PlaybackRateControl</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> playbackRate<span class="token punctuation">,</span> onSetPlaybackRate <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>\n      <span class="token keyword">return</span> <span class="token punctuation">(</span>\n        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span> <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> color<span class="token punctuation">:</span> <span class="token string">\'white\'</span><span class="token punctuation">,</span> display<span class="token punctuation">:</span> <span class="token string">\'flex\'</span><span class="token punctuation">,</span> alignItems<span class="token punctuation">:</span> <span class="token string">\'center\'</span> <span class="token punctuation">}</span><span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">\n          Speed: x\n          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span>\n            <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>number<span class="token punctuation">"</span></span>\n            <span class="token attr-name">min</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">0.5</span><span class="token punctuation">}</span></span>\n            <span class="token attr-name">max</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">3</span><span class="token punctuation">}</span></span>\n            <span class="token attr-name">step</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token number">0.25</span><span class="token punctuation">}</span></span>\n            <span class="token attr-name">value</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playbackRate<span class="token punctuation">}</span></span>\n            <span class="token attr-name">onChange</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token parameter">e</span> <span class="token operator">=></span> <span class="token function">onSetPlaybackRate</span><span class="token punctuation">(</span><span class="token function">Number</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span>target<span class="token punctuation">.</span>value<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">}</span></span>\n            <span class="token attr-name">style</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">{</span> width<span class="token punctuation">:</span> <span class="token number">50</span> <span class="token punctuation">}</span><span class="token punctuation">}</span></span>\n          <span class="token punctuation">/></span></span><span class="token plain-text">\n        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>\n      <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    <span class="token punctuation">}</span>\n\n    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MediaPlayer</span></span>\n        <span class="token attr-name">playlist</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playlist<span class="token punctuation">}</span></span>\n        <span class="token attr-name">showVideo</span>\n        <span class="token attr-name">controls</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">[</span>\n          <span class="token string">\'spacer\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'playpause\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'forwardskip\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'mute\'</span><span class="token punctuation">,</span>\n          <span class="token parameter">playerContext</span> <span class="token operator">=></span> <span class="token punctuation">(</span>\n            <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">PlaybackRateControl</span></span>\n              <span class="token attr-name">playbackRate</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playerContext<span class="token punctuation">.</span>playbackRate<span class="token punctuation">}</span></span>\n              <span class="token attr-name">onSetPlaybackRate</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playerContext<span class="token punctuation">.</span>onSetPlaybackRate<span class="token punctuation">}</span></span>\n            <span class="token punctuation">/></span></span>\n          <span class="token punctuation">)</span><span class="token punctuation">,</span>\n          <span class="token string">\'spacer\'</span><span class="token punctuation">,</span>\n          <span class="token string">\'progress\'</span>\n        <span class="token punctuation">]</span><span class="token punctuation">}</span></span>\n      <span class="token punctuation">/></span></span><span class="token punctuation">,</span>\n      document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n    <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    ```\n\n    <img src="/styleguide/img/playbackrate_control.png">\n\n5.  Now you want something crazy.. you want to display a menu to select and play a track from the playlist, and _outside_ of your `MediaPlayer`. How can we do this? The answer is, by dividing `MediaPlayer` up into its component parts - `MediaPlayerControls` and `PlayerContextProvider`.\n    First you\'ll do this - note that some `MediaPlayer` props belong to `PlayerContextProvider`, and some props belong to `MediaPlayerControls`:\n\n    ```jsx\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> MediaPlayerControls <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/player\'</span><span class="token punctuation">;</span>\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> PlayerContextProvider <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/core\'</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">const</span> playlist <span class="token operator">=</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">function</span> <span class="token function">PlaybackRateControl</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">}</span>\n\n    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">PlayerContextProvider</span></span> <span class="token attr-name">playlist</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>playlist<span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">\n        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">MediaPlayerControls</span></span>\n          <span class="token attr-name">showVideo</span>\n          <span class="token attr-name">controls</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token comment">/* unchanged */</span><span class="token punctuation">}</span></span>\n        <span class="token punctuation">/></span></span><span class="token plain-text">\n      </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">PlayerContextProvider</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>\n      document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n    <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    ```\n\n    At this point, your app should still look the same.\n\n    Lastly, you\'ll create your playlist menu component using a higher-order component called `playerContextFilter`. You can render it anywhere as a descendant of your `PlayerContextProvider`:\n\n    ```jsx\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> MediaPlayerControls <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/player\'</span><span class="token punctuation">;</span>\n    <span class="token keyword">import</span> <span class="token punctuation">{</span> PlayerContextProvider<span class="token punctuation">,</span> playerContextFilter <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">\'@cassette/core\'</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">const</span> playlist <span class="token operator">=</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">;</span>\n\n    <span class="token keyword">function</span> <span class="token function">PlaybackRateControl</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment">/* unchanged */</span><span class="token punctuation">}</span>\n\n    <span class="token keyword">function</span> <span class="token function">PlaylistMenu</span><span class="token punctuation">(</span><span class="token parameter"><span class="token punctuation">{</span> playlist<span class="token punctuation">,</span> activeTrackIndex<span class="token punctuation">,</span> onSelectTrackIndex <span class="token punctuation">}</span></span><span class="token punctuation">)</span> <span class="token punctuation">{</span>\n      <span class="token keyword">return</span> <span class="token punctuation">(</span>\n        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>ol</span><span class="token punctuation">></span></span><span class="token plain-text">\n          </span><span class="token punctuation">{</span>playlist<span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">track<span class="token punctuation">,</span> i</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">{</span>\n            <span class="token keyword">const</span> playing <span class="token operator">=</span> activeTrackIndex <span class="token operator">===</span> i<span class="token punctuation">;</span>\n            <span class="token keyword">return</span> <span class="token punctuation">(</span>\n              <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>li</span> <span class="token attr-name">key</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span>track<span class="token punctuation">.</span>title<span class="token punctuation">}</span></span><span class="token punctuation">></span></span><span class="token plain-text">\n                </span><span class="token punctuation">{</span>playing <span class="token operator">&amp;&amp;</span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>strong</span><span class="token punctuation">></span></span><span class="token punctuation">{</span>track<span class="token punctuation">.</span>title<span class="token punctuation">}</span><span class="token plain-text"> (playing)</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>strong</span><span class="token punctuation">></span></span><span class="token punctuation">}</span><span class="token plain-text">\n                </span><span class="token punctuation">{</span><span class="token operator">!</span>playing <span class="token operator">&amp;&amp;</span>\n                  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span>\n                    <span class="token attr-name">onClick</span><span class="token script language-javascript"><span class="token script-punctuation punctuation">=</span><span class="token punctuation">{</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token function">onSelectTrackIndex</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">}</span></span>\n                  <span class="token punctuation">></span></span><span class="token plain-text">\n                    </span><span class="token punctuation">{</span>track<span class="token punctuation">.</span>title<span class="token punctuation">}</span><span class="token plain-text">\n                  </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">></span></span><span class="token punctuation">}</span><span class="token plain-text">\n              </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>li</span><span class="token punctuation">></span></span>\n            <span class="token punctuation">)</span><span class="token punctuation">;</span>\n          <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token plain-text">\n        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>ol</span><span class="token punctuation">></span></span>\n      <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    <span class="token punctuation">}</span>\n\n    PlaylistMenu <span class="token operator">=</span> <span class="token function">playerContextFilter</span><span class="token punctuation">(</span>PlaylistMenu<span class="token punctuation">,</span> <span class="token punctuation">[</span>\n      <span class="token string">\'playlist\'</span><span class="token punctuation">,</span>\n      <span class="token string">\'activeTrackIndex\'</span><span class="token punctuation">,</span>\n      <span class="token string">\'onSelectTrackIndex\'</span>\n    <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>\n\n    ReactDOM<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>\n      <span class="token operator">&lt;</span>PlayerContextProvider <span class="token punctuation">{</span><span class="token operator">...</span><span class="token comment">/* props unchanged */</span><span class="token punctuation">}</span><span class="token operator">></span>\n        <span class="token operator">&lt;</span>MediaPlayerControls <span class="token punctuation">{</span><span class="token operator">...</span><span class="token comment">/* props unchanged */</span><span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span>\n        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span><span class="token plain-text">\n          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h3</span><span class="token punctuation">></span></span><span class="token plain-text">Select a track:</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h3</span><span class="token punctuation">></span></span><span class="token plain-text">\n          </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span><span class="token class-name">PlaylistMenu</span></span> <span class="token punctuation">/></span></span><span class="token plain-text">\n        </span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span>\n      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span><span class="token class-name">PlayerContextProvider</span></span><span class="token punctuation">></span></span><span class="token punctuation">,</span>\n      document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">\'app\'</span><span class="token punctuation">)</span>\n    <span class="token punctuation">)</span><span class="token punctuation">;</span>\n    ```\n\n    <img src="/styleguide/img/playlist_menu.png">\n\nThat\'s a brief overview - hopefully it gets you off the ground running with Cassette!'
+    }]
+	
+
+/***/ }),
+/* 871 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48575,12 +48614,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(871)
+    'examples': __webpack_require__(872)
 }
 	
 
 /***/ }),
-/* 871 */
+/* 872 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48599,7 +48638,7 @@ module.exports = []
 	
 
 /***/ }),
-/* 872 */
+/* 873 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48618,12 +48657,12 @@ module.exports = {
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(873)
+    'examples': __webpack_require__(874)
 }
 	
 
 /***/ }),
-/* 873 */
+/* 874 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48665,7 +48704,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 874 */
+/* 875 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -48978,12 +49017,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(875)
+    'examples': __webpack_require__(876)
 }
 	
 
 /***/ }),
-/* 875 */
+/* 876 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49002,7 +49041,7 @@ module.exports = []
 	
 
 /***/ }),
-/* 876 */
+/* 877 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49018,7 +49057,7 @@ module.exports = []
 	
 
 /***/ }),
-/* 877 */
+/* 878 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49048,12 +49087,12 @@ module.exports = {
         }
     ],
     'doclets': {},
-    'examples': __webpack_require__(878)
+    'examples': __webpack_require__(879)
 }
 	
 
 /***/ }),
-/* 878 */
+/* 879 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49078,7 +49117,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 879 */
+/* 880 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49097,7 +49136,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 880 */
+/* 881 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49116,7 +49155,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 881 */
+/* 882 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49135,7 +49174,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 882 */
+/* 883 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49154,7 +49193,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 883 */
+/* 884 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49173,7 +49212,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 884 */
+/* 885 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49192,7 +49231,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 885 */
+/* 886 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49247,12 +49286,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(886)
+    'examples': __webpack_require__(887)
 }
 	
 
 /***/ }),
-/* 886 */
+/* 887 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49297,7 +49336,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 887 */
+/* 888 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49316,12 +49355,12 @@ module.exports = {
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(888)
+    'examples': __webpack_require__(889)
 }
 	
 
 /***/ }),
-/* 888 */
+/* 889 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49358,7 +49397,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 889 */
+/* 890 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49377,12 +49416,12 @@ module.exports = {
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(890)
+    'examples': __webpack_require__(891)
 }
 	
 
 /***/ }),
-/* 890 */
+/* 891 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49407,7 +49446,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 891 */
+/* 892 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49501,12 +49540,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(892)
+    'examples': __webpack_require__(893)
 }
 	
 
 /***/ }),
-/* 892 */
+/* 893 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49531,7 +49570,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 893 */
+/* 894 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49600,12 +49639,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(894)
+    'examples': __webpack_require__(895)
 }
 	
 
 /***/ }),
-/* 894 */
+/* 895 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49630,7 +49669,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 895 */
+/* 896 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49680,12 +49719,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(896)
+    'examples': __webpack_require__(897)
 }
 	
 
 /***/ }),
-/* 896 */
+/* 897 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49710,7 +49749,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 897 */
+/* 898 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49729,7 +49768,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 898 */
+/* 899 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49745,12 +49784,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(899)
+    'examples': __webpack_require__(900)
 }
 	
 
 /***/ }),
-/* 899 */
+/* 900 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49782,7 +49821,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 900 */
+/* 901 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49846,12 +49885,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(901)
+    'examples': __webpack_require__(902)
 }
 	
 
 /***/ }),
-/* 901 */
+/* 902 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49877,7 +49916,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 902 */
+/* 903 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49889,12 +49928,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(903)
+    'examples': __webpack_require__(904)
 }
 	
 
 /***/ }),
-/* 903 */
+/* 904 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49919,7 +49958,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 904 */
+/* 905 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49931,12 +49970,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(905)
+    'examples': __webpack_require__(906)
 }
 	
 
 /***/ }),
-/* 905 */
+/* 906 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49961,7 +50000,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 906 */
+/* 907 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -49973,12 +50012,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(907)
+    'examples': __webpack_require__(908)
 }
 	
 
 /***/ }),
-/* 907 */
+/* 908 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50020,7 +50059,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 908 */
+/* 909 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50052,12 +50091,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(909)
+    'examples': __webpack_require__(910)
 }
 	
 
 /***/ }),
-/* 909 */
+/* 910 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50082,7 +50121,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 910 */
+/* 911 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50114,12 +50153,12 @@ module.exports = {
     ],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(911)
+    'examples': __webpack_require__(912)
 }
 	
 
 /***/ }),
-/* 911 */
+/* 912 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50144,7 +50183,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 912 */
+/* 913 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50156,12 +50195,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(913)
+    'examples': __webpack_require__(914)
 }
 	
 
 /***/ }),
-/* 913 */
+/* 914 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50186,7 +50225,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 914 */
+/* 915 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50205,12 +50244,12 @@ module.exports = {
         }],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(915)
+    'examples': __webpack_require__(916)
 }
 	
 
 /***/ }),
-/* 915 */
+/* 916 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50235,7 +50274,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 916 */
+/* 917 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50247,12 +50286,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(917)
+    'examples': __webpack_require__(918)
 }
 	
 
 /***/ }),
-/* 917 */
+/* 918 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50277,7 +50316,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 918 */
+/* 919 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50289,12 +50328,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(919)
+    'examples': __webpack_require__(920)
 }
 	
 
 /***/ }),
-/* 919 */
+/* 920 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50319,7 +50358,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 920 */
+/* 921 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50331,12 +50370,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(921)
+    'examples': __webpack_require__(922)
 }
 	
 
 /***/ }),
-/* 921 */
+/* 922 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50361,7 +50400,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 922 */
+/* 923 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50373,12 +50412,12 @@ module.exports = {
     'methods': [],
     'doclets': {},
     'tags': {},
-    'examples': __webpack_require__(923)
+    'examples': __webpack_require__(924)
 }
 	
 
 /***/ }),
-/* 923 */
+/* 924 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50403,7 +50442,7 @@ module.exports = [{
 	
 
 /***/ }),
-/* 924 */
+/* 925 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50428,13 +50467,13 @@ module.exports = [{
 	
 
 /***/ }),
-/* 925 */
+/* 926 */
 /***/ (function(module) {
 
-module.exports = {"name":"@cassette/hooks","version":"2.0.0-alpha.33","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-hooks.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.8.0"},"devDependencies":{"rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"@cassette/core":"^2.0.0-alpha.33","prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
+module.exports = {"name":"@cassette/hooks","version":"2.0.0-beta.1","description":"A simple, clean, and responsive visual wrapper for the HTML audio tag, built with React.","main":"dist/es5/cassette-hooks.js","scripts":{"build:clean":"rimraf dist","build:webpack":"BUILD_MODE=all webpack --progress","build":"npm run build:clean && npm run build:webpack","prepare":"npm run build","test":"echo \"Error: no test specified\" && exit 1"},"repository":{"type":"git","url":"https://github.com/benwiley4000/cassette.git"},"engines":{"node":">=6.0.0","npm":">=5.0.0"},"keywords":["audio","video","media","ui","react","reactjs","responsive","music","player","html5","component","components"],"author":{"name":"Ben Wiley","email":"therealbenwiley@gmail.com","url":"http://benwiley.org/"},"license":"MIT","peerDependencies":{"react":"^16.8.0"},"devDependencies":{"rimraf":"^2.5.4","webpack":"^4.17.1"},"dependencies":{"@cassette/core":"^2.0.0-beta.1","prop-types":"^15.5.10"},"publishConfig":{"access":"public"}};
 
 /***/ }),
-/* 926 */
+/* 927 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -50464,7 +50503,7 @@ module.exports = [
 	
 
 /***/ }),
-/* 927 */
+/* 928 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
