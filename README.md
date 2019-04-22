@@ -4,7 +4,7 @@
 
 Cassette is a zero-config-required media player component library for React. The default responsive UI works great in desktop or mobile web browsers. The flexible core handles the logical complexities of common audio and video player paradigms, while allowing you to implement any UI you can come up with.
 
-### This is Cassette v2, which is in alpha.
+### This is Cassette v2, which is in beta.
 
 See version 1 (also known as `react-responsive-audio-player`) [here](https://github.com/benwiley4000/cassette/blob/master/README.md)!
 
@@ -27,7 +27,7 @@ npm install @cassette/core @cassette/player
 
 **I do not control, nor do I have any contact with the owner of, the npm package called [`cassette`](https://www.npmjs.com/package/cassette) (without the `@`).** If you `npm install cassette`, you will be using the wrong library! However it turns out this package is used for managing playlist data. So if you really want to confuse the other devs on your team, you can try using `cassette` and `@cassette` together!
 
-**If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases). We're not posting scripts for the Cassette 2 alpha, but we will for the beta. You can also look on unpkg, e.g. [here](https://unpkg.com/@cassette/core@2.0.0-alpha.26/dist/es5/).**
+**If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases). You can also look on unpkg, e.g. [here](https://unpkg.com/@cassette/core@2.0.0-beta.0/dist/es5/).**
 
 # Development
 

@@ -111,7 +111,7 @@ export class PlayerContextProvider extends Component {
   constructor(props) {
     super(props);
     let currentTime = 0;
-    const activeTrackIndex = convertToNumberWithinIntervalBounds(
+    let activeTrackIndex = convertToNumberWithinIntervalBounds(
       props.startingTrackIndex,
       0
     );
@@ -127,6 +127,16 @@ export class PlayerContextProvider extends Component {
           initialStateSnapshot,
           props
         );
+        const {
+          activeTrackIndex: a,
+          currentTime: c
+        } = restoredStateFromSnapshot;
+        if (typeof a === 'number') {
+          activeTrackIndex = a;
+        }
+        if (typeof c === 'number') {
+          currentTime = c;
+        }
       } catch (err) {
         logWarning(err);
         logWarning('Loading Cassette state from snapshot failed.');
