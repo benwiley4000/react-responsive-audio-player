@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v2.0.0-beta.1] - 2019-04-22
 v2 is a huge update! And yes, there are breaking changes. If you're just trying to upgrade from v1, you can check the **Changed** and **Removed** sections.
 
-These notes are on changes since the previous stable release (v1.5.0). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
+These notes are on changes since the previous stable release ([v1.5.0](#v150---2018-09-30)). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
 
 All updates are mentioned on a broad level, but it wouldn't make sense to explain all new and changed APIs in minute detail here, so be sure to [read the docs](https://benwiley4000.github.io/cassette/styleguide).
 
@@ -202,8 +202,8 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 ### Added
 - Initial prerelease.
 
-[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.0...HEAD
-[v2.0.0-beta.0]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.0
+[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...HEAD
+[v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.1
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0
