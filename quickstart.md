@@ -69,6 +69,8 @@ If you're using npm or yarn and a bundler like Parcel or Webpack, you can do the
 ```jsx static
 import { MediaPlayer } from '@cassette/player';
 
+import '@cassette/player/dist/css/cassette-player.css';
+
 const playlist = [
   {
     url:
@@ -94,6 +96,8 @@ Let's say you want to change the controls a bit. You don't need the back skip bu
 
 ```jsx static
 import { MediaPlayer } from '@cassette/player';
+
+import '@cassette/player/dist/css/cassette-player.css';
 
 const playlist = /* unchanged */;
 
@@ -125,6 +129,8 @@ You also want to throw in a control to adjust the playback rate. But that's not 
 
 ```jsx static
 import { MediaPlayer } from '@cassette/player';
+
+import '@cassette/player/dist/css/cassette-player.css';
 
 const playlist = /* unchanged */;
 
@@ -183,6 +189,8 @@ Note that some `MediaPlayer` props belong to `PlayerContextProvider`, and some p
 import { MediaPlayerControls } from '@cassette/player';
 import { PlayerContextProvider } from '@cassette/core';
 
+import '@cassette/player/dist/css/cassette-player.css';
+
 const playlist = /* unchanged */;
 
 function PlaybackRateControl() {/* unchanged */}
@@ -205,6 +213,8 @@ Lastly, you'll create your playlist menu component using a higher-order componen
 ```jsx static
 import { MediaPlayerControls } from '@cassette/player';
 import { PlayerContextProvider, playerContextFilter } from '@cassette/core';
+
+import '@cassette/player/dist/css/cassette-player.css';
 
 const playlist = /* unchanged */;
 
