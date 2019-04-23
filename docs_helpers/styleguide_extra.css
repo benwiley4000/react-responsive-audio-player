@@ -23,9 +23,14 @@ body {
   display: inline-block;
   display: inline-grid;
   margin-bottom: 1rem;
+  max-width: 100%;
 }
 
-.screenshot_wrapper .notice::after {
+.screenshot_wrapper > img {
+  max-width: 100%;
+}
+
+.screenshot_wrapper > .notice::after {
   content: '(screenshot.. not interactive!)';
   color: white;
   background: rgba(0, 0, 0, 0.4);
@@ -43,6 +48,6 @@ body {
   transition: opacity 0.08s;
 }
 
-.screenshot_wrapper:hover .notice::after {
+.screenshot_wrapper:hover > .notice::after {
   opacity: 1;
 }
