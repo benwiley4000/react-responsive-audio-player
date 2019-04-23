@@ -13,3 +13,32 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
 }
+
+.screenshot_wrapper {
+  position: relative;
+  display: inline-block;
+  display: inline-grid;
+  margin-bottom: 1rem;
+}
+
+.screenshot_wrapper .notice::after {
+  content: '(screenshot.. not interactive!)';
+  color: white;
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 1.6rem;
+  font-style: italic;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 0.08s;
+}
+
+.screenshot_wrapper:hover .notice::after {
+  opacity: 1;
+}

@@ -1,6 +1,5 @@
 node_modules
 dist
 styleguide/*
-!styleguide/img
 .DS_Store
 lerna-debug.log
