@@ -1,4 +1,4 @@
-Want to get unramped with Cassette quickly, without reading a bunch of API documentation?
+Want to get onramped with Cassette quickly, without reading a bunch of API documentation?
 
 ### I: Hello World
 
@@ -121,7 +121,7 @@ ReactDOM.render(
 
 ### IV: Bring your own controls
 
-You also want to throw in a control to adjust the playback rate. But that's not included with Cassette! The good news is, it's also simple to implement a control like that yourself:
+You also want to throw in a control to adjust the playback rate. But that's not included with Cassette! The good news is, it's pretty simple to implement a control like that yourself:
 
 ```jsx static
 import { MediaPlayer } from '@cassette/player';
