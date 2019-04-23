@@ -1,4 +1,5 @@
 var path = require('path');
+var CopyPlugin = require('copy-webpack-plugin');
 
 // TODO: write a test to keep this in sync
 const contextPropNames = [
@@ -198,7 +199,21 @@ module.exports = {
     optimization: {
       noEmitOnErrors: true,
       minimize: false
-    }
+    },
+    plugins: [
+      new CopyPlugin([
+        {
+          // dev server
+          from: path.join(__dirname, 'img'),
+          to: 'build/img'
+        },
+        {
+          // prod build
+          from: path.join(__dirname, 'img'),
+          to: 'img'
+        }
+      ])
+    ]
   },
   ignore: [
     '**/ShuffleManager.js',
