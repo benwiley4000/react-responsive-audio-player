@@ -29,6 +29,42 @@ npm install @cassette/core @cassette/player
 
 **If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases). You can also look on unpkg, e.g. [here](https://unpkg.com/@cassette/core@2.0.0-beta.0/dist/es5/).**
 
+## 📼 Cassette in the wild 📼
+
+What can you build with Cassette? Here are some examples:
+
+### [rexmort.us](https://rexmort.us)
+<a href="https://rexmort.us">
+  <img width="300" src="img/rexmortus.png">
+</a>
+
+A site showcasing creative content, including several podcast series which can be listened to while navigating the rest of the site.
+
+#### How is Cassette used?
+The `MediaPlayerControls` UI from the `@cassette/player` package can be seen at the bottom of the page, featuring the included play/pause, mute toggle, and media progress controls (with some custom CSS styles applied). `PlayerContextProvider` wraps the whole page, and is used on each of the podcast pages where we can select a podcast to play, and see an indication of which podcast is playing currently.
+
+### [Owltail](https://owltail.com)
+<a href="https://owltail.com">
+  <img width="300" src="img/owltail.png">
+</a>
+
+A web app where users can explore curated popular podcasts and schedule queues of podcasts to listen to in the browser.
+
+#### How is Cassette used?
+Instead of using Cassette's default UI, Owltail's player UI is all custom-built. It relies on a page-level `PlayerContextProvider` to provide media data and functionality. The control UI at the bottom of the screen features some controls which don't even exist in the default Cassette UI, like a playback rate control, and buttons for skipping back and forward by 30 second intervals; even though Cassette doesn't provide this UI, its callbacks make it simple to implement this sort of behavior. The progress bar, although featuring custom UI, relies on the `MediaProgressBar` helper from the `@cassette/components` package, which is designed to work well with both mouse and touch devices.
+
+The UI in the rest of the app is synced with the player via the `PlayerContextProvider` wrapper, so that the currently-playing podcast will always display as such when encountered in the queue or a podcast listing.
+
+### [benwiley.org](https://benwiley.org)
+<a href="https://benwiley.org">
+  <img width="300" src="img/benwiley.org.png">
+</a>
+
+A personal site featuring a portfolio of work, including some video game soundtrack pieces, which can be sampled while browsing the rest of the site's content.
+
+#### How is Cassette used?
+This site uses `@cassette/player`'s `PlayPauseButton` and `ForwardSkipButton` components, while wrapping the `MediaProgressBar` helper from `@cassette/components` for a custom progress navigation UI. Because the `PlayerContextProvider` wraps the whole page, we can integrate playback controls inline on the music portfolio page, dynamically displaying a media progress control below the description for the currently-selected track.
+
 ## Development
 
 For building and testing instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
