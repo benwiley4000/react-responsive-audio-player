@@ -1,4 +1,4 @@
-# cassette
+# Cassette
 
 <img alt="https://www.pexels.com/photo/black-lx90-cassette-tape-1228497/" src="cassette.jpg" title="Photo by Stas Knop from Pexels" />
 
