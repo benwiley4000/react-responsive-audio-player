@@ -43,7 +43,7 @@ A site showcasing creative content, including several podcast series which can b
 #### How is Cassette used?
 The `MediaPlayerControls` UI from the `@cassette/player` package can be seen at the bottom of the page, featuring the included play/pause, mute toggle, and media progress controls (with some custom CSS styles applied). `PlayerContextProvider` wraps the whole page, and is used on each of the podcast pages where we can select a podcast to play, and see an indication of which podcast is playing currently.
 
-### [Owltail](https://owltail.com)
+### [OwlTail](https://owltail.com)
 <a href="https://owltail.com">
   <img width="300" src="img/owltail.png">
 </a>
@@ -51,7 +51,7 @@ The `MediaPlayerControls` UI from the `@cassette/player` package can be seen at 
 A web app where users can explore curated popular podcasts and schedule queues of podcasts to listen to in the browser.
 
 #### How is Cassette used?
-Instead of using Cassette's default UI, Owltail's player UI is all custom-built. It relies on a page-level `PlayerContextProvider` to provide media data and functionality. The control UI at the bottom of the screen features some controls which don't even exist in the default Cassette UI, like a playback rate control, and buttons for skipping back and forward by 30 second intervals; even though Cassette doesn't provide this UI, its callbacks make it simple to implement this sort of behavior. The progress bar, although featuring custom UI, relies on the `MediaProgressBar` helper from the `@cassette/components` package, which is designed to work well with both mouse and touch devices.
+Instead of using Cassette's default UI, OwlTail's player UI is all custom-built. It relies on a page-level `PlayerContextProvider` to provide media data and functionality. The control UI at the bottom of the screen features some controls which don't even exist in the default Cassette UI, like a playback rate control, and buttons for skipping back and forward by 30 second intervals; even though Cassette doesn't provide this UI, its callbacks make it simple to implement this sort of behavior. The progress bar, although featuring custom UI, relies on the `MediaProgressBar` helper from the `@cassette/components` package, which is designed to work well with both mouse and touch devices.
 
 The UI in the rest of the app is synced with the player via the `PlayerContextProvider` wrapper, so that the currently-playing podcast will always display as such when encountered in the queue or a podcast listing.
 
