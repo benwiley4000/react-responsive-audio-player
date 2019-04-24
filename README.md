@@ -29,11 +29,11 @@ npm install @cassette/core @cassette/player
 
 **If you're not using npm and you need production-ready scripts to include in your project, check out [the releases](https://github.com/benwiley4000/cassette/releases). You can also look on unpkg, e.g. [here](https://unpkg.com/@cassette/core@2.0.0-beta.0/dist/es5/).**
 
-# Development
+## Development
 
 For building and testing instructions, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-# Acknowledgements
+## Acknowledgements
 
 Thanks to [BrowserStack](http://browserstack.com/) for providing their platform free of charge for this project (and many other open source projects). We're using BrowserStack to test compatibility across multiple browsers and platforms.
 
@@ -41,7 +41,7 @@ Thanks to [BrowserStack](http://browserstack.com/) for providing their platform 
   <img alt="BrowserStack Logo" height="100" src="https://p14.zdusercontent.com/attachment/1015988/DucCZ7r9Wh1qj5RTUQUtIgaDM?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..QyFYSeGwuz3hu2DYiIp-Wg.wG_egoKd46-VIYOLxlSOyc3zxeZQz0rLx0q6vklPvnEYiTRW2UolruFNGe2_h-Ci7kDR8hYqKyCbDJx8apDXyiJwwRiL1qYuBq9pdk8NP4h9znXRgs-5FCvAT-QX9ICsoDUEdHa8Bvj0sc_9ZjMocTn_njqzCkVv7PtKqT-QYf3zJIlsib0JvRgiMGuw__AyId65m1z7Q93LC4pVzlvqBL_4B26I2Mvt4NPqvlTbVUg_tbIWUDqzmhNBfqCWAuIfNYDb_EtIkdR8fWQ-uOFd5qjkB84NOi2ljlo7g5WrFYI.5MCH_b_7gSlMJ4L9twhThA">
 </a>
 
-## Icons
+### Icons
 
 The standard control components make use of icons from various sources.
 
