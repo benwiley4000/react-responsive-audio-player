@@ -264,4 +264,4 @@ ReactDOM.render(
   <div class="notice"></div>
 </div>
 
-That's a brief overview - hopefully it gets you off the ground running with Cassette!
+That's a brief overview - hopefully it helps you hit the ground running with Cassette!
