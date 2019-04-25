@@ -55,6 +55,16 @@ Instead of using Cassette's default UI, OwlTail's player UI is all custom-built.
 
 The UI in the rest of the app is synced with the player via the `PlayerContextProvider` wrapper, so that the currently-playing podcast will always display as such when encountered in the queue or a podcast listing.
 
+### [Win95 Media Player](https://benwiley4000.github.io/win95-media-player/)
+<a href="https://benwiley4000.github.io/win95-media-player/">
+  <img width="300" src="img/win95-media-player.png">
+</a>
+
+A React component which is a clone of the Media Player application that shipped with Windows 95. It supports video and audio playback.
+
+#### How is Cassette used?
+Although the UI is totally different than what ships with Cassette, all the media playback internals are handled by Cassette. This means you can configure it the same way you would configure the `MediaPlayer` component from `@cassette/player`. The website features a video playlist and an audio playlist, and `PlayerContextGroup` from `@cassette/core` is used to prevent both audio from both pieces of media from playing simultaneously.
+
 ### [benwiley.org](https://benwiley.org)
 <a href="https://benwiley.org">
   <img width="300" src="img/benwiley.org.png">
