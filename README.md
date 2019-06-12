@@ -17,6 +17,12 @@ See version 1 (also known as `react-responsive-audio-player`) [here](https://git
 
 ### [See full documentation (with integrated live demos) here](https://benwiley4000.github.io/cassette/styleguide)
 
+### [Watch a talk introducing Cassette here](https://www.youtube.com/watch?v=fsySVdhEErI)
+
+<a href="https://www.youtube.com/watch?v=fsySVdhEErI">
+  <img src="https://i.imgur.com/NgHgQFP.png" width="350">
+</a>
+
 #### ⚠️ Note on installation
 
 If you wanted to install, for instance, the `@cassette/core` and `@cassette/player` packages, you would run:
