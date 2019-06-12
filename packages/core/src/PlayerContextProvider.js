@@ -18,7 +18,7 @@ import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIn
 import { logError, logWarning } from './utils/console';
 import getDisplayText from './utils/getDisplayText';
 import getInitialDuration from './utils/getInitialDuration';
-import { repeatStrategyOptions } from './constants';
+import { repeatStrategyOptions, MEDIA_ERR_NETWORK } from './constants';
 
 function playErrorHandler(err) {
   logError(err);
@@ -629,7 +629,11 @@ export class PlayerContextProvider extends Component {
     const error = event.target.error;
     // If there's a network error, the current track should be reloaded
     // in order to recover from the error state the player is in.
-    if (event.target === this.media && error && error.code === 2) {
+    if (
+      event.target === this.media &&
+      error &&
+      error.code === MEDIA_ERR_NETWORK
+    ) {
       if (window.navigator.onLine) {
         this.reloadActiveTrack({ shouldPlay });
       } else {
@@ -1179,7 +1183,8 @@ export class PlayerContextProvider extends Component {
       onToggleMuted: this.toggleMuted,
       onToggleShuffle: this.toggleShuffle,
       onSetRepeatStrategy: this.setRepeatStrategy,
-      onSetPlaybackRate: this.setPlaybackRate
+      onSetPlaybackRate: this.setPlaybackRate,
+      reloadActiveTrack: this.reloadActiveTrack
     };
     if (this.playerContext) {
       // only update this.playerContext if something has changed

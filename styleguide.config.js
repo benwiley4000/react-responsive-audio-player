@@ -40,7 +40,8 @@ const contextPropNames = [
   'onSetPlaybackRate',
   'fullscreen',
   'requestFullscreen',
-  'requestExitFullscreen'
+  'requestExitFullscreen',
+  'reloadActiveTrack'
 ];
 
 module.exports = {
