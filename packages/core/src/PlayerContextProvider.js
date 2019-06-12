@@ -18,7 +18,7 @@ import convertToNumberWithinIntervalBounds from './utils/convertToNumberWithinIn
 import { logError, logWarning } from './utils/console';
 import getDisplayText from './utils/getDisplayText';
 import getInitialDuration from './utils/getInitialDuration';
-import { repeatStrategyOptions } from './constants';
+import { repeatStrategyOptions, MEDIA_ERR_NETWORK } from './constants';
 
 function playErrorHandler(err) {
   logError(err);
@@ -85,11 +85,12 @@ function getGoToTrackState({
   index,
   track,
   shouldPlay = true,
-  shouldForceLoad = false
+  shouldForceLoad = false,
+  startingTime
 }) {
   const isNewTrack = prevState.activeTrackIndex !== index;
   const shouldLoadAsNew = Boolean(isNewTrack || shouldForceLoad);
-  const currentTime = track.startingTime || 0;
+  const currentTime = startingTime || track.startingTime || 0;
   return {
     duration: getInitialDuration(track),
     activeTrackIndex: index,
@@ -199,6 +200,9 @@ export class PlayerContextProvider extends Component {
     this.handleTrackPlaybackFailure = this.handleTrackPlaybackFailure.bind(
       this
     );
+    this.handlePlayerOnlineAfterFailure = this.handlePlayerOnlineAfterFailure.bind(
+      this
+    );
 
     // bind callback methods to pass to descendant elements
     this.togglePause = this.togglePause.bind(this);
@@ -301,6 +305,7 @@ export class PlayerContextProvider extends Component {
     media.addEventListener('durationchange', this.handleMediaDurationchange);
     media.addEventListener('progress', this.handleMediaProgress);
     media.addEventListener('ratechange', this.handleMediaRatechange);
+    media.addEventListener('error', this.handleTrackPlaybackFailure);
     // add listeners for special events
     media.addEventListener('srcrequest', this.handleMediaSrcrequest);
     media.addEventListener('loopchange', this.handleMediaLoopchange);
@@ -444,6 +449,9 @@ export class PlayerContextProvider extends Component {
         // lost our history.
         this.shuffler.clear();
       }
+      // If track changes before player is back online, the previous track
+      // shouldn't be reloaded.
+      window.removeEventListener('online', this.handlePlayerOnlineAfterFailure);
     }
 
     if (this.props.onActiveTrackUpdate && prevTrack !== newTrack) {
@@ -506,6 +514,7 @@ export class PlayerContextProvider extends Component {
       );
       media.removeEventListener('progress', this.handleMediaProgress);
       media.removeEventListener('ratechange', this.handleMediaRatechange);
+      media.removeEventListener('error', this.handleTrackPlaybackFailure);
       // remove special event listeners on the media element
       media.removeEventListener('srcrequest', this.handleMediaSrcrequest);
       media.removeEventListener('loopchange', this.handleMediaLoopchange);
@@ -520,6 +529,7 @@ export class PlayerContextProvider extends Component {
     }
     clearTimeout(this.gapLengthTimeout);
     clearTimeout(this.delayTimeout);
+    window.removeEventListener('online', this.handlePlayerOnlineAfterFailure);
   }
 
   stealMediaSession() {
@@ -591,10 +601,45 @@ export class PlayerContextProvider extends Component {
     this.media.load();
   }
 
+  reloadActiveTrack({ shouldPlay = false } = {}) {
+    const { playlist } = this.props;
+    const { activeTrackIndex, paused, currentTime } = this.state;
+    if (!isPlaylistValid(playlist)) {
+      return;
+    }
+    this.goToTrack({
+      track: playlist[activeTrackIndex],
+      shouldForceLoad: true,
+      shouldPlay: shouldPlay || !paused,
+      startingTime: currentTime,
+      index: activeTrackIndex
+    });
+  }
+
+  handlePlayerOnlineAfterFailure() {
+    this.reloadActiveTrack();
+    window.removeEventListener('online', this.handlePlayerOnlineAfterFailure);
+  }
+
   handleTrackPlaybackFailure(event) {
+    const shouldPlay = !this.state.paused;
     this.setState({
       mediaCannotPlay: true
     });
+    const error = event.target.error;
+    // If there's a network error, the current track should be reloaded
+    // in order to recover from the error state the player is in.
+    if (
+      event.target === this.media &&
+      error &&
+      error.code === MEDIA_ERR_NETWORK
+    ) {
+      if (window.navigator.onLine) {
+        this.reloadActiveTrack({ shouldPlay });
+      } else {
+        window.addEventListener('online', this.handlePlayerOnlineAfterFailure);
+      }
+    }
     if (this.props.onTrackPlaybackFailure) {
       this.props.onTrackPlaybackFailure({
         track: this.props.playlist[this.state.activeTrackIndex],
@@ -1138,7 +1183,8 @@ export class PlayerContextProvider extends Component {
       onToggleMuted: this.toggleMuted,
       onToggleShuffle: this.toggleShuffle,
       onSetRepeatStrategy: this.setRepeatStrategy,
-      onSetPlaybackRate: this.setPlaybackRate
+      onSetPlaybackRate: this.setPlaybackRate,
+      reloadActiveTrack: this.reloadActiveTrack
     };
     if (this.playerContext) {
       // only update this.playerContext if something has changed
