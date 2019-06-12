@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v2.0.0-beta.1] - 2019-04-22
+## [v2.0.0-beta.2] - 2019-06-12
 v2 is a huge update! And yes, there are breaking changes. If you're just trying to upgrade from v1, you can check the **Changed** and **Removed** sections.
 
 These notes are on changes since the previous stable release ([v1.5.0](#v150---2018-09-30)). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
@@ -70,6 +70,7 @@ All updates are mentioned on a broad level, but it wouldn't make sense to explai
 - The media `title` attribute is now set, and configurable, for system notifcation support on iOS ([#344](https://github.com/benwiley4000/cassette/issues/344))
 - You can set a `startingTime` property on a track object if you need to restore `currentTime` from some previously recorded state (advanced use case) ([#369](https://github.com/benwiley4000/cassette/issues/369))
 - You can now bring your own `HTMLMediaElement` implementation ([#349](https://github.com/benwiley4000/cassette/issues/349))
+- You can now force the player to reload if something goes wrong with the network. ([#426](https://github.com/benwiley4000/cassette/pull/426))
 
 ### Fixed
 - Prevent fullscreen player from opening automatically on iOS ([#307](https://github.com/benwiley4000/cassette/issues/307))
