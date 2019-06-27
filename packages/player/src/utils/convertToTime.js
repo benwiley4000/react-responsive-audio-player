@@ -4,7 +4,7 @@
 function convertToTime(number) {
   const hours = Math.floor(number / (60 * 60));
   const mins = Math.floor(number / 60) - hours * 60;
-  const secs = (number % 60).toFixed();
+  const secs = Math.floor(number % 60);
   let time = hours > 0 ? `${hours}:` : '';
   time += `${mins < 10 && hours > 0 ? '0' : ''}${mins}:`;
   time += `${secs < 10 ? '0' : ''}${secs}`;
