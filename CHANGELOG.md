@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v2.0.0-beta.2] - 2019-06-12
+## [v2.0.0-beta.3] - 2019-06-27
 v2 is a huge update! And yes, there are breaking changes. If you're just trying to upgrade from v1, you can check the **Changed** and **Removed** sections.
 
 These notes are on changes since the previous stable release ([v1.5.0](#v150---2018-09-30)). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
@@ -20,6 +20,7 @@ All updates are mentioned on a broad level, but it wouldn't make sense to explai
 - The `audioElementRef` prop to `PlayerContextProvider`/`MediaPlayer` has been renamed `mediaElementRef` ([#284](https://github.com/benwiley4000/cassette/issues/284))
 - A few minor style tweaks and improvements have been made for the player UI ([#69](https://github.com/benwiley4000/cassette/issues/69), [#94](https://github.com/benwiley4000/cassette/issues/94)), but things look overall the same when you upgrade. However HTML and CSS have been totally refactored and classes renamed for v2 so any CSS extensions you wrote for v1 will need to be recreated using the new stylesheets for v2. ([#42](https://github.com/benwiley4000/cassette/issues/42), [#81](https://github.com/benwiley4000/cassette/issues/81))
 - New/improved timestamp formatting in the default UI implementation from `@cassette/player` ([#397](https://github.com/benwiley4000/cassette/issues/397))
+- Timestamp display always rounds down ([#429](https://github.com/benwiley4000/cassette/issues/429)).
 - When an end user begins seeking with a progress bar or similar, the default behavior (which can be configured) is now to update the `currentTime` immediately instead of waiting until the user releases the mouse. ([#204](https://github.com/benwiley4000/cassette/issues/204))
 - Initiating a forward skip during playback of the last track in a playlist, when the `cycle` prop is `false`, no longer works - the action will be ignored and playback will continue. ([#68](https://github.com/benwiley4000/cassette/issues/68))
 - Track duration is now reset to 0 when a new track is selected, then changes once metadata loads. To avoid this funny intermediate state, you should set the `duration` property on your tracks! ([#372](https://github.com/benwiley4000/cassette/issues/372))
@@ -204,6 +205,8 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 - Initial prerelease.
 
 [Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...HEAD
+[v2.0.0-beta.3]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.2...v2.0.0-beta.3
+[v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...v2.0.0-beta.2
 [v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.1
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
