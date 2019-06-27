@@ -205,9 +205,7 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 - Initial prerelease.
 
 [Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...HEAD
-[v2.0.0-beta.3]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.2...v2.0.0-beta.3
-[v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.1...v2.0.0-beta.2
-[v2.0.0-beta.1]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.1
+[v2.0.0-beta.3]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.3
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0
