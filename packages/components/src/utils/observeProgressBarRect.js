@@ -106,8 +106,10 @@ function refresh() {
 }
 
 function updateScroll() {
-  scrollTop = document.body.scrollTop;
-  scrollLeft = document.body.scrollLeft;
+  const supportPageOffset = window.pageXOffset !== undefined;
+  const isCSS1Compat = ((document.compatMode || "") === "CSS1Compat");
+  scrollTop = supportPageOffset ? window.pageYOffset : isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
+  scrollLeft = supportPageOffset ? window.pageXOffset : isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
 }
 
 function onTransitionend({ propertyName = '' }) {
