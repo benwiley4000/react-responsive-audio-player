@@ -111,13 +111,13 @@ function updateScroll() {
   scrollTop = supportPageOffset
     ? window.pageYOffset
     : isCSS1Compat
-    ? document.documentElement.scrollTop  
-    : document.body.scrollTop;  
+    ? document.documentElement.scrollTop
+    : document.body.scrollTop;
   scrollLeft = supportPageOffset
     ? window.pageXOffset
     : isCSS1Compat
-    ? document.documentElement.scrollLeft  
-    : document.body.scrollLeft;  
+    ? document.documentElement.scrollLeft
+    : document.body.scrollLeft;
 }
 
 function onTransitionend({ propertyName = '' }) {
