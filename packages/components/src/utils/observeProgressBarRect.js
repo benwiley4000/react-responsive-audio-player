@@ -107,16 +107,9 @@ function refresh() {
 
 function updateScroll() {
   const supportPageOffset = window.pageXOffset !== undefined;
-  const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
-  scrollTop = supportPageOffset
-    ? window.pageYOffset
-    : isCSS1Compat
-    ? document.documentElement.scrollTop
-    : document.body.scrollTop;
+  scrollTop = supportPageOffset ? window.pageYOffset : document.body.scrollTop;
   scrollLeft = supportPageOffset
     ? window.pageXOffset
-    : isCSS1Compat
-    ? document.documentElement.scrollLeft
     : document.body.scrollLeft;
 }
 
