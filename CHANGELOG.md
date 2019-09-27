@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [v2.0.0-beta.3] - 2019-06-27
+## [v2.0.0-beta.4] - 2019-09-26
 v2 is a huge update! And yes, there are breaking changes. If you're just trying to upgrade from v1, you can check the **Changed** and **Removed** sections.
 
 These notes are on changes since the previous stable release ([v1.5.0](#v150---2018-09-30)). For changes that have occurred between alpha/beta releases, check the [release notes](https://github.com/benwiley4000/cassette/releases).
@@ -204,8 +204,8 @@ This version is the same as v1.4.0 and was published by mistake - it will be rem
 ### Added
 - Initial prerelease.
 
-[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.3...HEAD
-[v2.0.0-beta.3]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.3
+[Unreleased]: https://github.com/benwiley4000/cassette/compare/v2.0.0-beta.4...HEAD
+[v2.0.0-beta.4]: https://github.com/benwiley4000/cassette/compare/v1.5.0...v2.0.0-beta.4
 [v1.5.0]: https://github.com/benwiley4000/cassette/compare/v1.4.2...v1.5.0
 [v1.4.2]: https://github.com/benwiley4000/cassette/compare/v1.4.0...v1.4.2
 [v1.4.0]: https://github.com/benwiley4000/cassette/compare/v1.3.2...v1.4.0
