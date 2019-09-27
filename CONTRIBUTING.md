@@ -14,3 +14,6 @@ Open `localhost:6060` in a web browser to see the live-updated styleguide site.
 
 ### Tests
 We're using Jest for tests, and although we haven't done a great job with this in the past, we're trying to add test files for any new features or fixes. If you're not sure what kind of test to add, go ahead and open your pull request, and we can discuss test-writing in the comments!
+
+### Changelog
+When you submit a pull request for just about anything (unless it's purely releated to development process and won't change the user's experience at all), please update the CHANGELOG.md file - add a new bullet point under the section at the top labeled **Unreleased**.
