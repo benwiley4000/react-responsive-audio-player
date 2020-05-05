@@ -103,14 +103,21 @@ export function restoreStateFromSnapshot(snapshot, props) {
     const currentSrc =
       props.playlist[activeTrackIndex] &&
       getTrackSources(props.playlist, activeTrackIndex)[0].src;
-    if (currentSrc && activeTrackSrc === currentSrc) {
+    if (
+      currentSrc &&
+      props.areTrackSourceUrlsEqual(activeTrackSrc, currentSrc)
+    ) {
       restoredStateValues.activeTrackIndex = activeTrackIndex;
       useCurrentTime = true;
     } else {
       /* if the track we were playing before is in the new playlist,
        * update the activeTrackIndex.
        */
-      const newTrackIndex = findTrackIndexByUrl(props.playlist, activeTrackSrc);
+      const newTrackIndex = findTrackIndexByUrl(
+        props.playlist,
+        activeTrackSrc,
+        props.areTrackSourceUrlsEqual
+      );
       if (newTrackIndex !== -1) {
         restoredStateValues.activeTrackIndex = newTrackIndex;
         useCurrentTime = true;

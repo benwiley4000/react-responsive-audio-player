@@ -1,11 +1,15 @@
 import arrayFindIndex from 'array-find-index';
 
-function findTrackIndexByUrl(playlist, url) {
+function findTrackIndexByUrl(playlist, url, areTrackSourceUrlsEqual) {
   return arrayFindIndex(playlist, track => {
     if (track.sources) {
-      return arrayFindIndex(track.sources, source => source.src === url) !== -1;
+      return (
+        arrayFindIndex(track.sources, source =>
+          areTrackSourceUrlsEqual(source.src, url)
+        ) !== -1
+      );
     }
-    return track.url && url === track.url;
+    return track.url && areTrackSourceUrlsEqual(url, track.url);
   });
 }
 
