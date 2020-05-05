@@ -375,7 +375,12 @@ export class PlayerContextProvider extends Component {
         prevState.activeTrackIndex
       );
       // non-comprehensive but probably accurate check
-      if (prevSources[0].src === currentSources[0].src) {
+      if (
+        nextProps.areTrackSourceUrlsEqual(
+          prevSources[0].src,
+          currentSources[0].src
+        )
+      ) {
         // our active track index already matches
         return baseNewState;
       }
@@ -384,7 +389,11 @@ export class PlayerContextProvider extends Component {
     /* if the track we're already playing is in the new playlist, update the
      * activeTrackIndex.
      */
-    const newTrackIndex = findTrackIndexByUrl(newPlaylist, prevSources[0].src);
+    const newTrackIndex = findTrackIndexByUrl(
+      newPlaylist,
+      prevSources[0].src,
+      nextProps.areTrackSourceUrlsEqual
+    );
     if (newTrackIndex !== -1) {
       return {
         ...baseNewState,
@@ -722,15 +731,23 @@ export class PlayerContextProvider extends Component {
   }
 
   handleMediaSrcrequest(e) {
-    const { playlist } = this.props;
+    const { playlist, areTrackSourceUrlsEqual } = this.props;
     const sources = getTrackSources(playlist, this.state.activeTrackIndex);
-    if (arrayFindIndex(sources, s => s.src === e.srcRequested) !== -1) {
+    if (
+      arrayFindIndex(sources, s =>
+        areTrackSourceUrlsEqual(s.src, e.srcRequested)
+      ) !== -1
+    ) {
       // we're good! nothing to update.
       return;
     }
     // looks like 'src' was set from outside our component.
     // let's see if we can use it.
-    const newTrackIndex = findTrackIndexByUrl(playlist, e.srcRequested);
+    const newTrackIndex = findTrackIndexByUrl(
+      playlist,
+      e.srcRequested,
+      areTrackSourceUrlsEqual
+    );
     if (newTrackIndex === -1) {
       logError(
         `Source '${e.srcRequested}' does not exist in the loaded playlist. ` +
@@ -933,7 +950,11 @@ export class PlayerContextProvider extends Component {
   }
 
   backSkip() {
-    const { playlist, stayOnBackSkipThreshold } = this.props;
+    const {
+      playlist,
+      stayOnBackSkipThreshold,
+      areTrackSourceUrlsEqual
+    } = this.props;
     const { media } = this;
     const { cycle, activeTrackIndex, shuffle } = this.state;
     if (
@@ -952,7 +973,11 @@ export class PlayerContextProvider extends Component {
         media.currentTime = 0;
         return;
       }
-      index = findTrackIndexByUrl(playlist, previousItem);
+      index = findTrackIndexByUrl(
+        playlist,
+        previousItem,
+        areTrackSourceUrlsEqual
+      );
     } else {
       index = activeTrackIndex - 1;
       if (index < 0) {
@@ -963,7 +988,7 @@ export class PlayerContextProvider extends Component {
   }
 
   forwardSkip() {
-    const { playlist } = this.props;
+    const { playlist, areTrackSourceUrlsEqual } = this.props;
     const { cycle, activeTrackIndex, shuffle } = this.state;
     if (
       !isPlaylistValid(playlist) ||
@@ -975,7 +1000,8 @@ export class PlayerContextProvider extends Component {
     if (shuffle) {
       index = findTrackIndexByUrl(
         playlist,
-        this.shuffler.findNextItem(activeTrackIndex)
+        this.shuffler.findNextItem(activeTrackIndex),
+        areTrackSourceUrlsEqual
       );
     } else {
       index = activeTrackIndex + 1;
@@ -1359,6 +1385,18 @@ PlayerContextProvider.propTypes = {
    */
   getMediaTitleAttributeForTrack: PropTypes.func.isRequired,
   /**
+   * A function which receives two url string arguments and should return `true`
+   * if each url points to the same piece of media, or `false` otherwise. We use
+   * this check to prevent resetting the track if we request the track that is
+   * already playing, and to know whether we can preserve the player state when
+   * we restore the player from a saved snapshot. By default we perform a strict
+   * equality check (`===`), but in some cases you may have many urls pointing
+   * to the same media resource. For example, if your application attaches
+   * meta-information to the url (like query parameters for analytics) then you
+   * may need to define this prop.
+   */
+  areTrackSourceUrlsEqual: PropTypes.func.isRequired,
+  /**
    * Either a renderable React node or a render prop function like the
    * one passed into [`PlayerContextConsumer`](#playercontextconsumer)
    */
@@ -1386,7 +1424,10 @@ PlayerContextProvider.defaultProps = {
   getPosterImageForTrack(track) {
     return track && track.artwork ? track.artwork[0].src : '';
   },
-  getMediaTitleAttributeForTrack: getDisplayText
+  getMediaTitleAttributeForTrack: getDisplayText,
+  areTrackSourceUrlsEqual(urlA, urlB) {
+    return urlA === urlB;
+  }
 };
 
 export class PlayerContextGroupMember extends Component {
